@@ -1,50 +1,39 @@
-/* ===== GLOBAL STYLES ===== */
-        /* Smooth scrolling and base styling */
+/* ===== CUSTOM STYLES & ANIMATIONS ===== */
+        /* Global font assignments and base styling */
         html {
             scroll-behavior: smooth;
         }
         body {
             font-family: 'IBM Plex Sans', sans-serif;
             background-color: #080d1a;
-            color: #e8edf5;
+            color: #ffffff;
             overflow-x: hidden;
         }
-        /* ===== HEXAGONAL GRID BACKGROUND ===== */
-        /* Subtle animated background pattern */
-        .hex-grid-bg {
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(74, 158, 255, 0.02) 0%, transparent 50%);
-            background-size: 60px 60px;
-            background-position: 0 0;
-            animation: grid-pulse 8s ease-in-out infinite;
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Exo 2', sans-serif;
         }
+
         /* ===== GLOW EFFECTS ===== */
-        /* Reusable glow classes for key elements */
-        .glow-border {
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+        /* Subtle cyan glow for interactive elements and cards */
+        .glow-card {
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.08);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
-        .glow-border-hover:hover {
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+        .glow-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+            transform: translateY(-4px);
         }
-        .text-glow {
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        .glow-button {
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
         }
-        .drop-glow {
-            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.2));
+        .hero-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
         }
-        /* ===== CUSTOM SCROLLBAR ===== */
-        /* Styled scrollbar for dark theme */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0d1528;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1a2a40;
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00d4ff;
+
+        /* ===== NAVBAR STICKY BEHAVIOR ===== */
+        /* Ensures navbar stays on top with backdrop blur */
+        .sticky-nav {
+            backdrop-filter: blur(10px);
+            background-color: rgba(8, 13, 26, 0.9);
+            border-bottom: 1px solid #1a2a40;
         }
