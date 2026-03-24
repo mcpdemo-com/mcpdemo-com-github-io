@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <meta name="description" content="Experience Model Context Protocol in action. MCP Demo showcases real AI tool integrations with Claude. Explore live demonstrations of Google Calendar, GitHub, Slack, and more.">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
-    
 
 <!-- SEO Meta Tags -->
-<title>AI Generated Page</title>
-<meta property="og:title" content="AI Generated Page" />
+<title>MCP Demo - Model Context Protocol AI Tools in Action</title>
+<meta name="description" content="Experience live Model Context Protocol demonstrations connecting Claude AI to Google Calendar, Gmail, GitHub, Slack, and more. See the future of AI integration." />
+<meta property="og:title" content="MCP Demo - Model Context Protocol AI Tools in Action" />
+<meta property="og:description" content="Experience live Model Context Protocol demonstrations connecting Claude AI to Google Calendar, Gmail, GitHub, Slack, and more. See the future of AI integration." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="AI Generated Page" />
+<meta name="twitter:title" content="MCP Demo - Model Context Protocol AI Tools in Action" />
+<meta name="twitter:description" content="Experience live Model Context Protocol demonstrations connecting Claude AI to Google Calendar, Gmail, GitHub, Slack, and more. See the future of AI integration." />
 <!-- End SEO Meta Tags -->
 
 <script data-field-replace>
@@ -119,7 +121,7 @@
   function run(){
     if(contactId){
       var xhr=new XMLHttpRequest();
-      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2482');
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2484');
       xhr.onload=function(){
         if(xhr.status===200){
           try{
@@ -146,7 +148,7 @@
 </script>
 <script data-payment>
 (function(){
-  var slug='pAzj5v';
+  var slug='B7prBmmgY';
   var apiBase='https://paymegpt.com';
   function findEmail(){
     var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
@@ -199,420 +201,334 @@
 })();
 </script>  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="font-body">
+<body class="antialiased">
     <!-- ============================================================================ -->
-    <!-- NAVIGATION: Sticky header with logo, links, and CTA button                  -->
-    <!-- Features: Blur backdrop, border bottom, responsive mobile menu              -->
-    <!-- Mobile Padding: px-4 ensures content doesn't touch screen edges             -->
+    <!-- STICKY NAVIGATION BAR                                                        -->
+    <!-- Features: Logo with hexagon icon, navigation links, prominent CTA button     -->
+    <!-- Mobile: Hamburger menu for smaller screens, responsive padding               -->
     <!-- ============================================================================ -->
-    <nav class="sticky top-0 z-50 border-b border-border-dark backdrop-blur-md bg-navy/90 py-4 px-4 md:px-8 lg:px-12">
+    <nav class="sticky-nav sticky top-0 z-50 w-full py-4 px-4 md:px-8 lg:px-12">
         <div class="container mx-auto flex items-center justify-between">
-            <!-- Logo Section -->
-            <div class="flex items-center space-x-3">
-                <!-- Hexagonal Network SVG Logo -->
-                <svg class="w-10 h-10 drop-glow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-                        </radialGradient>
-                        <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.8"/>
-                            <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-                        </radialGradient>
-                    </defs>
-                    <!-- Connection Lines -->
-                    <path d="M50,20 L70,35 L70,65 L50,80 L30,65 L30,35 Z" stroke="#1a2a40" stroke-width="2" fill="none"/>
-                    <line x1="50" y1="20" x2="50" y2="50" stroke="#4a9eff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <line x1="50" y1="50" x2="70" y2="35" stroke="#4a9eff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <line x1="50" y1="50" x2="70" y2="65" stroke="#4a9eff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <line x1="50" y1="50" x2="30" y2="65" stroke="#4a9eff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <line x1="50" y1="50" x2="30" y2="35" stroke="#4a9eff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <!-- Outer Nodes -->
-                    <circle cx="50" cy="20" r="5" fill="url(#nodeGlow)"/>
-                    <circle cx="70" cy="35" r="5" fill="url(#nodeGlow)"/>
-                    <circle cx="70" cy="65" r="5" fill="url(#nodeGlow)"/>
-                    <circle cx="50" cy="80" r="5" fill="url(#nodeGlow)"/>
-                    <circle cx="30" cy="65" r="5" fill="url(#nodeGlow)"/>
-                    <circle cx="30" cy="35" r="5" fill="url(#nodeGlow)"/>
-                    <!-- Center Node -->
-                    <circle cx="50" cy="50" r="8" fill="url(#centerGlow)"/>
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.4641 6.5L21 7.5L18 12L21 16.5L15.4641 17.5L12 22L8.5359 17.5L3 16.5L6 12L3 7.5L8.5359 6.5L12 2Z" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
                 </svg>
-                <!-- Wordmark -->
-                <div class="flex items-baseline">
-                    <span class="font-heading text-2xl font-bold text-white">MCP</span>
-                    <span class="font-heading text-2xl font-bold text-cyan-primary ml-1">Demo</span>
-                </div>
-            </div>
+                <span class="font-heading text-xl font-bold">
+                    <span class="text-white">MCP</span><span class="text-[#00d4ff]">Demo</span>
+                </span>
+            </a>
 
-            <!-- Desktop Navigation Links -->
+            <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="text-text-muted hover:text-cyan-primary transition-colors duration-200">Home</a>
-                <a href="#tools" class="text-text-muted hover:text-cyan-primary transition-colors duration-200">Tools</a>
-                <a href="#about" class="text-text-muted hover:text-cyan-primary transition-colors duration-200">About</a>
-                <a href="#contact" class="text-text-muted hover:text-cyan-primary transition-colors duration-200">Contact</a>
-                <a href="#tools" class="border border-cyan-primary text-cyan-primary hover:bg-cyan-primary/10 px-5 py-2 rounded-lg transition-all duration-200 glow-border-hover">Explore Tools</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="#tools" class="text-gray-300 hover:text-white transition-colors">Tools</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                <a href="#tools" class="border border-[#00d4ff] text-[#00d4ff] px-5 py-2 rounded-lg font-medium hover:bg-[#00d4ff] hover:text-[#080d1a] transition-all duration-300">
+                    Explore Tools
+                </a>
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="mobileMenuToggle" class="md:hidden text-text-muted hover:text-cyan-primary">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <button id="mobile-menu-toggle" class="md:hidden text-gray-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
         </div>
 
         <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobileMenu" class="md:hidden hidden mt-4 pb-4 border-t border-border-dark pt-4">
+        <div id="mobile-menu" class="md:hidden hidden mt-4 px-4 py-6 bg-[#111c35] border border-[#1a2a40] rounded-lg">
             <div class="flex flex-col space-y-4">
-                <a href="#home" class="text-text-muted hover:text-cyan-primary transition-colors duration-200 py-2">Home</a>
-                <a href="#tools" class="text-text-muted hover:text-cyan-primary transition-colors duration-200 py-2">Tools</a>
-                <a href="#about" class="text-text-muted hover:text-cyan-primary transition-colors duration-200 py-2">About</a>
-                <a href="#contact" class="text-text-muted hover:text-cyan-primary transition-colors duration-200 py-2">Contact</a>
-                <a href="#tools" class="border border-cyan-primary text-cyan-primary hover:bg-cyan-primary/10 px-5 py-2 rounded-lg transition-all duration-200 w-fit">Explore Tools</a>
+                <a href="#" class="text-gray-300 hover:text-white py-2">Home</a>
+                <a href="#tools" class="text-gray-300 hover:text-white py-2">Tools</a>
+                <a href="#about" class="text-gray-300 hover:text-white py-2">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white py-2">Contact</a>
+                <a href="#tools" class="border border-[#00d4ff] text-[#00d4ff] px-5 py-2 rounded-lg font-medium text-center mt-2">
+                    Explore Tools
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- ============================================================================ -->
-    <!-- HERO SECTION: Main landing area with headline, subtext, and primary CTA     -->
-    <!-- Features: Animated hex network, gradient background, centered content       -->
-    <!-- Mobile Padding: px-4 py-12 ensures text never touches viewport edges        -->
+    <!-- HERO SECTION                                                                 -->
+    <!-- Features: Centered headline with cyan accent, two CTA buttons, radial glow  -->
+    <!-- Mobile Padding: Ensures text never touches viewport edges                   -->
     <!-- ============================================================================ -->
-    <section id="home" class="relative overflow-hidden hex-grid-bg py-12 md:py-20 px-4 md:px-8 lg:px-12">
-        <div class="container mx-auto text-center relative z-10">
-            <!-- Animated Hexagonal Network -->
-            <div class="flex justify-center mb-8 md:mb-12">
-                <svg class="w-48 h-48 md:w-64 md:h-64 animate-pulse-glow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="heroCenterGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-                        </radialGradient>
-                        <radialGradient id="heroNodeGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#00d4ff" stop-opacity="1"/>
-                            <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-                        </radialGradient>
-                        <filter id="heroGlow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="blur"/>
-                            <feMerge>
-                                <feMergeNode in="blur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <!-- Connection Lines with Animation -->
-                    <path d="M50,20 L70,35 L70,65 L50,80 L30,65 L30,35 Z" stroke="#1a2a40" stroke-width="2" fill="none"/>
-                    <g class="animate-float" style="animation-delay: 0s">
-                        <line x1="50" y1="20" x2="50" y2="50" stroke="#4a9eff" stroke-width="2" stroke-opacity="0.8"/>
-                        <circle cx="50" cy="20" r="6" fill="url(#heroNodeGlow)" filter="url(#heroGlow)"/>
-                    </g>
-                    <g class="animate-float" style="animation-delay: 1s">
-                        <line x1="50" y1="50" x2="70" y2="35" stroke="#4a9eff" stroke-width="2" stroke-opacity="0.8"/>
-                        <circle cx="70" cy="35" r="6" fill="url(#heroNodeGlow)" filter="url(#heroGlow)"/>
-                    </g>
-                    <g class="animate-float" style="animation-delay: 2s">
-                        <line x1="50" y1="50" x2="70" y2="65" stroke="#4a9eff" stroke-width="2" stroke-opacity="0.8"/>
-                        <circle cx="70" cy="65" r="6" fill="url(#heroNodeGlow)" filter="url(#heroGlow)"/>
-                    </g>
-                    <g class="animate-float" style="animation-delay: 3s">
-                        <line x1="50" y1="50" x2="30" y2="65" stroke="#4a9eff" stroke-width="2" stroke-opacity="0.8"/>
-                        <circle cx="30" cy="65" r="6" fill="url(#heroNodeGlow)" filter="url(#heroGlow)"/>
-                    </g>
-                    <g class="animate-float" style="animation-delay: 4s">
-                        <line x1="50" y1="50" x2="30" y2="35" stroke="#4a9eff" stroke-width="2" stroke-opacity="0.8"/>
-                        <circle cx="30" cy="35" r="6" fill="url(#heroNodeGlow)" filter="url(#heroGlow)"/>
-                    </g>
-                    <circle cx="50" cy="50" r="10" fill="url(#heroCenterGlow)" filter="url(#heroGlow)"/>
-                </svg>
-            </div>
-
-            <!-- Headline -->
-            <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                The Future of <span class="text-white">AI Integration</span>
-                <br>
-                <span class="text-white">MCP</span> <span class="text-cyan-primary text-glow">in Action</span>
+    <section class="hero-glow relative py-16 md:py-24 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                The Future of AI Integration <span class="text-[#00d4ff]">in Action</span>
             </h1>
-
-            <!-- Subheadline -->
-            <p class="text-xl md:text-2xl text-text-muted max-w-3xl mx-auto mb-10">
-                Model Context Protocol connects Claude AI to hundreds of real-world tools. See it work. Understand why it matters.
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto px-4">
+                Model Context Protocol connects Claude AI to real-world tools. See it live. Understand why it matters.
             </p>
-
-            <!-- Call to Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#tools" class="bg-cyan-primary hover:bg-cyan-primary/90 text-navy font-semibold px-8 py-4 rounded-lg transition-all duration-200 glow-border-hover text-lg">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#tools" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-8 py-4 rounded-lg text-lg hover:bg-[#00b8e6] transition-colors duration-300 glow-button">
                     Explore MCP Tools
                 </a>
-                <a href="#how-it-works" class="border border-cyan-primary text-cyan-primary hover:bg-cyan-primary/10 px-8 py-4 rounded-lg transition-all duration-200 glow-border-hover text-lg">
-                    Learn How It Works
+                <a href="#how-it-works" class="border border-[#00d4ff] text-[#00d4ff] font-semibold px-8 py-4 rounded-lg text-lg hover:bg-[#00d4ff] hover:text-[#080d1a] transition-all duration-300">
+                    How It Works
                 </a>
             </div>
         </div>
     </section>
 
     <!-- ============================================================================ -->
-    <!-- WHAT IS MCP SECTION: Three-column cards explaining the protocol             -->
-    <!-- Features: Glowing icons, card hover effects, accent underline               -->
-    <!-- Mobile Padding: px-4 py-12 ensures proper spacing on small screens          -->
+    <!-- WHAT IS MCP SECTION                                                          -->
+    <!-- Features: Three cards explaining the protocol, connection, and power         -->
+    <!-- Design: Consistent card styling with hover glow and border                  -->
     <!-- ============================================================================ -->
-    <section id="about" class="py-12 md:py-20 px-4 md:px-8 lg:px-12 bg-navy-secondary">
+    <section id="about" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
         <div class="container mx-auto">
-            <!-- Section Title -->
-            <div class="text-center mb-12 md:mb-16">
-                <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                    What is <span class="text-cyan-primary">MCP</span>?
-                </h2>
-                <div class="w-24 h-1 bg-cyan-primary mx-auto rounded-full"></div>
-            </div>
-
-            <!-- Three Column Cards -->
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-12">What is Model Context Protocol?</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Card 1: The Protocol -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-8 glow-border hover:glow-border-hover transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-cyan-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-primary/20 transition-colors duration-300">
-                        <svg class="w-8 h-8 text-cyan-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-heading text-2xl font-bold mb-4">The Protocol</h3>
-                    <p class="text-text-muted">
-                        MCP is a standard that lets AI models like Claude connect to external tools and data sources in real time. It's an open specification that defines how AI assistants can securely interact with your applications, databases, and APIs.
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Protocol</div>
+                    <p class="text-gray-300">
+                        MCP is an open standard that lets AI models connect to external tools and data sources. It defines how models like Claude can securely interact with your applications, databases, and APIs.
                     </p>
                 </div>
 
                 <!-- Card 2: The Connection -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-8 glow-border hover:glow-border-hover transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-cyan-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-primary/20 transition-colors duration-300">
-                        <svg class="w-8 h-8 text-cyan-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-heading text-2xl font-bold mb-4">The Connection</h3>
-                    <p class="text-text-muted">
-                        Instead of hardcoded integrations, MCP creates a universal bridge between AI and the apps you already use. This means Claude can access your calendar, email, project management tools, and more through a single, standardized interface.
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Connection</div>
+                    <p class="text-gray-300">
+                        A universal bridge between Claude AI and the apps you already use. MCP serves as the middleware that translates natural language requests into actionable API calls and data retrievals.
                     </p>
                 </div>
 
                 <!-- Card 3: The Power -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-8 glow-border hover:glow-border-hover transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-cyan-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-primary/20 transition-colors duration-300">
-                        <svg class="w-8 h-8 text-cyan-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Power</div>
+                    <p class="text-gray-300">
+                        When Claude accesses your calendar, email, and APIs, it becomes a true assistant—not just a chatbot. It can perform tasks, analyze data, and automate workflows in real-time.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- HOW IT WORKS SECTION                                                         -->
+    <!-- Features: Three numbered steps with descriptions                             -->
+    <!-- Layout: Responsive grid with visual step indicators                         -->
+    <!-- ============================================================================ -->
+    <section id="how-it-works" class="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-gradient-to-b from-[#080d1a] to-[#0a1225]">
+        <div class="container mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-4">How MCP Works</h2>
+            <p class="text-gray-300 text-center text-lg mb-12 max-w-3xl mx-auto">
+                Every demo on this site is a live MCP connection — not a mockup.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        1
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">You Ask Claude</h3>
+                    <p class="text-gray-300">
+                        Pose a natural language request to Claude, like "What's on my calendar today?" or "Send an email to the team about the project update."
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        2
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">MCP Connects</h3>
+                    <p class="text-gray-300">
+                        The MCP server interprets the request, authenticates with the appropriate service (Google, GitHub, etc.), and retrieves or acts on the data.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        3
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">Real Results</h3>
+                    <p class="text-gray-300">
+                        Claude receives the structured data or confirmation of action and presents it back to you in a conversational, helpful format.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- TOOLS PREVIEW GRID SECTION                                                   -->
+    <!-- Features: Six tool cards with badges, descriptions, and dual action buttons  -->
+    <!-- Layout: Responsive grid with 2-3 columns based on screen size               -->
+    <!-- ============================================================================ -->
+    <section id="tools" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-4">Explore MCP Tools</h2>
+            <p class="text-gray-300 text-center text-lg mb-12">Servers · Clients · Demonstrations</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Google Calendar Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Google Calendar</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Read and write calendar events, check availability, and schedule meetings directly through Claude.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Gmail Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Gmail</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Compose, send, search, and manage your emails with natural language instructions.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- GitHub Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">GitHub</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Create issues, review pull requests, and manage repositories through conversational AI.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Slack Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Slack</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Client</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Send messages, read channels, and manage notifications directly from your AI assistant.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Google Sheets Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Google Sheets</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Query, update, and analyze spreadsheet data using natural language commands.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Web Search Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Web Search</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Demonstration</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Perform real-time web searches, fetch current information, and summarize findings.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- NEWSLETTER SIGNUP SECTION                                                    -->
+    <!-- Features: Email input with subscribe button, privacy policy link            -->
+    <!-- Design: Centered card with subtle glow and border                           -->
+    <!-- ============================================================================ -->
+    <section id="contact" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto max-w-2xl">
+            <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8 md:p-12 text-center">
+                <h2 class="font-heading text-3xl font-bold mb-4">Stay Ahead of MCP</h2>
+                <p class="text-gray-300 mb-8">
+                    Get updates on new tools, demonstrations, and protocol developments delivered to your inbox.
+                </p>
+                <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" name="email" placeholder="Your email address" required class="flex-grow bg-[#0a1225] border border-[#1a2a40] rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#00d4ff] focus:border-transparent">
+                    <button type="submit" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-6 py-3 rounded-lg hover:bg-[#00b8e6] transition-colors duration-300">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-gray-400 text-sm mt-6">
+                    By subscribing, you agree to our <a href="/legal/privacy-policy.html" class="text-[#4a9eff] hover:text-[#00d4ff]">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- FOOTER SECTION                                                               -->
+    <!-- Features: Copyright, legal links, and disclaimer text                       -->
+    <!-- Layout: Stacked on mobile, spaced columns on desktop                        -->
+    <!-- ============================================================================ -->
+    <footer class="py-12 px-4 md:px-8 lg:px-12 border-t border-[#1a2a40]">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.4641 6.5L21 7.5L18 12L21 16.5L15.4641 17.5L12 22L8.5359 17.5L3 16.5L6 12L3 7.5L8.5359 6.5L12 2Z" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
                         </svg>
+                        <span class="font-heading font-bold">
+                            <span class="text-white">MCP</span><span class="text-[#00d4ff]">Demo</span>
+                        </span>
                     </div>
-                    <h3 class="font-heading text-2xl font-bold mb-4">The Power</h3>
-                    <p class="text-text-muted">
-                        When Claude can access your calendar, email, databases, and APIs, it stops being a chatbot and starts being a true assistant. MCP transforms AI from a conversational partner into an actionable tool that can actually get things done for you.
+                    <p class="text-gray-400 text-sm">
+                        © 2026 Effinsoftware.com, INC. d/b/a MCP Demo<br>
+                        A Wyoming corporation.
                     </p>
+                    <p class="text-gray-500 text-sm mt-4">
+                        Not affiliated with Anthropic.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+                    <a href="/legal/privacy-policy.html" class="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                    <a href="/legal/terms-of-service.html" class="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
+                    <a href="/legal/cookie-policy.html" class="text-gray-400 hover:text-white transition-colors text-sm">Cookie Policy</a>
+                    <a href="/legal/affiliate-disclosure.html" class="text-gray-400 hover:text-white transition-colors text-sm">Affiliate Disclosure</a>
                 </div>
             </div>
         </div>
-    </section>
+    </footer>
 
     <!-- ============================================================================ -->
-    <!-- HOW IT WORKS SECTION: Three-step horizontal flow with connecting arrows     -->
-    <!-- Features: Visual flow diagram, numbered steps, connecting lines             -->
-    <!-- Mobile Padding: px-4 py-12 for mobile-safe layout                           -->
+    <!-- JAVASCRIPT FUNCTIONALITY                                                    -->
+    <!-- Features: Mobile menu toggle, form handling with URL parameters             -->
     <!-- ============================================================================ -->
-    <section id="how-it-works" class="py-12 md:py-20 px-4 md:px-8 lg:px-12 bg-navy">
-        <div class="container mx-auto">
-            <!-- Section Title -->
-            <div class="text-center mb-12 md:mb-16">
-                <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                    See <span class="text-cyan-primary">MCP</span> in Action
-                </h2>
-                <p class="text-xl text-text-muted max-w-3xl mx-auto">
-                    Every demo on this site is a live MCP connection — not a mockup.
-                </p>
-            </div>
-
-            <!-- Three-Step Flow -->
-            <div class="relative">
-                <!-- Connecting Lines (Desktop only) -->
-                <div class="hidden md:block absolute top-16 left-1/4 right-1/4 h-0.5 bg-border-dark z-0"></div>
-                <div class="hidden md:block absolute top-16 left-3/4 right-1/4 h-0.5 bg-border-dark z-0"></div>
-                <div class="hidden md:flex absolute top-12 left-1/4 right-3/4 justify-center">
-                    <svg class="w-8 h-8 text-border-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                    </svg>
-                </div>
-                <div class="hidden md:flex absolute top-12 left-3/4 right-1/4 justify-center">
-                    <svg class="w-8 h-8 text-border-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                    </svg>
-                </div>
-
-                <!-- Steps Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 relative z-10">
-                    <!-- Step 1 -->
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-cyan-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-cyan-primary/30">
-                            <span class="font-heading text-4xl font-bold text-cyan-primary">1</span>
-                        </div>
-                        <h3 class="font-heading text-2xl font-bold mb-4">You Ask Claude</h3>
-                        <p class="text-text-muted">
-                            Type a natural language request like "What's on my calendar today?" or "Create a GitHub issue for the bug report."
-                        </p>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-cyan-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-cyan-primary/30">
-                            <span class="font-heading text-4xl font-bold text-cyan-primary">2</span>
-                        </div>
-                        <h3 class="font-heading text-2xl font-bold mb-4">MCP Connects</h3>
-                        <p class="text-text-muted">
-                            Claude calls the right tool via the Model Context Protocol. The protocol handles authentication, data formatting, and secure communication.
-                        </p>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-cyan-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-cyan-primary/30">
-                            <span class="font-heading text-4xl font-bold text-cyan-primary">3</span>
-                        </div>
-                        <h3 class="font-heading text-2xl font-bold mb-4">Real Results</h3>
-                        <p class="text-text-muted">
-                            Live data returned from the actual service. Claude presents the information naturally and can take follow-up actions based on the results.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================================================ -->
-    <!-- TOOLS DIRECTORY PREVIEW: Filterable grid of MCP tool demonstrations         -->
-    <!-- Features: Filter pills, tool cards with badges, demo buttons                -->
-    <!-- Mobile Padding: px-4 py-12 ensures grid items have proper spacing           -->
-    <!-- ============================================================================ -->
-    <section id="tools" class="py-12 md:py-20 px-4 md:px-8 lg:px-12 bg-navy-secondary">
-        <div class="container mx-auto">
-            <!-- Section Title -->
-            <div class="text-center mb-8">
-                <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                    Explore <span class="text-cyan-primary">MCP Tools</span>
-                </h2>
-                <p class="text-xl text-text-muted mb-8">
-                    Servers · Clients · Demonstrations
-                </p>
-            </div>
-
-            <!-- Filter Pills -->
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <button class="filter-pill active bg-cyan-primary text-navy px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    All
-                </button>
-                <button class="filter-pill bg-navy-card text-text-muted hover:text-white px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    Productivity
-                </button>
-                <button class="filter-pill bg-navy-card text-text-muted hover:text-white px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    Developer Tools
-                </button>
-                <button class="filter-pill bg-navy-card text-text-muted hover:text-white px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    Data & Analytics
-                </button>
-                <button class="filter-pill bg-navy-card text-text-muted hover:text-white px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    Communication
-                </button>
-                <button class="filter-pill bg-navy-card text-text-muted hover:text-white px-5 py-2 rounded-full font-medium transition-all duration-200">
-                    AI & Automation
-                </button>
-            </div>
-
-            <!-- Tools Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                <!-- Tool Card 1: Google Calendar -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-6 glow-border hover:glow-border-hover transition-all duration-300">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-secondary/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <span class="bg-blue-secondary/20 text-blue-secondary text-xs font-medium px-3 py-1 rounded-full">
-                            Productivity
-                        </span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold mb-2">Google Calendar</h3>
-                    <p class="text-text-muted text-sm mb-6">
-                        View, create, and manage calendar events directly through Claude.
-                    </p>
-                    <div class="flex gap-3">
-                        <button class="text-cyan-primary hover:text-cyan-primary/80 text-sm font-medium transition-colors duration-200">
-                            Learn More
-                        </button>
-                        <button class="bg-cyan-primary hover:bg-cyan-primary/90 text-navy text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200">
-                            Try Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tool Card 2: Gmail -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-6 glow-border hover:glow-border-hover transition-all duration-300">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-secondary/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <span class="bg-blue-secondary/20 text-blue-secondary text-xs font-medium px-3 py-1 rounded-full">
-                            Communication
-                        </span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold mb-2">Gmail</h3>
-                    <p class="text-text-muted text-sm mb-6">
-                        Read, compose, and manage emails with natural language commands.
-                    </p>
-                    <div class="flex gap-3">
-                        <button class="text-cyan-primary hover:text-cyan-primary/80 text-sm font-medium transition-colors duration-200">
-                            Learn More
-                        </button>
-                        <button class="bg-cyan-primary hover:bg-cyan-primary/90 text-navy text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200">
-                            Try Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tool Card 3: GitHub -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-6 glow-border hover:glow-border-hover transition-all duration-300">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-secondary/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                            </svg>
-                        </div>
-                        <span class="bg-blue-secondary/20 text-blue-secondary text-xs font-medium px-3 py-1 rounded-full">
-                            Developer Tools
-                        </span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold mb-2">GitHub</h3>
-                    <p class="text-text-muted text-sm mb-6">
-                        Create issues, review pull requests, and manage repositories.
-                    </p>
-                    <div class="flex gap-3">
-                        <button class="text-cyan-primary hover:text-cyan-primary/80 text-sm font-medium transition-colors duration-200">
-                            Learn More
-                        </button>
-                        <button class="bg-cyan-primary hover:bg-cyan-primary/90 text-navy text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200">
-                            Try Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tool Card 4: Slack -->
-                <div class="bg-navy-card border border-border-dark rounded-xl p-6 glow-border hover:glow-border-hover transition-all duration-300">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-secondary/20 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
-                            </svg>
-                        </div>
-                        <span class="bg-blue-secondary/20 text-blue-secondary text-xs font-medium px-3 py-1 rounded-full">
-                            Communication
-                        </span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold mb-2">Slack</h3>
-                    <p class="text-text-muted
-<script src="script.js"></script>
+    
+  <script src="script.js"></script>
+</body>
+</html>
