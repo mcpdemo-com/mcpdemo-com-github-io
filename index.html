@@ -132,8 +132,8 @@
     .nl-wrap { max-width: 600px; margin: 0 auto; text-align: center; }
     .nl-wrap h2 { font-family: "Exo 2", sans-serif; font-weight: 800; font-size: 1.65rem; color: #fff; margin-bottom: 0.5rem; }
     .nl-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.75rem; }
-    .nl-frame-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg3); box-shadow: 0 0 60px rgba(0,212,255,0.06); }
-    .nl-frame-wrap iframe { width: 100%; border: none; display: block; min-height: 220px; }
+    .nl-frame-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #080d1a; box-shadow: 0 0 60px rgba(0,212,255,0.06); }
+    .nl-frame-wrap iframe { width: 100%; border: none; display: block; height: 380px; background: transparent; color-scheme: dark; }
 
     /* FOOTER */
     footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 3rem 2rem 2rem; }
@@ -252,7 +252,7 @@
       <h2>Stay Ahead of MCP</h2>
       <p class="nl-sub">New tools, new demos, and MCP developments &mdash; delivered when it matters.</p>
       <div class="nl-frame-wrap">
-        <iframe src="https://app.mcpcio.com/forms/sqt6qbtd" title="MCP Demo Newsletter Signup" id="nlFrame" scrolling="no"></iframe>
+        <iframe src="https://app.mcpcio.com/forms/sqt6qbtd?theme=dark&background=transparent" title="MCP Demo Newsletter Signup" id="nlFrame" scrolling="no" allowtransparency="true"></iframe>
       </div>
     </div>
   </div>
@@ -286,7 +286,7 @@
       </div>
       <div class="foot-contact">
         <h4>Get in Touch</h4>
-        <a href="mailto:robert@mcpdemo.com">robert@mcpdemo.com</a>
+        <a href="/cdn-cgi/l/email-protection#c7b5a8a5a2b5b387aaa4b7a3a2aaa8e9a4a8aa"><span class="__cf_email__" data-cfemail="c0b2afa2a5b2b480ada3b0a4a5adafeea3afad">[email&#160;protected]</span></a>
         <p>For legal notices, privacy requests, or general inquiries.</p>
         <p style="margin-top:0.75rem;">2232 Dell Range Blvd<br />Suite 245-3069<br />Cheyenne, WY 82009</p>
       </div>
@@ -298,14 +298,6 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.getElementById('yr').textContent = new Date().getFullYear();
-  window.addEventListener('message', function(e) {
-    if (e.origin === 'https://app.mcpcio.com') {
-      var f = document.getElementById('nlFrame');
-      if (f && e.data && e.data.height) f.style.height = e.data.height + 'px';
-    }
-  });
-</script>
-</body>
-</html>
+  window.addEventListener
