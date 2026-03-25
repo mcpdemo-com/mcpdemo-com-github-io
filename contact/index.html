@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — MCP Demo</title>
+  <meta name="description" content="Get in touch with the MCP Demo team. Questions, partnerships, feedback, or legal notices — we're here." />
+  <meta property="og:title" content="Contact MCP Demo" />
+  <meta property="og:description" content="Reach out to the MCP Demo team for questions, partnerships, or feedback." />
+  <meta property="og:image" content="/logo-wide.png" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#080d1a; --bg2:#0d1528; --bg3:#111c35;
+      --cyan:#00d4ff; --blue:#4a9eff;
+      --border:#1a2a40; --txt:#e8edf5; --muted:#8899aa; --dim:#556070;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6}
+    a{color:var(--muted);text-decoration:none;transition:color .2s}
+    a:hover{color:var(--cyan)}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(8,13,26,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-brand img{height:28px;mix-blend-mode:screen}
+    .nav-brand span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.8rem}
+    .nav-links a{font-size:.88rem;color:var(--muted)}
+    .nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan);background:transparent;font-size:.88rem;cursor:pointer;transition:background .2s,color .2s;text-decoration:none}
+    .btn-nav:hover{background:var(--cyan);color:var(--bg)}
+
+    /* HERO */
+    .hero{padding:5rem 2rem 4rem;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,0.09) 0%,transparent 70%)}
+    .hero-inner{max-width:580px;margin:0 auto}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1rem}
+    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.2rem);line-height:1.15;margin-bottom:1.25rem}
+    .hero p{color:var(--muted);font-size:1.05rem;line-height:1.75}
+
+    /* LAYOUT */
+    .contact-section{padding:4rem 2rem 5rem}
+    .contact-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:start}
+    @media(max-width:768px){.contact-inner{grid-template-columns:1fr;gap:2.5rem}}
+
+    /* FORM */
+    .form-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2.25rem}
+    .form-card h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:.4rem}
+    .form-card p{color:var(--muted);font-size:.9rem;margin-bottom:1.75rem}
+    .field{margin-bottom:1.25rem}
+    .field label{display:block;font-size:.82rem;font-weight:500;color:var(--txt);margin-bottom:.45rem}
+    .field input,.field textarea,.field select{
+      width:100%;background:#080d1a !important;color:#e8edf5 !important;
+      border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;
+      font-family:"IBM Plex Sans",sans-serif;font-size:.9rem;outline:none;
+      transition:border-color .2s,box-shadow .2s;resize:vertical
+    }
+    .field input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #080d1a inset !important;-webkit-text-fill-color:#e8edf5 !important}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+    .field input::placeholder,.field textarea::placeholder{color:var(--dim)}
+    .field textarea{min-height:130px}
+    .field select option{background:#0d1528;color:#e8edf5}
+    .btn-submit{width:100%;padding:.85rem;background:var(--cyan);color:var(--bg);border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;font-size:1rem;cursor:pointer;transition:background .2s,box-shadow .2s}
+    .btn-submit:hover{background:#00eeff;box-shadow:0 0 28px rgba(0,212,255,.4)}
+    .form-note{font-size:.78rem;color:var(--dim);text-align:center;margin-top:.9rem}
+    .success-msg{display:none;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:8px;padding:1.25rem;text-align:center;color:var(--cyan);font-size:.9rem;margin-top:1rem}
+
+    /* INFO PANEL */
+    .info-panel h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:.5rem}
+    .info-panel p{color:var(--muted);font-size:.92rem;line-height:1.75;margin-bottom:1.5rem}
+    .contact-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem}
+    .contact-item svg{flex-shrink:0;margin-top:2px;color:var(--cyan)}
+    .contact-item strong{display:block;font-size:.88rem;color:var(--txt);font-weight:500;margin-bottom:.2rem}
+    .contact-item span{font-size:.85rem;color:var(--muted);line-height:1.65}
+    .divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
+    .response-box{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:1.1rem 1.25rem}
+    .response-box strong{display:block;font-size:.82rem;color:var(--txt);font-weight:500;margin-bottom:.25rem}
+    .response-box span{font-size:.82rem;color:var(--muted)}
+
+    /* FOOTER */
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2rem 2rem}
+    .foot-inner{max-width:1100px;margin:0 auto}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2.5rem;margin-bottom:2.5rem}
+    @media(max-width:768px){.foot-cols{grid-template-columns:1fr}}
+    .foot-logo{display:flex;align-items:center;gap:8px;margin-bottom:.75rem}
+    .foot-logo img{height:26px;mix-blend-mode:screen}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.05rem}
+    footer a{display:block;color:var(--muted);font-size:.82rem;margin-bottom:.45rem}
+    footer a:hover{color:var(--cyan)}
+    footer h4{font-family:"Exo 2",sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:.75rem}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/logo.png" alt="MCP Demo" />
+      <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/contact/" class="active">Contact</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="sec-label">Contact</div>
+    <h1>Let's <span style="color:var(--cyan)">talk</span></h1>
+    <p>Questions about MCP, partnership ideas, feedback on the demos, or anything else — drop us a message.</p>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="contact-inner">
+
+    <!-- FORM -->
+    <div class="form-card">
+      <h2>Send a message</h2>
+      <p>Fill out the form and we'll get back to you as soon as we can.</p>
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" placeholder="Jane Smith" />
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="jane@example.com" />
+      </div>
+      <div class="field">
+        <label for="subject">Subject</label>
+        <select id="subject">
+          <option value="" disabled selected>Select a topic…</option>
+          <option>General question</option>
+          <option>Partnership or collaboration</option>
+          <option>Tool suggestion</option>
+          <option>Bug report</option>
+          <option>Privacy or legal request</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Tell us what's on your mind…"></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit()">Send message</button>
+      <p class="form-note">We typically respond within 1–2 business days.</p>
+      <div class="success-msg" id="success-msg">
+        ✓ Message sent! We'll be in touch soon.
+      </div>
+    </div>
+
+    <!-- INFO PANEL -->
+    <div class="info-panel">
+      <h2>Other ways to <span style="color:var(--cyan)">reach us</span></h2>
+      <p>Prefer email? Have a legal or privacy request? Here's everything you need.</p>
+
+      <div class="contact-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div>
+          <strong>Email</strong>
+          <span><a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a></span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>Mailing address</strong>
+          <span>Effinsoftware.com, INC. d/b/a MCP Demo<br>2232 Dell Range Blvd, Suite 245-3069<br>Cheyenne, WY 82009</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="response-box">
+        <strong>Response time</strong>
+        <span>We aim to reply within 1–2 business days. For urgent legal or privacy matters, please note that in your subject line.</span>
+      </div>
+
+      <div style="margin-top:1.25rem" class="response-box">
+        <strong>Partnership inquiries</strong>
+        <span>If you have an MCP server or tool you'd like featured on MCP Demo, we'd love to hear about it.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-cols">
+      <div>
+        <div class="foot-logo">
+          <img src="/logo.png" alt="MCP Demo" />
+          <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
+        </div>
+        <p style="color:var(--muted);font-size:.82rem">Model Context Protocol</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4>Legal</h4>
+          <a href="/legal/privacy-policy.html">Privacy Policy</a>
+          <a href="/legal/terms-of-service.html">Terms of Service</a>
+          <a href="/legal/cookie-policy.html">Cookie Policy</a>
+          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/tools/">Tools Directory</a>
+        </div>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">For legal notices, privacy requests, or general inquiries.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
+      <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function handleSubmit() {
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const subject = document.getElementById('subject').value;
+  const message = document.getElementById('message').value.trim();
+  if (!name || !email || !message) {
+    alert('Please fill in your name, email, and message.');
+    return;
+  }
+  const mailto = 'mailto:robert@mcpdemo.com'
+    + '?subject=' + encodeURIComponent('[MCPDemo] ' + (subject || 'Message from ' + name))
+    + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+  window.location.href = mailto;
+  document.getElementById('success-msg').style.display = 'block';
+}
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
