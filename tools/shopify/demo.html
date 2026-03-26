@@ -128,7 +128,7 @@
   <div class="api-setup">
     <label for="apiKey">Anthropic API Key</label>
     <input type="password" id="apiKey" placeholder="sk-ant-…" autocomplete="off" />
-    <p class="api-note">Your key is used only in your browser for this request — never stored or sent to our servers. <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Get a key →</a></p>
+    <p class="api-note">Your key is used only in your browser for this request — never stored or sent to our servers. <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">Get a key →</a></p>
   </div>
 
   <div class="prompts-label">Try a starter prompt</div>
@@ -234,7 +234,7 @@
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
           'anthropic-version': '2023-06-01',
-          'anthropic-beta': 'mcp-client-1-0'
+          'anthropic-beta': 'mcp-client-2025-04-04'
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
