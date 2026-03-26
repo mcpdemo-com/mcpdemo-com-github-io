@@ -1,390 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MCP Demo — See Model Context Protocol in Action</title>
-  <meta name="description" content="Experience live Model Context Protocol demonstrations connecting Claude AI to Google Calendar, Gmail, GitHub, Slack, and more. See the future of AI integration." />
-  <meta property="og:title" content="MCP Demo — Model Context Protocol Servers, Clients & Demonstrations" />
-  <meta property="og:description" content="The open standard that lets Claude AI connect to real tools. Live demos, not mockups." />
-  <meta property="og:image" content="/logo-wide.png" />
-  <link rel="icon" type="image/png" href="/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
-  <style>
-    :root {
-      --bg:     #080d1a;
-      --bg2:    #0d1528;
-      --bg3:    #111c35;
-      --cyan:   #00d4ff;
-      --blue:   #4a9eff;
-      --border: #1a2a40;
-      --txt:    #e8edf5;
-      --muted:  #8899aa;
-      --dim:    #556070;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--txt); font-family: "IBM Plex Sans", sans-serif; line-height: 1.6; }
-    a { color: inherit; text-decoration: none; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
 
-    /* NAV */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      height: 64px; display: flex; align-items: center;
-      background: rgba(8,13,26,0.92); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-    }
-    .nav-inner { max-width: 1100px; width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 2rem; }
-    .nav-brand { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
-    .nav-brand img { height: 32px; mix-blend-mode: screen; }
-    .nav-brand span { font-family: "Exo 2", sans-serif; font-weight: 800; font-size: 1.1rem; }
-    .nav-links { display: flex; align-items: center; gap: 1.75rem; margin-left: auto; }
-    .nav-links a { color: var(--muted); font-size: 0.9rem; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--cyan); }
-    .btn-nav {
-      padding: 0.45rem 1.2rem; border: 1px solid var(--cyan);
-      border-radius: 6px; color: var(--cyan); background: transparent;
-      font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-nav:hover { background: var(--cyan); color: var(--bg); }
+<!-- SEO Meta Tags -->
+<title>MCP Demo — Model Context Protocol Servers, Clients &amp; Demonstrations</title>
+<meta name="description" content="The open standard that lets Claude AI connect to real tools. Live demos, not mockups." />
+<meta property="og:title" content="MCP Demo — Model Context Protocol Servers, Clients &amp; Demonstrations" />
+<meta property="og:description" content="The open standard that lets Claude AI connect to real tools. Live demos, not mockups." />
+<meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="MCP Demo — Model Context Protocol Servers, Clients &amp; Demonstrations" />
+<meta name="twitter:description" content="The open standard that lets Claude AI connect to real tools. Live demos, not mockups." />
+<meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
+<!-- End SEO Meta Tags -->
 
-    /* HERO */
-    .hero {
-      min-height: 88vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-      padding: 5rem 2rem 4rem;
-      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(0,212,255,0.09) 0%, transparent 70%);
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
     }
-    .hero-logo {
-      width: 110px; height: 110px; margin-bottom: 2rem;
-      mix-blend-mode: screen;
-      filter: drop-shadow(0 0 28px rgba(0,212,255,0.55));
-      animation: glow-pulse 3s ease-in-out infinite;
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
     }
-    @keyframes glow-pulse {
-      0%,100% { filter: drop-shadow(0 0 28px rgba(0,212,255,0.55)); }
-      50%      { filter: drop-shadow(0 0 48px rgba(0,212,255,0.85)); }
-    }
-    .hero h1 {
-      font-family: "Exo 2", sans-serif; font-weight: 900;
-      font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.15;
-      margin-bottom: 0.5rem;
-    }
-    .hero h1 em { color: var(--cyan); font-style: normal; }
-    .hero p { color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); max-width: 560px; margin: 1.2rem auto 2.2rem; }
-    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      padding: 0.8rem 2rem; background: var(--cyan); color: var(--bg);
-      border: none; border-radius: 8px; font-weight: 700;
-      font-family: "IBM Plex Sans", sans-serif; font-size: 1rem;
-      cursor: pointer; transition: all 0.2s; text-decoration: none;
-    }
-    .btn-primary:hover { background: #00eeff; box-shadow: 0 0 28px rgba(0,212,255,0.45); }
-    .btn-ghost {
-      padding: 0.8rem 2rem; background: transparent; color: var(--txt);
-      border: 1px solid rgba(255,255,255,0.25); border-radius: 8px;
-      font-family: "IBM Plex Sans", sans-serif; font-size: 1rem;
-      cursor: pointer; transition: all 0.2s; text-decoration: none;
-    }
-    .btn-ghost:hover { border-color: #fff; }
-
-    /* SECTIONS */
-    section { padding: 5rem 2rem; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-    .sec-label {
-      display: inline-block; font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan);
-      background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
-      border-radius: 4px; padding: 0.22rem 0.65rem; margin-bottom: 1rem;
-      font-family: "Exo 2", sans-serif;
-    }
-    h2 {
-      font-family: "Exo 2", sans-serif; font-weight: 800;
-      font-size: clamp(1.6rem, 3vw, 2.4rem); margin-bottom: 0.5rem;
-    }
-    .section-sub { color: var(--muted); margin-bottom: 3rem; font-size: 1.05rem; }
-
-    /* WHAT IS MCP */
-    .what { background: var(--bg2); }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem; }
-    .card {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-top: 2px solid var(--cyan); border-radius: 12px; padding: 1.75rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 36px rgba(0,212,255,0.1); }
-    .card h3 { font-family: "Exo 2", sans-serif; font-weight: 700; color: var(--cyan); margin-bottom: 0.75rem; font-size: 1.1rem; }
-    .card p { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
-
-    /* HOW IT WORKS */
-    .how { background: var(--bg); }
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 2rem; }
-    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
-    .step-num {
-      flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-family: "Exo 2", sans-serif; font-weight: 800; color: var(--cyan); font-size: 1rem;
-    }
-    .step h3 { font-family: "Exo 2", sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
-    .step p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-    .how-note {
-      margin-top: 3rem; padding: 1.25rem 1.5rem;
-      background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15);
-      border-radius: 10px; text-align: center;
-      color: var(--muted); font-size: 0.9rem;
-    }
-    .how-note strong { color: var(--cyan); }
-
-    /* NEWSLETTER */
-    .newsletter { background: var(--bg2); }
-    .nl-box {
-      background: var(--bg3); border: 1px solid var(--border); border-radius: 16px;
-      padding: 3rem; text-align: center; max-width: 600px; margin: 0 auto;
-    }
-    .nl-box h2 { margin-bottom: 0.5rem; }
-    .nl-box p { color: var(--muted); margin-bottom: 1.75rem; }
-    .nl-form { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
-    .nl-form input[type="email"] {
-      flex: 1; min-width: 220px; max-width: 320px;
-      background: var(--bg) !important; color: var(--txt) !important;
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 0.8rem 1rem; font-family: "IBM Plex Sans", sans-serif;
-      font-size: 0.95rem; outline: none;
-    }
-    .nl-form input[type="email"]:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 1000px #080d1a inset !important;
-      -webkit-text-fill-color: #e8edf5 !important;
-    }
-    .nl-form input[type="email"]:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,212,255,0.1); }
-    .nl-form input[type="email"]::placeholder { color: var(--dim); }
-    #nl-msg { margin-top: 1rem; font-size: 0.88rem; min-height: 1.2em; }
-    #nl-msg.success { color: var(--cyan); }
-    #nl-msg.error { color: #ff6b6b; }
-    .nl-fine { margin-top: 1rem; color: var(--dim); font-size: 0.78rem; }
-    .nl-fine a { color: var(--muted); text-decoration: underline; }
-
-    /* FOOTER */
-    footer {
-      background: var(--bg); border-top: 1px solid var(--border);
-      padding: 3.5rem 2rem 2rem;
-    }
-    .foot-inner { max-width: 1100px; margin: 0 auto; }
-    .foot-cols { display: grid; grid-template-columns: 1.2fr 1.6fr 1.2fr; gap: 2.5rem; margin-bottom: 2.5rem; }
-    .foot-logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
-    .foot-logo img { height: 26px; mix-blend-mode: screen; }
-    .foot-logo span { font-family: "Exo 2", sans-serif; font-weight: 800; font-size: 1rem; }
-    .foot-link-group h4 {
-      color: var(--cyan); font-size: 0.68rem; text-transform: uppercase;
-      letter-spacing: 0.1em; font-family: "Exo 2", sans-serif;
-      margin-bottom: 0.75rem;
-    }
-    .foot-link-group a { display: block; color: var(--muted); font-size: 0.85rem; margin-bottom: 0.45rem; transition: color 0.2s; }
-    .foot-link-group a:hover { color: var(--cyan); }
-    .foot-links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .foot-contact h4 {
-      color: var(--cyan); font-size: 0.68rem; text-transform: uppercase;
-      letter-spacing: 0.1em; font-family: "Exo 2", sans-serif; margin-bottom: 0.75rem;
-    }
-    .foot-bar {
-      border-top: 1px solid var(--border); padding-top: 1.5rem;
-      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links .nav-text { display: none; }
-      .foot-cols { grid-template-columns: 1fr; }
-      .foot-links-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="/" class="nav-brand">
-      <img src="/logo.png" alt="MCP Demo" />
-      <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
-    </a>
-    <div class="nav-links">
-      <a href="/" class="nav-text">Home</a>
-      <a href="/about/" class="nav-text">About</a>
-      <a href="/contact/" class="nav-text">Contact</a>
-      <a href="/tools/" class="btn-nav">Explore Tools</a>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <img src="/logo.png" alt="MCP Demo" class="hero-logo" />
-  <h1>The Future of AI Integration<br><em>MCP in Action</em></h1>
-  <p>Model Context Protocol connects Claude AI to real-world tools. See it live. Understand why it matters.</p>
-  <div class="hero-ctas">
-    <a href="/tools/" class="btn-primary">Explore MCP Tools</a>
-    <a href="#how-it-works" class="btn-ghost">How It Works</a>
-  </div>
-</section>
-
-<!-- WHAT IS MCP -->
-<section class="what">
-  <div class="section-inner">
-    <div class="sec-label">Background</div>
-    <h2>What is Model Context Protocol?</h2>
-    <p class="section-sub">The open standard that makes AI genuinely useful.</p>
-    <div class="cards">
-      <div class="card">
-        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#00d4ff" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-        </svg>
-        <h3>The Protocol</h3>
-        <p>MCP is an open standard that lets AI models like Claude connect to external tools and data sources in real time. It defines how AI can securely interact with your applications, databases, and APIs.</p>
-      </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#00d4ff" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-        </svg>
-        <h3>The Connection</h3>
-        <p>Instead of hardcoded integrations, MCP creates a universal bridge between Claude AI and the apps you already use — one protocol that handles authentication, data formatting, and secure communication.</p>
-      </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#00d4ff" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem">
-          <path d="M12 2L8.5 8.5 2 9.27l5 4.87L5.82 21 12 17.27 18.18 21l-1.18-6.86L22 9.27l-6.5-.77L12 2z"/>
-        </svg>
-        <h3>The Power</h3>
-        <p>When Claude accesses your calendar, email, and APIs it stops being a chatbot and starts being a true assistant — one that can perform tasks, analyze data, and automate workflows in real time.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="how-it-works">
-  <div class="section-inner">
-    <div class="sec-label">The Flow</div>
-    <h2>How MCP Works</h2>
-    <p class="section-sub">Three steps from your question to a real answer.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div>
-          <h3>You Ask Claude</h3>
-          <p>Type a natural language request — "What's on my calendar today?" or "Create a GitHub issue for this bug."</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div>
-          <h3>MCP Connects</h3>
-          <p>Claude calls the right tool via Model Context Protocol. The server authenticates, retrieves data, and responds.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div>
-          <h3>Real Results</h3>
-          <p>Live data returns from the actual service. Claude presents it naturally and can take follow-up actions.</p>
-        </div>
-      </div>
-    </div>
-    <div class="how-note">
-      <strong>Every demo on this site is a live MCP connection — not a mockup.</strong>
-    </div>
-  </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="section-inner">
-    <div class="nl-box">
-      <h2>Stay Ahead of MCP</h2>
-      <p>New tools, new demos, and MCP developments — delivered when it matters.</p>
-      <form class="nl-form" id="nl-form" onsubmit="submitNewsletter(event)">
-        <input type="email" id="nl-email" placeholder="your@email.com" required />
-        <button type="submit" class="btn-primary">Subscribe</button>
-      </form>
-      <div id="nl-msg"></div>
-      <p class="nl-fine">No spam. Unsubscribe anytime. See our <a href="/legal/privacy-policy.html">Privacy Policy</a>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-inner">
-    <div class="foot-cols">
-      <div>
-        <div class="foot-logo">
-          <img src="/logo.png" alt="MCP Demo" />
-          <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
-        </div>
-        <p style="color:#8899aa;font-size:0.82rem;margin-bottom:0.5rem">Model Context Protocol</p>
-        <p style="color:#556070;font-size:0.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
-      </div>
-      <div class="foot-links-grid">
-        <div class="foot-link-group">
-          <h4>Legal</h4>
-          <a href="/legal/privacy-policy.html">Privacy Policy</a>
-          <a href="/legal/terms-of-service.html">Terms of Service</a>
-          <a href="/legal/cookie-policy.html">Cookie Policy</a>
-          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
-        </div>
-        <div class="foot-link-group">
-          <h4>Company</h4>
-          <a href="/about/">About</a>
-          <a href="/contact/">Contact</a>
-          <a href="/tools/">Tools Directory</a>
-        </div>
-      </div>
-      <div class="foot-contact">
-        <h4>Get in Touch</h4>
-        <a href="mailto:robert@mcpdemo.com" style="color:#00d4ff;font-size:0.9rem">robert@mcpdemo.com</a>
-        <p style="color:#8899aa;font-size:0.8rem;margin-top:0.5rem">For legal notices, privacy requests, or general inquiries.</p>
-        <p style="color:#8899aa;font-size:0.8rem;margin-top:0.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
-      </div>
-    </div>
-    <div class="foot-bar">
-      <span style="color:#00d4ff;font-size:0.85rem;font-weight:600">mcpdemo.com</span>
-      <span style="color:#556070;font-size:0.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
-    </div>
-  </div>
-</footer>
-
-<!-- HERMES WIDGET -->
-<script src="https://app.mcpcio.com/widget.js" data-widget="58804415" async></script>
-
-<script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
-  async function submitNewsletter(e) {
-    e.preventDefault();
-    const email = document.getElementById('nl-email').value.trim();
-    const msg = document.getElementById('nl-msg');
-    msg.textContent = '';
-    try {
-      const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      if (res.ok) {
-        msg.className = 'success';
-        msg.textContent = '✓  You\'re subscribed! Welcome to MCP Demo.';
-        document.getElementById('nl-form').reset();
-      } else { throw new Error(); }
-    } catch {
-      msg.className = 'error';
-      msg.textContent = 'Something went wrong — please try again.';
-      window.open('https://app.mcpcio.com/forms/sqt6qbtd', '_blank');
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2484');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
     }
   }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
 </script>
+<script data-payment>
+(function(){
+  var slug='B7prBmmgY';
+  var apiBase='https://paymegpt.com';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Thank you for purchasing '+pName.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'.</p><button onclick="document.getElementById(\'payment-success-overlay\').remove();window.history.replaceState({},\'\',window.location.pathname);" style="padding:12px 32px;font-size:16px;font-weight:600;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;">Continue</button></div>';
+      document.body.appendChild(overlay);
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="antialiased">
+    <!-- ============================================================================ -->
+    <!-- STICKY NAVIGATION BAR                                                        -->
+    <!-- Features: Logo with hexagon icon, navigation links, prominent CTA button     -->
+    <!-- Mobile: Hamburger menu for smaller screens, responsive padding               -->
+    <!-- ============================================================================ -->
+    <nav class="sticky-nav sticky top-0 z-50 w-full py-4 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.4641 6.5L21 7.5L18 12L21 16.5L15.4641 17.5L12 22L8.5359 17.5L3 16.5L6 12L3 7.5L8.5359 6.5L12 2Z" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
+                </svg>
+                <span class="font-heading text-xl font-bold">
+                    <span class="text-white">MCP</span><span class="text-[#00d4ff]">Demo</span>
+                </span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="#tools" class="text-gray-300 hover:text-white transition-colors">Tools</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                <a href="#tools" class="border border-[#00d4ff] text-[#00d4ff] px-5 py-2 rounded-lg font-medium hover:bg-[#00d4ff] hover:text-[#080d1a] transition-all duration-300">
+                    Explore Tools
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-toggle" class="md:hidden text-gray-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="md:hidden hidden mt-4 px-4 py-6 bg-[#111c35] border border-[#1a2a40] rounded-lg">
+            <div class="flex flex-col space-y-4">
+                <a href="#" class="text-gray-300 hover:text-white py-2">Home</a>
+                <a href="#tools" class="text-gray-300 hover:text-white py-2">Tools</a>
+                <a href="#about" class="text-gray-300 hover:text-white py-2">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white py-2">Contact</a>
+                <a href="#tools" class="border border-[#00d4ff] text-[#00d4ff] px-5 py-2 rounded-lg font-medium text-center mt-2">
+                    Explore Tools
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================================ -->
+    <!-- HERO SECTION                                                                 -->
+    <!-- Features: Centered headline with cyan accent, two CTA buttons, radial glow  -->
+    <!-- Mobile Padding: Ensures text never touches viewport edges                   -->
+    <!-- ============================================================================ -->
+    <section class="hero-glow relative py-16 md:py-24 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                The Future of AI Integration <span class="text-[#00d4ff]">in Action</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto px-4">
+                Model Context Protocol connects Claude AI to real-world tools. See it live. Understand why it matters.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#tools" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-8 py-4 rounded-lg text-lg hover:bg-[#00b8e6] transition-colors duration-300 glow-button">
+                    Explore MCP Tools
+                </a>
+                <a href="#how-it-works" class="border border-[#00d4ff] text-[#00d4ff] font-semibold px-8 py-4 rounded-lg text-lg hover:bg-[#00d4ff] hover:text-[#080d1a] transition-all duration-300">
+                    How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- WHAT IS MCP SECTION                                                          -->
+    <!-- Features: Three cards explaining the protocol, connection, and power         -->
+    <!-- Design: Consistent card styling with hover glow and border                  -->
+    <!-- ============================================================================ -->
+    <section id="about" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-12">What is Model Context Protocol?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: The Protocol -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Protocol</div>
+                    <p class="text-gray-300">
+                        MCP is an open standard that lets AI models connect to external tools and data sources. It defines how models like Claude can securely interact with your applications, databases, and APIs.
+                    </p>
+                </div>
+
+                <!-- Card 2: The Connection -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Connection</div>
+                    <p class="text-gray-300">
+                        A universal bridge between Claude AI and the apps you already use. MCP serves as the middleware that translates natural language requests into actionable API calls and data retrievals.
+                    </p>
+                </div>
+
+                <!-- Card 3: The Power -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8">
+                    <div class="text-[#00d4ff] text-2xl font-heading font-bold mb-4">The Power</div>
+                    <p class="text-gray-300">
+                        When Claude accesses your calendar, email, and APIs, it becomes a true assistant—not just a chatbot. It can perform tasks, analyze data, and automate workflows in real-time.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- HOW IT WORKS SECTION                                                         -->
+    <!-- Features: Three numbered steps with descriptions                             -->
+    <!-- Layout: Responsive grid with visual step indicators                         -->
+    <!-- ============================================================================ -->
+    <section id="how-it-works" class="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-gradient-to-b from-[#080d1a] to-[#0a1225]">
+        <div class="container mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-4">How MCP Works</h2>
+            <p class="text-gray-300 text-center text-lg mb-12 max-w-3xl mx-auto">
+                Every demo on this site is a live MCP connection — not a mockup.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        1
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">You Ask Claude</h3>
+                    <p class="text-gray-300">
+                        Pose a natural language request to Claude, like "What's on my calendar today?" or "Send an email to the team about the project update."
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        2
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">MCP Connects</h3>
+                    <p class="text-gray-300">
+                        The MCP server interprets the request, authenticates with the appropriate service (Google, GitHub, etc.), and retrieves or acts on the data.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#111c35] border border-[#1a2a40] text-[#00d4ff] text-2xl font-heading font-bold mb-6">
+                        3
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold mb-4">Real Results</h3>
+                    <p class="text-gray-300">
+                        Claude receives the structured data or confirmation of action and presents it back to you in a conversational, helpful format.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- TOOLS PREVIEW GRID SECTION                                                   -->
+    <!-- Features: Six tool cards with badges, descriptions, and dual action buttons  -->
+    <!-- Layout: Responsive grid with 2-3 columns based on screen size               -->
+    <!-- ============================================================================ -->
+    <section id="tools" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-center mb-4">Explore MCP Tools</h2>
+            <p class="text-gray-300 text-center text-lg mb-12">Servers · Clients · Demonstrations</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Google Calendar Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Google Calendar</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Read and write calendar events, check availability, and schedule meetings directly through Claude.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Gmail Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Gmail</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Compose, send, search, and manage your emails with natural language instructions.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- GitHub Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">GitHub</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Create issues, review pull requests, and manage repositories through conversational AI.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Slack Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Slack</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Client</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Send messages, read channels, and manage notifications directly from your AI assistant.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Google Sheets Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Google Sheets</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Server</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Query, update, and analyze spreadsheet data using natural language commands.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+
+                <!-- Web Search Card -->
+                <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-heading text-xl font-bold">Web Search</h3>
+                        <span class="bg-[#1a2a40] text-[#4a9eff] text-xs font-semibold px-3 py-1 rounded-full">Demonstration</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        Perform real-time web searches, fetch current information, and summarize findings.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-[#00d4ff] hover:text-white transition-colors font-medium">Learn More</a>
+                        <a href="#" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#00b8e6] transition-colors">Try Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- NEWSLETTER SIGNUP SECTION                                                    -->
+    <!-- Features: Email input with subscribe button, privacy policy link            -->
+    <!-- Design: Centered card with subtle glow and border                           -->
+    <!-- ============================================================================ -->
+    <section id="contact" class="py-16 md:py-20 px-4 md:px-8 lg:px-12">
+        <div class="container mx-auto max-w-2xl">
+            <div class="glow-card bg-[#111c35] border border-[#1a2a40] rounded-2xl p-8 md:p-12 text-center">
+                <h2 class="font-heading text-3xl font-bold mb-4">Stay Ahead of MCP</h2>
+                <p class="text-gray-300 mb-8">
+                    Get updates on new tools, demonstrations, and protocol developments delivered to your inbox.
+                </p>
+                <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" name="email" placeholder="Your email address" required class="flex-grow bg-[#0a1225] border border-[#1a2a40] rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#00d4ff] focus:border-transparent">
+                    <button type="submit" class="bg-[#00d4ff] text-[#080d1a] font-semibold px-6 py-3 rounded-lg hover:bg-[#00b8e6] transition-colors duration-300">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-gray-400 text-sm mt-6">
+                    By subscribing, you agree to our <a href="/legal/privacy-policy.html" class="text-[#4a9eff] hover:text-[#00d4ff]">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================ -->
+    <!-- FOOTER SECTION                                                               -->
+    <!-- Features: Copyright, legal links, and disclaimer text                       -->
+    <!-- Layout: Stacked on mobile, spaced columns on desktop                        -->
+    <!-- ============================================================================ -->
+    <footer class="py-12 px-4 md:px-8 lg:px-12 border-t border-[#1a2a40]">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.4641 6.5L21 7.5L18 12L21 16.5L15.4641 17.5L12 22L8.5359 17.5L3 16.5L6 12L3 7.5L8.5359 6.5L12 2Z" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <span class="font-heading font-bold">
+                            <span class="text-white">MCP</span><span class="text-[#00d4ff]">Demo</span>
+                        </span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        © 2026 Effinsoftware.com, INC. d/b/a MCP Demo<br>
+                        A Wyoming corporation.
+                    </p>
+                    <p class="text-gray-500 text-sm mt-4">
+                        Not affiliated with Anthropic.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+                    <a href="/legal/privacy-policy.html" class="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                    <a href="/legal/terms-of-service.html" class="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
+                    <a href="/legal/cookie-policy.html" class="text-gray-400 hover:text-white transition-colors text-sm">Cookie Policy</a>
+                    <a href="/legal/affiliate-disclosure.html" class="text-gray-400 hover:text-white transition-colors text-sm">Affiliate Disclosure</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================================ -->
+    <!-- JAVASCRIPT FUNCTIONALITY                                                    -->
+    <!-- Features: Mobile menu toggle, form handling with URL parameters             -->
+    <!-- ============================================================================ -->
+    
+  <script src="script.js"></script>
 </body>
 </html>
