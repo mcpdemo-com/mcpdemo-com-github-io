@@ -5,148 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tools Directory — MCP Demo</title>
   <meta name="description" content="Browse live MCP tool demonstrations — calendars, email, databases, and more, all connected to Claude via Model Context Protocol." />
+  <link rel="canonical" href="https://mcpdemo.com/tools/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/" />
   <meta property="og:title" content="Tools Directory — MCP Demo" />
-  <meta property="og:description" content="Browse live MCP tool demonstrations connected to Claude AI." />
-  <meta property="og:image" content="/logo-wide.png" />
+  <meta property="og:description" content="Browse live MCP tool demonstrations — calendars, email, databases, and more, all connected to Claude via Model Context Protocol." />
+  <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:site_name" content="MCP Demo" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg:#080d1a; --bg2:#0d1528; --bg3:#111c35;
-      --cyan:#00d4ff; --blue:#4a9eff;
-      --border:#1a2a40; --txt:#e8edf5; --muted:#8899aa; --dim:#556070;
-    }
+    :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
-    a{color:var(--muted);text-decoration:none;transition:color .2s}
-    a:hover{color:var(--cyan)}
-
-    /* NAV */
-    nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(8,13,26,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem}
-    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-    .nav-brand img{height:28px;mix-blend-mode:screen}
-    .nav-brand span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
-    .nav-links{display:flex;align-items:center;gap:1.8rem}
-    .nav-links a{font-size:.88rem;color:var(--muted)}
-    .nav-links a:hover,.nav-links a.active{color:var(--cyan)}
-    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan);background:transparent;font-size:.88rem;cursor:pointer;transition:background .2s,color .2s;text-decoration:none}
-    .btn-nav:hover,.btn-nav.active{background:var(--cyan);color:var(--bg)}
-
-    /* MAIN */
-    main{flex:1;display:flex;align-items:center;justify-content:center;padding:4rem 2rem}
-    .coming-inner{max-width:640px;width:100%;text-align:center}
-
-    /* ANIMATED LOGO */
-    .hero-logo{width:88px;height:88px;margin:0 auto 2.5rem;filter:drop-shadow(0 0 28px rgba(0,212,255,0.55));animation:glow-pulse 3s ease-in-out infinite}
-    @keyframes glow-pulse{0%,100%{filter:drop-shadow(0 0 28px rgba(0,212,255,0.55))}50%{filter:drop-shadow(0 0 48px rgba(0,212,255,0.85))}}
-
-    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1.25rem}
-    h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2.4rem,6vw,3.6rem);line-height:1.1;margin-bottom:1.25rem}
-    .subtitle{color:var(--muted);font-size:1.05rem;line-height:1.8;margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto}
-
-    /* PREVIEW CHIPS */
-    .chips{display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;margin-bottom:3rem}
-    .chip{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:.4rem .95rem;font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.45rem}
-    .chip-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0}
-    .chip.soon .chip-dot{background:var(--cyan);box-shadow:0 0 6px rgba(0,212,255,.6)}
-
-    /* NOTIFY FORM */
-    .notify-box{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem}
-    .notify-box h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.4rem}
-    .notify-box p{color:var(--muted);font-size:.88rem;margin-bottom:1.25rem}
-    .notify-row{display:flex;gap:.65rem}
-    @media(max-width:480px){.notify-row{flex-direction:column}}
-    .notify-row input{
-      flex:1;background:#080d1a !important;color:#e8edf5 !important;
-      border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;
-      font-family:"IBM Plex Sans",sans-serif;font-size:.9rem;outline:none;
-      transition:border-color .2s,box-shadow .2s
-    }
-    .notify-row input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #080d1a inset !important;-webkit-text-fill-color:#e8edf5 !important}
-    .notify-row input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
-    .notify-row input::placeholder{color:var(--dim)}
-    .btn-notify{padding:.75rem 1.5rem;background:var(--cyan);color:var(--bg);border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;font-size:.9rem;cursor:pointer;white-space:nowrap;transition:background .2s,box-shadow .2s}
-    .btn-notify:hover{background:#00eeff;box-shadow:0 0 24px rgba(0,212,255,.4)}
-    .notify-success{display:none;color:var(--cyan);font-size:.85rem;margin-top:.75rem}
-
-    .back-link{color:var(--muted);font-size:.88rem}
-    .back-link:hover{color:var(--cyan)}
-
-    /* FOOTER */
-    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2rem 2rem}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6}
+    a{color:var(--cyan);text-decoration:none}
+    a:hover{text-decoration:underline}
+    nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo img{height:32px;mix-blend-mode:screen}
+    .nav-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+    .nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
+    .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
+    .hero{padding:5rem 2rem 4rem;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,.09) 0%,transparent 70%)}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1rem;font-family:"Exo 2",sans-serif}
+    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.1;margin-bottom:1rem}
+    .hero p{color:var(--muted);max-width:600px;margin:0 auto 2rem;font-size:1.05rem}
+    .coming-soon{padding:4rem 2rem}
+    .coming-soon-inner{max-width:860px;margin:0 auto;text-align:center}
+    h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,2.5vw,1.9rem);margin-bottom:1.5rem}
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin:2.5rem 0 3rem}
+    .tool-chip{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.65rem;font-size:.9rem;color:var(--muted);transition:border-color .2s,color .2s}
+    .tool-chip:hover{border-color:var(--cyan);color:var(--txt)}
+    .tool-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .2s}
+    .tool-chip:hover .dot{background:var(--cyan)}
+    .notify-box{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:2.5rem;max-width:520px;margin:0 auto}
+    .notify-box h3{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:.5rem}
+    .notify-box p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+    .notify-form{display:flex;gap:.75rem}
+    .notify-form input{flex:1;background:#080d1a!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none}
+    .notify-form input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #080d1a inset!important;-webkit-text-fill-color:#e8edf5!important}
+    .notify-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+    .notify-form input::placeholder{color:var(--dim)}
+    .btn-notify{padding:.75rem 1.5rem;background:var(--cyan);color:var(--bg);border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap;transition:background .2s,box-shadow .2s}
+    .btn-notify:hover{background:#00eeff;box-shadow:0 0 20px rgba(0,212,255,.4)}
+    .notify-success{display:none;color:var(--cyan);margin-top:.75rem;font-size:.9rem;text-align:center}
+    .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.9rem;margin-top:2rem;transition:color .2s}
+    .back-link:hover{color:var(--cyan);text-decoration:none}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
     .foot-inner{max-width:1100px;margin:0 auto}
-    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2.5rem;margin-bottom:2.5rem}
-    @media(max-width:768px){.foot-cols{grid-template-columns:1fr}}
-    .foot-logo{display:flex;align-items:center;gap:8px;margin-bottom:.75rem}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
+    .foot-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;text-decoration:none}
     .foot-logo img{height:26px;mix-blend-mode:screen}
-    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.05rem}
-    footer a{display:block;color:var(--muted);font-size:.82rem;margin-bottom:.45rem}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1rem}
+    footer h4{color:var(--cyan);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;font-family:"Exo 2",sans-serif;font-weight:700}
+    footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
     footer a:hover{color:var(--cyan)}
-    footer h4{font-family:"Exo 2",sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:.75rem}
+    .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.notify-form{flex-direction:column}.foot-cols{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a href="/" class="nav-brand">
-      <img src="/logo.png" alt="MCP Demo" />
-      <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
-    </a>
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/about/">About</a>
       <a href="/contact/">Contact</a>
-      <a href="/tools/" class="btn-nav active">Explore Tools</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
     </div>
   </div>
 </nav>
 
-<main>
-  <div class="coming-inner">
-    <img src="/logo.png" alt="MCP Demo" class="hero-logo" style="mix-blend-mode:normal" />
-    <div class="sec-label">Tools Directory</div>
-    <h1>Coming <span style="color:var(--cyan)">soon</span></h1>
-    <p class="subtitle">We're building live, interactive demos for the most useful MCP tools — calendars, email, databases, web search, and more. Each one lets you see Claude using the tool in real time.</p>
+<div class="hero">
+  <div class="sec-label">Tools Directory</div>
+  <h1>Coming soon</h1>
+  <p>We're building live, interactive demos for the most useful MCP tools — calendars, email, databases, web search, and more. Each one lets you see Claude using the tool in real time.</p>
+</div>
 
-    <div class="chips">
-      <div class="chip soon"><span class="chip-dot"></span>Google Calendar</div>
-      <div class="chip soon"><span class="chip-dot"></span>Gmail</div>
-      <div class="chip soon"><span class="chip-dot"></span>Google Drive</div>
-      <div class="chip"><span class="chip-dot"></span>Slack</div>
-      <div class="chip"><span class="chip-dot"></span>Asana</div>
-      <div class="chip"><span class="chip-dot"></span>Salesforce</div>
-      <div class="chip"><span class="chip-dot"></span>GitHub</div>
-      <div class="chip"><span class="chip-dot"></span>Web Search</div>
-      <div class="chip"><span class="chip-dot"></span>+ more</div>
+<div class="coming-soon">
+  <div class="coming-soon-inner">
+    <div class="sec-label">In the pipeline</div>
+    <h2>Tools launching first</h2>
+    <div class="tool-grid">
+      <div class="tool-chip"><span class="dot"></span>Google Calendar</div>
+      <div class="tool-chip"><span class="dot"></span>Gmail</div>
+      <div class="tool-chip"><span class="dot"></span>Google Drive</div>
+      <div class="tool-chip"><span class="dot"></span>Slack</div>
+      <div class="tool-chip"><span class="dot"></span>Asana</div>
+      <div class="tool-chip"><span class="dot"></span>Salesforce</div>
+      <div class="tool-chip"><span class="dot"></span>GitHub</div>
+      <div class="tool-chip"><span class="dot"></span>Web Search</div>
     </div>
 
     <div class="notify-box">
       <h3>Get notified when tools launch</h3>
       <p>Drop your email and we'll let you know when the first demos go live.</p>
-      <div class="notify-row">
-        <input type="email" id="notify-email" placeholder="your@email.com" />
+      <div class="notify-form">
+        <input type="email" id="notifyEmail" placeholder="your@email.com" />
         <button class="btn-notify" onclick="handleNotify()">Notify me</button>
       </div>
-      <p class="notify-success" id="notify-success">✓ You're on the list!</p>
+      <div class="notify-success" id="notifySuccess">✓ You're on the list!</div>
     </div>
 
     <a href="/" class="back-link">← Back to homepage</a>
   </div>
-</main>
+</div>
 
 <footer>
   <div class="foot-inner">
     <div class="foot-cols">
       <div>
-        <div class="foot-logo">
-          <img src="/logo.png" alt="MCP Demo" />
-          <span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span>
-        </div>
-        <p style="color:var(--muted);font-size:.82rem">Model Context Protocol</p>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
         <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
@@ -171,7 +151,7 @@
         <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
       </div>
     </div>
-    <div style="border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div class="foot-bottom">
       <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
       <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
     </div>
@@ -179,23 +159,25 @@
 </footer>
 
 <script>
-async function handleNotify() {
-  const email = document.getElementById('notify-email').value.trim();
-  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
-  try {
-    const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, name: '' })
-    });
-    if (res.ok) {
-      document.getElementById('notify-success').style.display = 'block';
-      document.getElementById('notify-email').value = '';
-    } else { throw new Error(); }
-  } catch {
-    window.open('https://app.mcpcio.com/forms/sqt6qbtd', '_blank');
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  async function handleNotify() {
+    const email = document.getElementById('notifyEmail').value;
+    if (!email) return;
+    try {
+      const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        document.getElementById('notifyEmail').style.display = 'none';
+        document.querySelector('.btn-notify').style.display = 'none';
+        document.getElementById('notifySuccess').style.display = 'block';
+      } else { throw new Error(); }
+    } catch {
+      window.open('https://app.mcpcio.com/forms/sqt6qbtd','_blank');
+    }
   }
-}
-document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
