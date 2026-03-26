@@ -4,15 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tools Directory — MCP Demo</title>
-  <meta name="description" content="Browse live MCP tool demonstrations — calendars, email, databases, and more, all connected to Claude via Model Context Protocol." />
+  <meta name="description" content="Browse live Model Context Protocol (MCP) tool demonstrations — e-commerce, productivity, data, and more, all connected to Claude AI in real time." />
   <link rel="canonical" href="https://mcpdemo.com/tools/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mcpdemo.com/tools/" />
   <meta property="og:title" content="Tools Directory — MCP Demo" />
-  <meta property="og:description" content="Browse live MCP tool demonstrations — calendars, email, databases, and more, all connected to Claude via Model Context Protocol." />
+  <meta property="og:description" content="Browse live MCP tool demonstrations connected to Claude AI." />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
-  <meta property="og:image:width" content="1400" />
-  <meta property="og:image:height" content="420" />
   <meta property="og:site_name" content="MCP Demo" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +21,6 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6}
     a{color:var(--cyan);text-decoration:none}
-    a:hover{text-decoration:underline}
     nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
     .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
     .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
@@ -34,31 +31,41 @@
     .nav-links a:hover{color:var(--cyan)}
     .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
     .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
-    .hero{padding:5rem 2rem 4rem;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,.09) 0%,transparent 70%)}
+    .hero{padding:4.5rem 2rem 3rem;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,.09) 0%,transparent 70%)}
     .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1rem;font-family:"Exo 2",sans-serif}
-    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.1;margin-bottom:1rem}
-    .hero p{color:var(--muted);max-width:600px;margin:0 auto 2rem;font-size:1.05rem}
-    .coming-soon{padding:4rem 2rem}
-    .coming-soon-inner{max-width:860px;margin:0 auto;text-align:center}
-    h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,2.5vw,1.9rem);margin-bottom:1.5rem}
-    .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin:2.5rem 0 3rem}
-    .tool-chip{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.65rem;font-size:.9rem;color:var(--muted);transition:border-color .2s,color .2s}
-    .tool-chip:hover{border-color:var(--cyan);color:var(--txt)}
-    .tool-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .2s}
-    .tool-chip:hover .dot{background:var(--cyan)}
-    .notify-box{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:2.5rem;max-width:520px;margin:0 auto}
-    .notify-box h3{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:.5rem}
-    .notify-box p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
-    .notify-form{display:flex;gap:.75rem}
-    .notify-form input{flex:1;background:#080d1a!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none}
-    .notify-form input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #080d1a inset!important;-webkit-text-fill-color:#e8edf5!important}
-    .notify-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
-    .notify-form input::placeholder{color:var(--dim)}
-    .btn-notify{padding:.75rem 1.5rem;background:var(--cyan);color:var(--bg);border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap;transition:background .2s,box-shadow .2s}
-    .btn-notify:hover{background:#00eeff;box-shadow:0 0 20px rgba(0,212,255,.4)}
-    .notify-success{display:none;color:var(--cyan);margin-top:.75rem;font-size:.9rem;text-align:center}
-    .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.9rem;margin-top:2rem;transition:color .2s}
-    .back-link:hover{color:var(--cyan);text-decoration:none}
+    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.2rem);line-height:1.1;margin-bottom:1rem}
+    .hero p{color:var(--muted);max-width:580px;margin:0 auto;font-size:1rem}
+    .search-wrap{max-width:560px;margin:2rem auto 0;position:relative}
+    .search-wrap svg{position:absolute;left:1rem;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none}
+    #toolSearch{width:100%;background:#0d1528!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem .85rem 2.8rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none;transition:border-color .2s,box-shadow .2s}
+    #toolSearch:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0d1528 inset!important;-webkit-text-fill-color:#e8edf5!important}
+    #toolSearch:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+    #toolSearch::placeholder{color:var(--dim)}
+    .filter-row{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+    .filter-btn{padding:.35rem .9rem;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s}
+    .filter-btn:hover,.filter-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.07)}
+    .tools-section{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem}
+    .section-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+    .section-head h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.1rem;color:var(--txt)}
+    .live-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.25);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif}
+    .coming-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.2);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif}
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+    .tool-card{background:var(--bg3);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:12px;padding:1.6rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .2s,box-shadow .2s;text-decoration:none;color:inherit}
+    .tool-card:hover{transform:translateY(-4px);box-shadow:0 8px 36px rgba(0,212,255,.1);text-decoration:none}
+    .tool-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+    .tool-icon{width:44px;height:44px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .tool-card h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.05rem;color:var(--cyan);margin-bottom:.2rem}
+    .tool-card .category{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-family:"Exo 2",sans-serif;font-weight:600}
+    .tool-card p{color:var(--muted);font-size:.88rem;line-height:1.6;flex:1}
+    .tool-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.25rem}
+    .tool-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+    .tag{font-size:.7rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.1rem .45rem;font-family:"Exo 2",sans-serif;font-weight:600}
+    .card-cta{font-size:.8rem;font-weight:700;color:var(--cyan);font-family:"Exo 2",sans-serif;white-space:nowrap}
+    .soon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-top:.5rem}
+    .soon-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted)}
+    .soon-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0}
+    .divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+    #noResults{display:none;text-align:center;padding:3rem;color:var(--muted)}
     footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
     .foot-inner{max-width:1100px;margin:0 auto}
     .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
@@ -69,7 +76,7 @@
     footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
     footer a:hover{color:var(--cyan)}
     .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.notify-form{flex-direction:column}.foot-cols{grid-template-columns:1fr}}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.foot-cols{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -88,37 +95,77 @@
 
 <div class="hero">
   <div class="sec-label">Tools Directory</div>
-  <h1>Coming soon</h1>
-  <p>We're building live, interactive demos for the most useful MCP tools — calendars, email, databases, web search, and more. Each one lets you see Claude using the tool in real time.</p>
+  <h1>MCP Tools, Live &amp; Connected</h1>
+  <p>Every tool here is a real Model Context Protocol (MCP) connection — Claude talks directly to the service, no copy-paste required.</p>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="toolSearch" placeholder="Search tools, categories, or use cases…" oninput="filterTools()" />
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('ecommerce',this)">E-Commerce</button>
+    <button class="filter-btn" onclick="setFilter('productivity',this)">Productivity</button>
+    <button class="filter-btn" onclick="setFilter('data',this)">Data</button>
+    <button class="filter-btn" onclick="setFilter('communication',this)">Communication</button>
+  </div>
 </div>
 
-<div class="coming-soon">
-  <div class="coming-soon-inner">
-    <div class="sec-label">In the pipeline</div>
-    <h2>Tools launching first</h2>
-    <div class="tool-grid">
-      <div class="tool-chip"><span class="dot"></span>Google Calendar</div>
-      <div class="tool-chip"><span class="dot"></span>Gmail</div>
-      <div class="tool-chip"><span class="dot"></span>Google Drive</div>
-      <div class="tool-chip"><span class="dot"></span>Slack</div>
-      <div class="tool-chip"><span class="dot"></span>Asana</div>
-      <div class="tool-chip"><span class="dot"></span>Salesforce</div>
-      <div class="tool-chip"><span class="dot"></span>GitHub</div>
-      <div class="tool-chip"><span class="dot"></span>Web Search</div>
-    </div>
+<div class="tools-section">
 
-    <div class="notify-box">
-      <h3>Get notified when tools launch</h3>
-      <p>Drop your email and we'll let you know when the first demos go live.</p>
-      <div class="notify-form">
-        <input type="email" id="notifyEmail" placeholder="your@email.com" />
-        <button class="btn-notify" onclick="handleNotify()">Notify me</button>
-      </div>
-      <div class="notify-success" id="notifySuccess">✓ You're on the list!</div>
-    </div>
-
-    <a href="/" class="back-link">← Back to homepage</a>
+  <!-- LIVE TOOLS -->
+  <div class="section-head">
+    <h2>Live Demos</h2>
+    <span class="live-badge">Available Now</span>
   </div>
+
+  <div class="tool-grid" id="liveGrid">
+
+    <a class="tool-card" href="/tools/shopify/" data-name="shopify product search ecommerce store" data-cat="ecommerce">
+      <div class="tool-card-head">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00d4ff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <span class="live-badge">Live</span>
+      </div>
+      <div>
+        <div class="category">E-Commerce</div>
+        <h3>Shopify</h3>
+      </div>
+      <p>Search millions of products across Shopify stores, compare prices, and get direct checkout links — all through a natural language conversation with Claude.</p>
+      <div class="tool-card-foot">
+        <div class="tool-tags"><span class="tag">Product Search</span><span class="tag">Pricing</span><span class="tag">Checkout</span></div>
+        <span class="card-cta">Explore →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div id="noResults"><p>No tools match your search. <a href="#" onclick="clearSearch()">Clear filter</a></p></div>
+
+  <hr class="divider" />
+
+  <!-- COMING SOON -->
+  <div class="section-head">
+    <h2>Coming Soon</h2>
+    <span class="coming-badge">In Development</span>
+  </div>
+  <div class="soon-grid" id="soonGrid">
+    <div class="soon-chip" data-name="google calendar productivity scheduling"><span class="soon-dot"></span>Google Calendar</div>
+    <div class="soon-chip" data-name="gmail email communication productivity"><span class="soon-dot"></span>Gmail</div>
+    <div class="soon-chip" data-name="google drive files data productivity"><span class="soon-dot"></span>Google Drive</div>
+    <div class="soon-chip" data-name="slack communication messaging teams"><span class="soon-dot"></span>Slack</div>
+    <div class="soon-chip" data-name="asana tasks productivity project management"><span class="soon-dot"></span>Asana</div>
+    <div class="soon-chip" data-name="salesforce crm data communication"><span class="soon-dot"></span>Salesforce</div>
+    <div class="soon-chip" data-name="github code data developer"><span class="soon-dot"></span>GitHub</div>
+    <div class="soon-chip" data-name="web search data research"><span class="soon-dot"></span>Web Search</div>
+    <div class="soon-chip" data-name="stripe payments ecommerce billing"><span class="soon-dot"></span>Stripe</div>
+    <div class="soon-chip" data-name="notion productivity docs data"><span class="soon-dot"></span>Notion</div>
+    <div class="soon-chip" data-name="hubspot crm marketing communication"><span class="soon-dot"></span>HubSpot</div>
+    <div class="soon-chip" data-name="postgres database data sql"><span class="soon-dot"></span>PostgreSQL</div>
+  </div>
+
 </div>
 
 <footer>
@@ -160,23 +207,44 @@
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+  let activeFilter = 'all';
 
-  async function handleNotify() {
-    const email = document.getElementById('notifyEmail').value;
-    if (!email) return;
-    try {
-      const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ email })
-      });
-      if (res.ok) {
-        document.getElementById('notifyEmail').style.display = 'none';
-        document.querySelector('.btn-notify').style.display = 'none';
-        document.getElementById('notifySuccess').style.display = 'block';
-      } else { throw new Error(); }
-    } catch {
-      window.open('https://app.mcpcio.com/forms/sqt6qbtd','_blank');
-    }
+  function setFilter(cat, btn) {
+    activeFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterTools();
+  }
+
+  function filterTools() {
+    const q = document.getElementById('toolSearch').value.toLowerCase();
+    const liveCards = document.querySelectorAll('#liveGrid .tool-card');
+    const soonChips = document.querySelectorAll('#soonGrid .soon-chip');
+    let liveVisible = 0;
+
+    liveCards.forEach(card => {
+      const name = card.dataset.name || '';
+      const cat = card.dataset.cat || '';
+      const matchesSearch = !q || name.includes(q);
+      const matchesCat = activeFilter === 'all' || cat === activeFilter;
+      const show = matchesSearch && matchesCat;
+      card.style.display = show ? '' : 'none';
+      if (show) liveVisible++;
+    });
+
+    soonChips.forEach(chip => {
+      const name = chip.dataset.name || '';
+      const matchesSearch = !q || name.includes(q);
+      chip.style.display = matchesSearch ? '' : 'none';
+    });
+
+    document.getElementById('noResults').style.display = liveVisible === 0 && q ? 'block' : 'none';
+  }
+
+  function clearSearch() {
+    document.getElementById('toolSearch').value = '';
+    filterTools();
+    return false;
   }
 </script>
 </body>
