@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopify Live Demo — MCP Demo</title>
-  <meta name="description" content="Live demo: Claude searches Shopify products in real time via Model Context Protocol (MCP). No API key needed — powered by mcpcio.com." />
+  <title>Shopify Product Search Demo — MCP Demo</title>
+  <meta name="description" content="Live demo: Claude searches Shopify products in real time via Model Context Protocol (MCP). No account needed — powered by mcpcio.com." />
   <link rel="canonical" href="https://mcpdemo.com/tools/shopify/demo.html" />
   <meta property="og:title" content="Shopify Live Demo — MCP Demo" />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
@@ -29,31 +29,81 @@
     .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
     .context-bar{background:rgba(0,212,255,.06);border-bottom:1px solid rgba(0,212,255,.15);padding:.6rem 2rem;text-align:center;font-size:.8rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:600;letter-spacing:.04em}
     .context-bar span{color:var(--muted);font-weight:400;font-family:"IBM Plex Sans",sans-serif}
-    main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:2rem 2rem 4rem}
+    main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:2rem 2rem 4rem}
     .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--dim);margin-bottom:1.5rem}
     .breadcrumb a{color:var(--muted);transition:color .2s}
     .breadcrumb a:hover{color:var(--cyan)}
     .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;font-family:"Exo 2",sans-serif}
-    .page-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.5rem}
+    .page-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.4rem}
     .page-head h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.2rem)}
-    .page-head-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.75rem}
-    .sponsored-bar{display:flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:8px;padding:.55rem 1rem;margin-bottom:1.5rem;font-size:.78rem;color:var(--muted)}
+    .page-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+    .sponsored-bar{display:flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:8px;padding:.5rem 1rem;margin-bottom:1.5rem;font-size:.78rem;color:var(--muted)}
     .sponsored-bar a{color:var(--blue);font-size:.78rem;font-weight:600}
-    .sponsored-bar strong{color:var(--txt)}
-    .widget-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--bg3);min-height:575px}
-    .widget-wrap iframe{display:block;width:100%;height:575px;border:none}
+
+    /* PROMPTS */
+    .prompts-label{font-size:.75rem;color:var(--muted);margin-bottom:.55rem;font-family:"Exo 2",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .prompts{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    .prompt-chip{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:.38rem .95rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:"IBM Plex Sans",sans-serif}
+    .prompt-chip:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06)}
+
+    /* INPUT */
+    .input-row{display:flex;gap:.75rem;margin-bottom:1.5rem}
+    #userInput{flex:1;background:#0d1528!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:10px;padding:.8rem 1.1rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
+    #userInput:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0d1528 inset!important;-webkit-text-fill-color:#e8edf5!important}
+    #userInput:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+    #userInput::placeholder{color:var(--dim)}
+    #sendBtn{padding:.8rem 1.75rem;background:var(--cyan);color:#080d1a;border:none;border-radius:10px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;white-space:nowrap;font-size:.95rem}
+    #sendBtn:hover{background:#00eeff;box-shadow:0 0 20px rgba(0,212,255,.4)}
+    #sendBtn:disabled{opacity:.5;cursor:not-allowed}
+
+    /* RESPONSE AREA */
+    .response-area{min-height:180px;margin-bottom:1.5rem}
+    .placeholder{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:3rem;text-align:center;color:var(--dim)}
+    .placeholder svg{display:block;margin:0 auto 1rem;opacity:.3}
+    .placeholder p{font-size:.9rem}
+    .thinking{display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center}
+    .thinking.active{display:block}
+    .dots{display:inline-flex;gap:.4rem;margin-bottom:.75rem}
+    .dots span{display:inline-block;width:8px;height:8px;background:var(--cyan);border-radius:50%;animation:dot-pulse 1.4s ease-in-out infinite}
+    .dots span:nth-child(2){animation-delay:.2s}
+    .dots span:nth-child(3){animation-delay:.4s}
+    @keyframes dot-pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+    .thinking p{color:var(--muted);font-size:.88rem}
+    .error-msg{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:1rem 1.25rem;color:#ff6b6b;font-size:.88rem;display:none}
+    .quota-msg{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-radius:10px;padding:1rem 1.25rem;color:var(--muted);font-size:.88rem;display:none}
+
+    /* SUMMARY */
+    .summary-bar{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:8px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.85rem;color:var(--muted);display:none}
+    .summary-bar .mcp-badge{display:inline-flex;align-items:center;gap:.35rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-right:.6rem}
+
+    /* PRODUCT CARDS */
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;display:none}
+    .product-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+    .product-card:hover{transform:translateY(-3px);box-shadow:0 6px 28px rgba(0,212,255,.1)}
+    .product-img{width:100%;height:160px;object-fit:contain;background:var(--bg2);padding:.75rem}
+    .product-img-placeholder{width:100%;height:160px;background:var(--bg2);display:flex;align-items:center;justify-content:center}
+    .product-body{padding:1rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
+    .product-title{font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--txt);line-height:1.4}
+    .product-price{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.1rem;color:var(--cyan)}
+    .product-rating{font-size:.75rem;color:var(--muted)}
+    .product-seller{font-size:.72rem;color:var(--dim)}
+    .product-desc{font-size:.78rem;color:var(--muted);line-height:1.5;flex:1}
+    .product-link{display:block;margin-top:.75rem;padding:.5rem;background:transparent;border:1px solid var(--border);border-radius:7px;text-align:center;color:var(--cyan);font-size:.8rem;font-weight:700;font-family:"Exo 2",sans-serif;text-decoration:none;transition:all .2s}
+    .product-link:hover{background:rgba(0,212,255,.08);border-color:var(--cyan);text-decoration:none}
+    .cache-note{font-size:.72rem;color:var(--dim);text-align:right;margin-top:.5rem;display:none}
+
+    /* COLLAPSIBLE */
     details{margin-top:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-    summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.9rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
+    summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
     summary:hover{color:var(--cyan)}
     summary::after{content:"›";font-size:1.2rem;transition:transform .2s}
     details[open] summary::after{transform:rotate(90deg)}
     details[open] summary{color:var(--cyan)}
-    .details-body{padding:1.25rem;border-top:1px solid var(--border);background:var(--bg2);font-size:.88rem;color:var(--muted);line-height:1.75}
-    .details-body p{margin-bottom:.75rem}
-    .details-body p:last-child{margin-bottom:0}
-    .details-body code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:.8rem;color:var(--cyan);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.12);border-radius:3px;padding:.1rem .3rem}
-    .info-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.5rem;color:var(--muted);font-size:.85rem;transition:color .2s}
-    .info-link:hover{color:var(--cyan);text-decoration:none}
+    .details-body{padding:1.25rem;border-top:1px solid var(--border);background:var(--bg2);font-size:.85rem;color:var(--muted);line-height:1.75}
+    .details-body p{margin-bottom:.65rem}
+    .details-body p:last-child{margin:0}
+    .details-body code{color:var(--cyan);font-family:"IBM Plex Mono","Courier New",monospace;font-size:.8rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.12);border-radius:3px;padding:.1rem .3rem}
+
     footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
     .foot-inner{max-width:1100px;margin:0 auto}
     .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
@@ -64,7 +114,7 @@
     footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
     footer a:hover{color:var(--cyan)}
     .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.foot-cols{grid-template-columns:1fr}}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.input-row{flex-direction:column}.foot-cols{grid-template-columns:1fr}.product-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -82,7 +132,7 @@
 </nav>
 
 <div class="context-bar">
-  Connected to <strong>Shopify</strong> via MCP &nbsp;·&nbsp; <span>Real product data · Live pricing · Direct checkout links</span>
+  Connected to <strong>Shopify</strong> via MCP &nbsp;·&nbsp; <span>Real product data · Live pricing · Powered by mcpcio.com</span>
 </div>
 
 <main>
@@ -95,41 +145,64 @@
   </div>
 
   <div class="page-head">
-    <div>
-      <h1>Shopify Product Search</h1>
-    </div>
+    <h1>Shopify Product Search</h1>
     <span class="sec-label">Live Demo</span>
   </div>
-  <p class="page-head-sub">Claude searches real Shopify data via MCP — live results every time. No account or API key needed.</p>
+  <p class="page-sub">Ask Claude to search millions of real Shopify products — live results, no account needed.</p>
 
   <div class="sponsored-bar">
-    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#4a9eff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    <span>This demo is powered by <a href="https://mcpcio.com" target="_blank" rel="noopener">mcpcio.com</a> MCP infrastructure &nbsp;·&nbsp; <strong>Free to try, no sign-up required</strong></span>
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    Free demos provided by <a href="https://mcpcio.com" target="_blank" rel="noopener">mcpcio.com</a> &nbsp;·&nbsp; Privacy-first · No tracking · No sign-up required
   </div>
 
-  <div class="widget-wrap">
-    <iframe
-      src="https://app.mcpcio.com/agents/3785553/embed"
-      title="Shopify Product Search — Live MCP Demo"
-      allow="microphone"
-      loading="lazy">
-    </iframe>
+  <div class="prompts-label">Try a starter prompt</div>
+  <div class="prompts">
+    <button class="prompt-chip" onclick="usePrompt(this)">Wireless headphones under $100</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Standing desk under $400</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Best mechanical keyboards</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Ergonomic office chairs</button>
   </div>
-  <script src="https://app.mcpcio.com/iframe-auto-resize.js"></script>
 
-  <a href="/tools/shopify/" class="info-link">
-    ← How does this MCP connection work?
-  </a>
+  <div class="input-row">
+    <input type="text" id="userInput" placeholder="Search for any product…" onkeydown="if(event.key==='Enter')sendSearch()" />
+    <button id="sendBtn" onclick="sendSearch()">Search →</button>
+  </div>
+
+  <!-- Response states -->
+  <div class="response-area">
+    <div class="placeholder" id="placeholder">
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#00d4ff" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <p>Results will appear here.<br>Enter a query above to get started.</p>
+    </div>
+
+    <div class="thinking" id="thinking">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <p>Claude is searching Shopify via MCP…</p>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="quota-msg" id="quotaMsg"></div>
+
+    <div class="summary-bar" id="summaryBar">
+      <span class="mcp-badge">
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        MCP · Shopify
+      </span>
+      <span id="summaryText"></span>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+    <div class="cache-note" id="cacheNote">⚡ Result from cache</div>
+  </div>
 
   <details>
     <summary>What's happening under the hood?</summary>
     <div class="details-body">
-      <p>This demo connects Claude directly to Shopify's product catalogue via Model Context Protocol (MCP). When you send a message, Claude calls <code>productsearch_search_products</code> — a live MCP tool that queries millions of real Shopify products in real time.</p>
-      <p>The MCP server is hosted by <a href="https://mcpcio.com" target="_blank" rel="noopener" style="color:var(--blue)">mcpcio.com</a>, which handles authentication, rate limiting, and result formatting on your behalf. Your searches are private — no tracking, no data selling.</p>
-      <p>Want to build this into your own app? See the <a href="/tools/shopify/" style="color:var(--blue)">Shopify MCP info page</a> for the full code example using the <code>mcp-client-2025-04-04</code> beta header.</p>
+      <p>When you search, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds an Anthropic API key securely — it's never sent to your browser.</p>
+      <p>The Worker calls <strong style="color:var(--txt)">Claude</strong> with the <strong style="color:var(--txt)">mcpcio.com MCP server</strong> connected. Claude automatically calls <code>productsearch_search_products</code> — a live tool that queries millions of real Shopify products. Checkout tools are deliberately excluded so results stay on this page.</p>
+      <p>Responses are cached for 7 days and rate-limited to keep the demo free and fair for everyone. Want the full technical walkthrough? <a href="/tools/shopify/">Read the info page →</a></p>
     </div>
   </details>
-
 </main>
 
 <footer>
@@ -168,6 +241,132 @@
     </div>
   </div>
 </footer>
-<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function usePrompt(btn) {
+    document.getElementById('userInput').value = btn.textContent;
+    document.getElementById('userInput').focus();
+  }
+
+  function setLoading(on) {
+    document.getElementById('sendBtn').disabled = on;
+    document.getElementById('placeholder').style.display  = on ? 'none' : '';
+    document.getElementById('thinking').classList.toggle('active', on);
+    document.getElementById('errorMsg').style.display     = 'none';
+    document.getElementById('quotaMsg').style.display     = 'none';
+    document.getElementById('summaryBar').style.display   = 'none';
+    document.getElementById('productGrid').style.display  = 'none';
+    document.getElementById('cacheNote').style.display    = 'none';
+    if (on) document.getElementById('placeholder').style.display = 'none';
+  }
+
+  function showError(msg) {
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('thinking').classList.remove('active');
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function showQuota(msg) {
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('thinking').classList.remove('active');
+    const el = document.getElementById('quotaMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function renderProducts(result, source) {
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('thinking').classList.remove('active');
+
+    if (result.summary) {
+      document.getElementById('summaryText').textContent = result.summary;
+      document.getElementById('summaryBar').style.display = 'block';
+    }
+
+    if (!result.products || result.products.length === 0) {
+      document.getElementById('placeholder').style.display = 'block';
+      document.getElementById('placeholder').querySelector('p').textContent = result.summary || 'No products found. Try a different search.';
+      return;
+    }
+
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+
+    result.products.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      const imgHtml = p.image
+        ? `<img class="product-img" src="${escHtml(p.image)}" alt="${escHtml(p.title)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\"product-img-placeholder\\"><svg viewBox=\\"0 0 24 24\\" width=\\"32\\" height=\\"32\\" fill=\\"none\\" stroke=\\"#1a2a40\\" stroke-width=\\"1.5\\"><path d=\\"M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z\\"/></svg></div>'" />`
+        : `<div class="product-img-placeholder"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#1a2a40" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg></div>`;
+
+      card.innerHTML = `
+        ${imgHtml}
+        <div class="product-body">
+          <div class="product-title">${escHtml(p.title)}</div>
+          <div class="product-price">${escHtml(p.price)}</div>
+          ${p.rating ? `<div class="product-rating">⭐ ${escHtml(p.rating)}</div>` : ''}
+          ${p.seller ? `<div class="product-seller">via ${escHtml(p.seller)}</div>` : ''}
+          ${p.description ? `<div class="product-desc">${escHtml(p.description)}</div>` : ''}
+          ${p.url ? `<a class="product-link" href="${escHtml(p.url)}" target="_blank" rel="noopener noreferrer">View Product →</a>` : ''}
+        </div>`;
+
+      grid.appendChild(card);
+    });
+
+    grid.style.display = 'grid';
+
+    if (source === 'cache') {
+      document.getElementById('cacheNote').style.display = 'block';
+    }
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function sendSearch() {
+    const query = document.getElementById('userInput').value.trim();
+    if (!query) return;
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('https://api.mcpdemo.com/proxy/shopify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(data.error || 'Request failed. Please try again.');
+        return;
+      }
+
+      if (data.source === 'quota' || data.source === 'ratelimit') {
+        showQuota(data.message);
+        return;
+      }
+
+      renderProducts(data.result, data.source);
+
+    } catch (err) {
+      showError('Connection failed. Please check your network and try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+</script>
 </body>
 </html>
