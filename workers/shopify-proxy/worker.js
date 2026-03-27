@@ -2,25 +2,15 @@
  * MCP Demo — Shopify Product Search Worker
  * =========================================
  * Proxies Anthropic API calls for the Shopify demo page.
- * - Holds ANTHROPIC_API_KEY encrypted — never exposed to browser
+ * - Holds ANTHROPIC_API_KEY and MCPCIO_TOKEN encrypted
  * - Calls mcpcio product search MCP tools (search + compare only, no checkout)
  * - Caches responses in KV by query hash (7-day TTL)
  * - Rate limits: 500 live calls/day site-wide, 5/IP/day
- * - Serves cached results when quota is exhausted
- *
- * REQUIRED KV BINDINGS (set in Cloudflare dashboard):
- *   MCP_CACHE   — cached query responses
- *   MCP_LIMITS  — rate limit counters
- *
- * REQUIRED SECRET (set in Cloudflare dashboard → Settings → Variables → Encrypt):
- *   ANTHROPIC_API_KEY — your sk-ant-... key
- *
- * Last updated: 2026-03-26
  */
 
 const DAILY_LIMIT    = 500;
 const PER_IP_LIMIT   = 5;
-const CACHE_TTL      = 604800;  // 7 days in seconds
+const CACHE_TTL      = 604800;
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
 
 const SYSTEM_PROMPT = `You are a Shopify product search assistant. You have access to live product search tools via MCP that query millions of real Shopify products.
@@ -108,7 +98,7 @@ export default {
     const dailyKey   = `daily:${dateStr}`;
     const ipKey      = `ip:${ip}:${dateStr}`;
 
-    // Check cache first — always serve if available
+    // Check cache first
     let cached = null;
     try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
 
@@ -117,9 +107,7 @@ export default {
     if (dailyCount >= DAILY_LIMIT) {
       if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
       return json({
-        result: null,
-        source: 'quota',
-        sponsored: true,
+        result: null, source: 'quota', sponsored: true,
         message: `Today's ${DAILY_LIMIT} free demos have been used. Powered by mcpcio.com — check back tomorrow!`
       });
     }
@@ -129,14 +117,12 @@ export default {
     if (ipCount >= PER_IP_LIMIT) {
       if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
       return json({
-        result: null,
-        source: 'ratelimit',
-        sponsored: true,
+        result: null, source: 'ratelimit', sponsored: true,
         message: `You've used your ${PER_IP_LIMIT} free demos for today. Powered by mcpcio.com — come back tomorrow!`
       });
     }
 
-    // Make live Anthropic API call with mcpcio MCP server
+    // Make live Anthropic API call with mcpcio MCP server + auth token
     let apiResp;
     try {
       apiResp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -153,9 +139,10 @@ export default {
           system:     SYSTEM_PROMPT,
           messages:   [{ role: 'user', content: query }],
           mcp_servers: [{
-            type: 'url',
-            url:  'https://api.mcpcio.com/mcp',
-            name: 'mcpcio',
+            type:                'url',
+            url:                 'https://api.mcpcio.com/mcp',
+            name:                'mcpcio',
+            authorization_token: env.MCPCIO_TOKEN,
             tool_configuration: {
               enabled: true,
               allowed_tools: [
@@ -177,14 +164,12 @@ export default {
       return json({ error: data?.error?.message || 'API error', code: data?.error?.type }, apiResp.status, origin);
     }
 
-    // Extract text response
     const text = (data.content || [])
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('\n')
       .trim();
 
-    // Parse JSON from Claude's response
     let result;
     try {
       const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -193,13 +178,13 @@ export default {
       result = { summary: text, products: [] };
     }
 
-    // Increment rate limit counters
+    // Increment counters
     try {
       await env.MCP_LIMITS.put(dailyKey, String(dailyCount + 1), { expirationTtl: 86400 });
       await env.MCP_LIMITS.put(ipKey,    String(ipCount + 1),    { expirationTtl: 86400 });
     } catch {}
 
-    // Cache the result
+    // Cache result
     try {
       await env.MCP_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: CACHE_TTL });
     } catch {}
