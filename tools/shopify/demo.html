@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shopify Product Search Demo — MCP Demo</title>
-  <meta name="description" content="Live demo: Claude searches Shopify products in real time via Model Context Protocol (MCP). No account needed — powered by mcpcio.com." />
+  <meta name="description" content="Live demo: Search millions of Shopify products in real time via Model Context Protocol (MCP). No account needed — powered by mcpcio.com." />
   <link rel="canonical" href="https://mcpdemo.com/tools/shopify/demo.html" />
   <meta property="og:title" content="Shopify Live Demo — MCP Demo" />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
@@ -39,14 +39,10 @@
     .page-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
     .sponsored-bar{display:flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:8px;padding:.5rem 1rem;margin-bottom:1.5rem;font-size:.78rem;color:var(--muted)}
     .sponsored-bar a{color:var(--blue);font-size:.78rem;font-weight:600}
-
-    /* PROMPTS */
     .prompts-label{font-size:.75rem;color:var(--muted);margin-bottom:.55rem;font-family:"Exo 2",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
     .prompts{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem}
     .prompt-chip{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:.38rem .95rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:"IBM Plex Sans",sans-serif}
     .prompt-chip:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06)}
-
-    /* INPUT */
     .input-row{display:flex;gap:.75rem;margin-bottom:1.5rem}
     #userInput{flex:1;background:#0d1528!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:10px;padding:.8rem 1.1rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
     #userInput:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0d1528 inset!important;-webkit-text-fill-color:#e8edf5!important}
@@ -55,8 +51,6 @@
     #sendBtn{padding:.8rem 1.75rem;background:var(--cyan);color:#080d1a;border:none;border-radius:10px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;white-space:nowrap;font-size:.95rem}
     #sendBtn:hover{background:#00eeff;box-shadow:0 0 20px rgba(0,212,255,.4)}
     #sendBtn:disabled{opacity:.5;cursor:not-allowed}
-
-    /* RESPONSE AREA */
     .response-area{min-height:180px;margin-bottom:1.5rem}
     .placeholder{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:3rem;text-align:center;color:var(--dim)}
     .placeholder svg{display:block;margin:0 auto 1rem;opacity:.3}
@@ -71,12 +65,8 @@
     .thinking p{color:var(--muted);font-size:.88rem}
     .error-msg{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:1rem 1.25rem;color:#ff6b6b;font-size:.88rem;display:none}
     .quota-msg{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-radius:10px;padding:1rem 1.25rem;color:var(--muted);font-size:.88rem;display:none}
-
-    /* SUMMARY */
     .summary-bar{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:8px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.85rem;color:var(--muted);display:none}
     .summary-bar .mcp-badge{display:inline-flex;align-items:center;gap:.35rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-right:.6rem}
-
-    /* PRODUCT CARDS */
     .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;display:none}
     .product-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
     .product-card:hover{transform:translateY(-3px);box-shadow:0 6px 28px rgba(0,212,255,.1)}
@@ -91,8 +81,6 @@
     .product-link{display:block;margin-top:.75rem;padding:.5rem;background:transparent;border:1px solid var(--border);border-radius:7px;text-align:center;color:var(--cyan);font-size:.8rem;font-weight:700;font-family:"Exo 2",sans-serif;text-decoration:none;transition:all .2s}
     .product-link:hover{background:rgba(0,212,255,.08);border-color:var(--cyan);text-decoration:none}
     .cache-note{font-size:.72rem;color:var(--dim);text-align:right;margin-top:.5rem;display:none}
-
-    /* COLLAPSIBLE */
     details{margin-top:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
     summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
     summary:hover{color:var(--cyan)}
@@ -103,7 +91,6 @@
     .details-body p{margin-bottom:.65rem}
     .details-body p:last-child{margin:0}
     .details-body code{color:var(--cyan);font-family:"IBM Plex Mono","Courier New",monospace;font-size:.8rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.12);border-radius:3px;padding:.1rem .3rem}
-
     footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
     .foot-inner{max-width:1100px;margin:0 auto}
     .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
@@ -148,7 +135,7 @@
     <h1>Shopify Product Search</h1>
     <span class="sec-label">Live Demo</span>
   </div>
-  <p class="page-sub">Ask Claude to search millions of real Shopify products — live results, no account needed.</p>
+  <p class="page-sub">Search millions of real Shopify products via MCP — live results, no account needed.</p>
 
   <div class="sponsored-bar">
     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -168,7 +155,6 @@
     <button id="sendBtn" onclick="sendSearch()">Search →</button>
   </div>
 
-  <!-- Response states -->
   <div class="response-area">
     <div class="placeholder" id="placeholder">
       <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#00d4ff" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -177,7 +163,7 @@
 
     <div class="thinking" id="thinking">
       <div class="dots"><span></span><span></span><span></span></div>
-      <p>Claude is searching Shopify via MCP…</p>
+      <p>Searching Shopify via MCP…</p>
     </div>
 
     <div class="error-msg" id="errorMsg"></div>
@@ -198,8 +184,8 @@
   <details>
     <summary>What's happening under the hood?</summary>
     <div class="details-body">
-      <p>When you search, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds an Anthropic API key securely — it's never sent to your browser.</p>
-      <p>The Worker calls <strong style="color:var(--txt)">Claude</strong> with the <strong style="color:var(--txt)">mcpcio.com MCP server</strong> connected. Claude automatically calls <code>productsearch_search_products</code> — a live tool that queries millions of real Shopify products. Checkout tools are deliberately excluded so results stay on this page.</p>
+      <p>When you search, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds API credentials securely — they're never sent to your browser.</p>
+      <p>The Worker uses the <strong style="color:var(--txt)">mcpcio.com MCP server</strong> to call <code>productsearch_search_products</code> — a live tool that queries millions of real Shopify products in real time. Checkout tools are deliberately excluded so results stay on this page.</p>
       <p>Responses are cached for 7 days and rate-limited to keep the demo free and fair for everyone. Want the full technical walkthrough? <a href="/tools/shopify/">Read the info page →</a></p>
     </div>
   </details>
