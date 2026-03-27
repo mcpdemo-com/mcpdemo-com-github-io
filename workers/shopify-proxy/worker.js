@@ -1,11 +1,6 @@
 /**
  * MCP Demo — Shopify Product Search Worker
- * =========================================
- * Proxies Anthropic API calls for the Shopify demo page.
- * - Holds ANTHROPIC_API_KEY and MCPCIO_TOKEN encrypted
- * - Calls mcpcio product search MCP tools (search + compare only, no checkout)
- * - Caches responses in KV by query hash (7-day TTL)
- * - Rate limits: 500 live calls/day site-wide, 5/IP/day
+ * Debug version — returns full error details
  */
 
 const DAILY_LIMIT    = 500;
@@ -91,6 +86,9 @@ export default {
     const query = (body.query || '').trim();
     if (!query) return json({ error: 'Missing query' }, 400, origin);
 
+    // DEBUG MODE: bypass rate limits and cache for testing
+    const debug = body.debug === true;
+
     const normQuery  = query.toLowerCase().replace(/\s+/g, ' ');
     const cacheKey   = `cache:${hashQuery(normQuery)}`;
     const dateStr    = today();
@@ -98,32 +96,34 @@ export default {
     const dailyKey   = `daily:${dateStr}`;
     const ipKey      = `ip:${ip}:${dateStr}`;
 
-    // Check cache first
-    let cached = null;
-    try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
+    if (!debug) {
+      let cached = null;
+      try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
 
-    // Check site-wide daily limit
-    const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
-    if (dailyCount >= DAILY_LIMIT) {
-      if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
-      return json({
-        result: null, source: 'quota', sponsored: true,
-        message: `Today's ${DAILY_LIMIT} free demos have been used. Powered by mcpcio.com — check back tomorrow!`
-      });
+      const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
+      if (dailyCount >= DAILY_LIMIT) {
+        if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
+        return json({ result: null, source: 'quota', sponsored: true, message: `Today's ${DAILY_LIMIT} free demos have been used.` });
+      }
+
+      const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
+      if (ipCount >= PER_IP_LIMIT) {
+        if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
+        return json({ result: null, source: 'ratelimit', sponsored: true, message: `You've used your ${PER_IP_LIMIT} free demos for today.` });
+      }
     }
 
-    // Check per-IP limit
-    const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
-    if (ipCount >= PER_IP_LIMIT) {
-      if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
-      return json({
-        result: null, source: 'ratelimit', sponsored: true,
-        message: `You've used your ${PER_IP_LIMIT} free demos for today. Powered by mcpcio.com — come back tomorrow!`
-      });
+    // Check secrets are available
+    if (!env.ANTHROPIC_API_KEY) {
+      return json({ error: 'ANTHROPIC_API_KEY secret not set', debug: true }, 500, origin);
+    }
+    if (!env.MCPCIO_TOKEN) {
+      return json({ error: 'MCPCIO_TOKEN secret not set', debug: true }, 500, origin);
     }
 
-    // Make live Anthropic API call with mcpcio MCP server + auth token
+    // Make Anthropic API call
     let apiResp;
+    let apiRespText;
     try {
       apiResp = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -154,14 +154,21 @@ export default {
           }]
         })
       });
+      apiRespText = await apiResp.text();
     } catch (err) {
-      return json({ error: 'Upstream request failed', detail: err.message }, 502, origin);
+      return json({ error: 'Fetch to Anthropic failed', detail: err.message, debug: true }, 502, origin);
     }
 
-    const data = await apiResp.json();
+    // Parse response
+    let data;
+    try {
+      data = JSON.parse(apiRespText);
+    } catch {
+      return json({ error: 'Anthropic returned non-JSON', raw: apiRespText.slice(0, 500), status: apiResp.status, debug: true }, 502, origin);
+    }
 
     if (!apiResp.ok) {
-      return json({ error: data?.error?.message || 'API error', code: data?.error?.type }, apiResp.status, origin);
+      return json({ error: data?.error?.message || 'Anthropic API error', code: data?.error?.type, status: apiResp.status, full: data, debug: true }, apiResp.status, origin);
     }
 
     const text = (data.content || [])
@@ -169,6 +176,10 @@ export default {
       .map(b => b.text)
       .join('\n')
       .trim();
+
+    if (!text) {
+      return json({ error: 'Empty response from API', content_blocks: data.content, debug: true }, 500, origin);
+    }
 
     let result;
     try {
@@ -178,17 +189,16 @@ export default {
       result = { summary: text, products: [] };
     }
 
-    // Increment counters
-    try {
-      await env.MCP_LIMITS.put(dailyKey, String(dailyCount + 1), { expirationTtl: 86400 });
-      await env.MCP_LIMITS.put(ipKey,    String(ipCount + 1),    { expirationTtl: 86400 });
-    } catch {}
+    if (!debug) {
+      try {
+        const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
+        const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
+        await env.MCP_LIMITS.put(dailyKey, String(dailyCount + 1), { expirationTtl: 86400 });
+        await env.MCP_LIMITS.put(ipKey,    String(ipCount + 1),    { expirationTtl: 86400 });
+        await env.MCP_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: CACHE_TTL });
+      } catch {}
+    }
 
-    // Cache result
-    try {
-      await env.MCP_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: CACHE_TTL });
-    } catch {}
-
-    return json({ result, source: 'live', sponsored: true });
+    return json({ result, source: debug ? 'debug' : 'live', sponsored: true });
   }
 };
