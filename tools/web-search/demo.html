@@ -61,9 +61,36 @@
     .mcp-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.2rem .55rem;font-family:"Exo 2",sans-serif}
     .live-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);display:inline-block;margin-right:.4rem;animation:pulse 1.5s ease-in-out infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    .result-answer{padding:1.25rem;color:var(--txt);font-size:.92rem;line-height:1.8;white-space:pre-wrap}
+
+    /* Answer body */
+    .result-answer{padding:1.25rem 1.25rem .75rem;color:var(--txt);font-size:.92rem;line-height:1.8}
+    .result-answer p{margin-bottom:.75rem;color:var(--muted)}
+    .result-answer p:last-child{margin-bottom:0}
+    .result-answer ul{margin:.25rem 0 .75rem 1.25rem}
+    .result-answer li{color:var(--muted);margin-bottom:.3rem;line-height:1.7}
     .result-answer strong{color:var(--txt);font-weight:600}
-    .sources-row{padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+    .result-answer h2,.result-answer h3{font-family:"Exo 2",sans-serif;font-weight:700;color:var(--txt);margin:.75rem 0 .35rem}
+    .result-answer h2{font-size:1.05rem}
+    .result-answer h3{font-size:.95rem;color:var(--cyan)}
+
+    /* Superscript citation */
+    .cite-sup{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:15px;height:15px;font-size:.6rem;font-weight:700;
+      background:rgba(0,212,255,.15);color:var(--cyan);
+      border:1px solid rgba(0,212,255,.3);border-radius:3px;
+      vertical-align:super;line-height:1;cursor:default;
+      font-family:"Exo 2",sans-serif;margin-left:1px;
+    }
+
+    /* Footnotes */
+    .footnotes{padding:.75rem 1.25rem 1rem;border-top:1px solid var(--border);background:rgba(0,0,0,.15)}
+    .footnotes-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-family:"Exo 2",sans-serif;margin-bottom:.5rem}
+    .footnote-item{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.25rem;font-size:.78rem}
+    .footnote-num{min-width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.25);border-radius:3px;font-size:.62rem;font-weight:700;font-family:"Exo 2",sans-serif;flex-shrink:0}
+    .footnote-text{color:var(--muted)}
+
+    .sources-row{padding:.6rem 1.25rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
     .sources-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-family:"Exo 2",sans-serif;margin-right:.25rem}
     .source-chip{font-size:.72rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif;font-weight:600}
     .cached-note{font-size:.7rem;color:var(--dim);margin-left:auto}
@@ -142,6 +169,10 @@
       <span class="mcp-badge">MCP Tool: websearch_web_search</span>
     </div>
     <div class="result-answer" id="resultAnswer"></div>
+    <div class="footnotes" id="footnotesBox" style="display:none">
+      <div class="footnotes-label">Sources</div>
+      <div id="footnotesList"></div>
+    </div>
     <div class="sources-row" id="sourcesRow"></div>
   </div>
 
@@ -150,12 +181,12 @@
   <div class="how-it-works">
     <button class="how-toggle" onclick="toggleHow()">
       <span>What's happening under the hood?</span>
-      <span id="howArrow">▾</span>
+      <span id="howArrow">&#9662;</span>
     </button>
     <div class="how-body" id="howBody">
       <p>When you hit Search, this page posts your query to a Cloudflare Worker running at <code>api.mcpdemo.com/proxy/web-search</code>. No API key needed on your end — the Worker handles authentication.</p>
-      <p>The Worker calls <code>websearch_web_search</code> directly on the mcpcio.com MCP server at <code>https://api.mcpcio.com/mcp</code> using the JSON-RPC 2.0 protocol. This is a direct tool call — there is no Claude or LLM in the search itself. The MCP server runs a live web search and returns a structured answer with source attribution.</p>
-      <p>The Worker strips noise and returns clean JSON to this page: the synthesized answer and the sources it came from. What you see is what the web actually says right now.</p>
+      <p>The Worker calls <code>websearch_web_search</code> directly on the mcpcio.com MCP server at <code>https://api.mcpcio.com/mcp</code> using the JSON-RPC 2.0 protocol. This is a direct tool call — there is no Claude or LLM in the search itself. The MCP server runs a live web search and returns a synthesized answer with source attribution.</p>
+      <p>The Worker returns clean JSON to this page: the synthesized answer and the sources it came from. Inline citations are extracted from the answer and rendered as numbered footnotes. What you see is what the web actually says right now.</p>
     </div>
   </div>
 </div>
@@ -221,25 +252,131 @@
     document.getElementById('thinking').classList.remove('active');
   }
 
+  /**
+   * Parse the answer text into HTML.
+   * - Extracts [Source Name] inline citations, replaces with superscript numbers
+   * - Converts **bold**, * bullet lines, ## headings to HTML
+   * - Returns { html, footnotes[] }
+   */
+  function parseAnswer(raw) {
+    // Step 1: collect all unique [Source] references in order of appearance
+    var footnotes = [];
+    var footMap   = {};
+
+    var cleaned = raw.replace(/\[([^\]]+)\]/g, function(match, name) {
+      // Skip if it looks like a markdown link label (unlikely here but safe)
+      if (!footMap.hasOwnProperty(name)) {
+        footnotes.push(name);
+        footMap[name] = footnotes.length; // 1-indexed
+      }
+      var n = footMap[name];
+      return '<sup class="cite-sup" title="' + escapeAttr(name) + '">' + n + '</sup>';
+    });
+
+    // Step 2: split into lines and convert markdown constructs
+    var lines  = cleaned.split('\n');
+    var html   = '';
+    var inList = false;
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) {
+        if (inList) { html += '</ul>'; inList = false; }
+        continue;
+      }
+
+      // Headings
+      if (line.startsWith('### ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<h3>' + inlineFormat(line.slice(4)) + '</h3>';
+        continue;
+      }
+      if (line.startsWith('## ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<h2>' + inlineFormat(line.slice(3)) + '</h2>';
+        continue;
+      }
+
+      // Bullet points (* or -)
+      if (/^[\*\-]\s+/.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += '<li>' + inlineFormat(line.replace(/^[\*\-]\s+/, '')) + '</li>';
+        continue;
+      }
+
+      // Regular paragraph
+      if (inList) { html += '</ul>'; inList = false; }
+      html += '<p>' + inlineFormat(line) + '</p>';
+    }
+
+    if (inList) html += '</ul>';
+
+    return { html: html, footnotes: footnotes };
+  }
+
+  // Convert **bold** inline
+  function inlineFormat(text) {
+    return text
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code style="color:var(--cyan);background:rgba(0,212,255,.08);border-radius:3px;padding:.1rem .3rem;font-size:.85em">$1</code>');
+  }
+
+  function escapeAttr(str) {
+    return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   function renderResult(data) {
     hideLoading();
-    const answer  = data.answer  || 'No answer returned.';
-    const sources = data.sources || [];
-    const cached  = data.cached  || false;
 
-    document.getElementById('resultAnswer').textContent = answer;
+    var raw     = data.answer  || 'No answer returned.';
+    var sources = data.sources || [];
+    var cached  = data.cached  || false;
 
-    const sourcesRow = document.getElementById('sourcesRow');
+    // Parse answer into HTML + footnotes
+    var parsed = parseAnswer(raw);
+
+    // Render answer HTML
+    document.getElementById('resultAnswer').innerHTML = parsed.html;
+
+    // Render footnotes section
+    var footBox  = document.getElementById('footnotesBox');
+    var footList = document.getElementById('footnotesList');
+    footList.innerHTML = '';
+
+    if (parsed.footnotes.length > 0) {
+      parsed.footnotes.forEach(function(name, idx) {
+        var item = document.createElement('div');
+        item.className = 'footnote-item';
+
+        var num = document.createElement('span');
+        num.className = 'footnote-num';
+        num.textContent = idx + 1;
+
+        var txt = document.createElement('span');
+        txt.className = 'footnote-text';
+        txt.textContent = name;
+
+        item.appendChild(num);
+        item.appendChild(txt);
+        footList.appendChild(item);
+      });
+      footBox.style.display = 'block';
+    } else {
+      footBox.style.display = 'none';
+    }
+
+    // Render data-sources chips row
+    var sourcesRow = document.getElementById('sourcesRow');
     sourcesRow.innerHTML = '';
 
     if (sources.length > 0) {
-      const label = document.createElement('span');
+      var label = document.createElement('span');
       label.className = 'sources-label';
-      label.textContent = 'Sources:';
+      label.textContent = 'Data from:';
       sourcesRow.appendChild(label);
 
       sources.forEach(function(s) {
-        const chip = document.createElement('span');
+        var chip = document.createElement('span');
         chip.className = 'source-chip';
         chip.textContent = s;
         sourcesRow.appendChild(chip);
@@ -247,7 +384,7 @@
     }
 
     if (cached) {
-      const note = document.createElement('span');
+      var note = document.createElement('span');
       note.className = 'cached-note';
       note.textContent = 'cached result';
       sourcesRow.appendChild(note);
