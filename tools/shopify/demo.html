@@ -67,11 +67,11 @@
     .quota-msg{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-radius:10px;padding:1rem 1.25rem;color:var(--muted);font-size:.88rem;display:none}
     .summary-bar{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:8px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.85rem;color:var(--muted);display:none}
     .summary-bar .mcp-badge{display:inline-flex;align-items:center;gap:.35rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-right:.6rem}
-    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;display:none}
+    .product-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
     .product-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
     .product-card:hover{transform:translateY(-3px);box-shadow:0 6px 28px rgba(0,212,255,.1)}
-    .product-img{width:100%;height:160px;object-fit:contain;background:var(--bg2);padding:.75rem}
-    .product-img-placeholder{width:100%;height:160px;background:var(--bg2);display:flex;align-items:center;justify-content:center}
+    .product-img{width:100%;height:160px;object-fit:contain;background:var(--bg2);padding:.75rem;display:block}
+    .product-img-placeholder{width:100%;height:160px;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--border);font-size:2rem}
     .product-body{padding:1rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
     .product-title{font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--txt);line-height:1.4}
     .product-price{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.1rem;color:var(--cyan)}
@@ -160,15 +160,12 @@
       <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#00d4ff" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       <p>Results will appear here.<br>Enter a query above to get started.</p>
     </div>
-
     <div class="thinking" id="thinking">
       <div class="dots"><span></span><span></span><span></span></div>
       <p>Searching Shopify via MCP…</p>
     </div>
-
     <div class="error-msg" id="errorMsg"></div>
     <div class="quota-msg" id="quotaMsg"></div>
-
     <div class="summary-bar" id="summaryBar">
       <span class="mcp-badge">
         <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -176,7 +173,6 @@
       </span>
       <span id="summaryText"></span>
     </div>
-
     <div class="product-grid" id="productGrid"></div>
     <div class="cache-note" id="cacheNote">⚡ Result from cache</div>
   </div>
@@ -238,13 +234,13 @@
 
   function setLoading(on) {
     document.getElementById('sendBtn').disabled = on;
-    document.getElementById('placeholder').style.display  = on ? 'none' : '';
+    document.getElementById('placeholder').style.display = on ? 'none' : '';
     document.getElementById('thinking').classList.toggle('active', on);
-    document.getElementById('errorMsg').style.display     = 'none';
-    document.getElementById('quotaMsg').style.display     = 'none';
-    document.getElementById('summaryBar').style.display   = 'none';
-    document.getElementById('productGrid').style.display  = 'none';
-    document.getElementById('cacheNote').style.display    = 'none';
+    document.getElementById('errorMsg').style.display    = 'none';
+    document.getElementById('quotaMsg').style.display    = 'none';
+    document.getElementById('summaryBar').style.display  = 'none';
+    document.getElementById('productGrid').style.display = 'none';
+    document.getElementById('cacheNote').style.display   = 'none';
     if (on) document.getElementById('placeholder').style.display = 'none';
   }
 
@@ -264,6 +260,75 @@
     el.style.display = 'block';
   }
 
+  function makeProductCard(p) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    // Image — use a plain img, fall back to text placeholder on error
+    const imgWrap = document.createElement('div');
+    if (p.image) {
+      const img = document.createElement('img');
+      img.className = 'product-img';
+      img.src = p.image;
+      img.alt = p.title || '';
+      img.loading = 'lazy';
+      img.onerror = function() {
+        this.parentNode.innerHTML = '<div class="product-img-placeholder">🛍️</div>';
+      };
+      imgWrap.appendChild(img);
+    } else {
+      imgWrap.innerHTML = '<div class="product-img-placeholder">🛍️</div>';
+    }
+    card.appendChild(imgWrap);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'product-body';
+
+    if (p.title) {
+      const t = document.createElement('div');
+      t.className = 'product-title';
+      t.textContent = p.title;
+      body.appendChild(t);
+    }
+    if (p.price) {
+      const pr = document.createElement('div');
+      pr.className = 'product-price';
+      pr.textContent = p.price;
+      body.appendChild(pr);
+    }
+    if (p.rating) {
+      const r = document.createElement('div');
+      r.className = 'product-rating';
+      r.textContent = '⭐ ' + p.rating;
+      body.appendChild(r);
+    }
+    if (p.seller) {
+      const s = document.createElement('div');
+      s.className = 'product-seller';
+      s.textContent = 'via ' + p.seller;
+      body.appendChild(s);
+    }
+    if (p.description) {
+      const d = document.createElement('div');
+      d.className = 'product-desc';
+      d.textContent = p.description;
+      body.appendChild(d);
+    }
+    if (p.url) {
+      const a = document.createElement('a');
+      a.className = 'product-link';
+      a.href = p.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = 'View Product →';
+      body.appendChild(a);
+    }
+
+    card.appendChild(body);
+    return card;
+  }
+
   function renderProducts(result, source) {
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('thinking').classList.remove('active');
@@ -281,43 +346,12 @@
 
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
-
-    result.products.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      const imgHtml = p.image
-        ? `<img class="product-img" src="${escHtml(p.image)}" alt="${escHtml(p.title)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\"product-img-placeholder\\"><svg viewBox=\\"0 0 24 24\\" width=\\"32\\" height=\\"32\\" fill=\\"none\\" stroke=\\"#1a2a40\\" stroke-width=\\"1.5\\"><path d=\\"M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z\\"/></svg></div>'" />`
-        : `<div class="product-img-placeholder"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#1a2a40" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg></div>`;
-
-      card.innerHTML = `
-        ${imgHtml}
-        <div class="product-body">
-          <div class="product-title">${escHtml(p.title)}</div>
-          <div class="product-price">${escHtml(p.price)}</div>
-          ${p.rating ? `<div class="product-rating">⭐ ${escHtml(p.rating)}</div>` : ''}
-          ${p.seller ? `<div class="product-seller">via ${escHtml(p.seller)}</div>` : ''}
-          ${p.description ? `<div class="product-desc">${escHtml(p.description)}</div>` : ''}
-          ${p.url ? `<a class="product-link" href="${escHtml(p.url)}" target="_blank" rel="noopener noreferrer">View Product →</a>` : ''}
-        </div>`;
-
-      grid.appendChild(card);
-    });
-
+    result.products.forEach(p => grid.appendChild(makeProductCard(p)));
     grid.style.display = 'grid';
 
     if (source === 'cache') {
       document.getElementById('cacheNote').style.display = 'block';
     }
-  }
-
-  function escHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
   }
 
   async function sendSearch() {
