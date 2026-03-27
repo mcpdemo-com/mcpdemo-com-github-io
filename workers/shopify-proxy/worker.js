@@ -14,6 +14,8 @@
  *
  * REQUIRED SECRET (set in Cloudflare dashboard → Settings → Variables → Encrypt):
  *   ANTHROPIC_API_KEY — your sk-ant-... key
+ *
+ * Last updated: 2026-03-26
  */
 
 const DAILY_LIMIT    = 500;
@@ -160,7 +162,6 @@ export default {
                 'productsearch_search_products',
                 'productsearch_get_product_details',
                 'productsearch_compare_offers'
-                // productsearch_get_checkout_url deliberately excluded
               ]
             }
           }]
