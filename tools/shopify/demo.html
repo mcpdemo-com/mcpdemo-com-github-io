@@ -67,8 +67,6 @@
     .quota-msg{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-radius:10px;padding:1rem 1.25rem;color:var(--txt);font-size:.9rem;display:none}
     .summary-bar{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:8px;padding:.65rem 1rem;margin-bottom:1.1rem;font-size:.9rem;color:var(--txt);display:none}
     .summary-bar .mcp-badge{display:inline-flex;align-items:center;gap:.35rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-right:.6rem}
-
-    /* PRODUCT CARDS — improved readability */
     .product-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.25rem}
     .product-card{background:var(--bg3);border:1px solid var(--border);border-top:2px solid rgba(0,212,255,.3);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
     .product-card:hover{transform:translateY(-3px);box-shadow:0 6px 28px rgba(0,212,255,.12);border-top-color:var(--cyan)}
@@ -83,7 +81,6 @@
     .product-link{display:block;margin-top:.85rem;padding:.6rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.3);border-radius:7px;text-align:center;color:var(--cyan);font-size:.85rem;font-weight:700;font-family:"Exo 2",sans-serif;text-decoration:none;transition:all .2s;letter-spacing:.03em}
     .product-link:hover{background:rgba(0,212,255,.18);border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,.2);text-decoration:none}
     .cache-note{font-size:.78rem;color:var(--muted);text-align:right;margin-top:.5rem;display:none}
-
     details{margin-top:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
     summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
     summary:hover{color:var(--cyan)}
@@ -235,29 +232,33 @@
     document.getElementById('userInput').focus();
   }
 
-  function setLoading(on) {
-    document.getElementById('sendBtn').disabled = on;
-    document.getElementById('placeholder').style.display = on ? 'none' : '';
-    document.getElementById('thinking').classList.toggle('active', on);
+  function showLoading() {
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('thinking').classList.add('active');
     document.getElementById('errorMsg').style.display    = 'none';
     document.getElementById('quotaMsg').style.display    = 'none';
     document.getElementById('summaryBar').style.display  = 'none';
     document.getElementById('productGrid').style.display = 'none';
     document.getElementById('cacheNote').style.display   = 'none';
-    if (on) document.getElementById('placeholder').style.display = 'none';
+  }
+
+  function hideLoading() {
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('thinking').classList.remove('active');
   }
 
   function showError(msg) {
+    hideLoading();
     document.getElementById('placeholder').style.display = 'none';
-    document.getElementById('thinking').classList.remove('active');
     const el = document.getElementById('errorMsg');
     el.textContent = msg;
     el.style.display = 'block';
   }
 
   function showQuota(msg) {
+    hideLoading();
     document.getElementById('placeholder').style.display = 'none';
-    document.getElementById('thinking').classList.remove('active');
     const el = document.getElementById('quotaMsg');
     el.textContent = msg;
     el.style.display = 'block';
@@ -286,36 +287,11 @@
     const body = document.createElement('div');
     body.className = 'product-body';
 
-    if (p.title) {
-      const t = document.createElement('div');
-      t.className = 'product-title';
-      t.textContent = p.title;
-      body.appendChild(t);
-    }
-    if (p.price) {
-      const pr = document.createElement('div');
-      pr.className = 'product-price';
-      pr.textContent = p.price;
-      body.appendChild(pr);
-    }
-    if (p.rating) {
-      const r = document.createElement('div');
-      r.className = 'product-rating';
-      r.textContent = '⭐ ' + p.rating;
-      body.appendChild(r);
-    }
-    if (p.seller) {
-      const s = document.createElement('div');
-      s.className = 'product-seller';
-      s.textContent = 'via ' + p.seller;
-      body.appendChild(s);
-    }
-    if (p.description) {
-      const d = document.createElement('div');
-      d.className = 'product-desc';
-      d.textContent = p.description;
-      body.appendChild(d);
-    }
+    if (p.title)       { const t = document.createElement('div'); t.className = 'product-title';  t.textContent = p.title;          body.appendChild(t); }
+    if (p.price)       { const t = document.createElement('div'); t.className = 'product-price';  t.textContent = p.price;          body.appendChild(t); }
+    if (p.rating)      { const t = document.createElement('div'); t.className = 'product-rating'; t.textContent = '⭐ ' + p.rating; body.appendChild(t); }
+    if (p.seller)      { const t = document.createElement('div'); t.className = 'product-seller'; t.textContent = 'via ' + p.seller; body.appendChild(t); }
+    if (p.description) { const t = document.createElement('div'); t.className = 'product-desc';   t.textContent = p.description;    body.appendChild(t); }
     if (p.url) {
       const a = document.createElement('a');
       a.className = 'product-link';
@@ -331,8 +307,7 @@
   }
 
   function renderProducts(result, source) {
-    document.getElementById('placeholder').style.display = 'none';
-    document.getElementById('thinking').classList.remove('active');
+    hideLoading();
 
     if (result.summary) {
       document.getElementById('summaryText').textContent = result.summary;
@@ -340,8 +315,9 @@
     }
 
     if (!result.products || result.products.length === 0) {
-      document.getElementById('placeholder').style.display = 'block';
-      document.getElementById('placeholder').querySelector('p').textContent = result.summary || 'No products found. Try a different search.';
+      const ph = document.getElementById('placeholder');
+      ph.querySelector('p').textContent = result.summary || 'No products found. Try a different search.';
+      ph.style.display = 'block';
       return;
     }
 
@@ -359,7 +335,7 @@
     const query = document.getElementById('userInput').value.trim();
     if (!query) return;
 
-    setLoading(true);
+    showLoading();
 
     try {
       const res = await fetch('https://api.mcpdemo.com/proxy/shopify', {
@@ -384,8 +360,6 @@
 
     } catch (err) {
       showError('Connection failed. Please check your network and try again.');
-    } finally {
-      setLoading(false);
     }
   }
 </script>
