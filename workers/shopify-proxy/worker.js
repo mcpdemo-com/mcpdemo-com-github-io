@@ -1,15 +1,16 @@
 /**
- * MCP Demo — Shopify Product Search Worker
+ * MCP Demo — Shopify Product Search Worker v2
  */
 
 const DAILY_LIMIT    = 500;
 const PER_IP_LIMIT   = 5;
 const CACHE_TTL      = 604800;
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
+const CACHE_VER      = 'v2:'; // prefix bump busts all stale KV entries
 
 const SYSTEM_PROMPT = `You are a Shopify product search tool. When given any product query, you MUST immediately call productsearch_search_products — do not ask clarifying questions, do not respond conversationally. Just search.
 
-After getting results, return ONLY a JSON object in this exact format — no other text, no markdown, no explanation:
+After getting results, return ONLY a JSON object — no other text, no markdown, no explanation:
 
 {
   "summary": "Found X products matching your search",
@@ -28,11 +29,11 @@ After getting results, return ONLY a JSON object in this exact format — no oth
 
 Rules:
 - Always search immediately — never ask for more information
-- Maximum 4 products in results
+- Maximum 4 products
 - Price is in cents — divide by 100 and format as $XX.XX
 - Use first variant's variantUrl as the url field
 - Use first media item's url as the image field
-- Omit image field if no image available
+- Omit image field if unavailable
 - Never include checkoutUrl
 - If no results: { "summary": "No products found.", "products": [] }`;
 
@@ -84,24 +85,31 @@ export default {
     const query = (body.query || '').trim();
     if (!query) return json({ error: 'Missing query' }, 400, origin);
 
-    const debug = body.debug === true;
+    const debug     = body.debug === true;
     const normQuery = query.toLowerCase().replace(/\s+/g, ' ');
-    const cacheKey  = `cache:${hashQuery(normQuery)}`;
+    const cacheKey  = CACHE_VER + hashQuery(normQuery); // v2 prefix busts old entries
     const dateStr   = today();
     const ip        = request.headers.get('CF-Connecting-IP') || 'unknown';
     const dailyKey  = `daily:${dateStr}`;
     const ipKey     = `ip:${ip}:${dateStr}`;
 
     if (!debug) {
+      // Check cache
       let cached = null;
       try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
-      if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        // Only serve cache if it has actual products
+        if (parsed.products && parsed.products.length > 0) {
+          return json({ result: parsed, source: 'cache', sponsored: true });
+        }
+      }
 
+      // Rate limits
       const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
       if (dailyCount >= DAILY_LIMIT) {
         return json({ result: null, source: 'quota', sponsored: true, message: `Today's ${DAILY_LIMIT} free demos have been used. Powered by mcpcio.com — check back tomorrow!` });
       }
-
       const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
       if (ipCount >= PER_IP_LIMIT) {
         return json({ result: null, source: 'ratelimit', sponsored: true, message: `You've used your ${PER_IP_LIMIT} free demos for today. Powered by mcpcio.com — come back tomorrow!` });
@@ -109,7 +117,7 @@ export default {
     }
 
     if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY not set' }, 500, origin);
-    if (!env.MCPCIO_TOKEN) return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
+    if (!env.MCPCIO_TOKEN)      return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
 
     let apiResp, apiRespText;
     try {
@@ -144,15 +152,15 @@ export default {
       });
       apiRespText = await apiResp.text();
     } catch (err) {
-      return json({ error: 'Fetch to Anthropic failed', detail: err.message }, 502, origin);
+      return json({ error: 'Fetch failed', detail: err.message }, 502, origin);
     }
 
     let data;
     try { data = JSON.parse(apiRespText); }
-    catch { return json({ error: 'Anthropic returned non-JSON', raw: apiRespText.slice(0, 500), status: apiResp.status }, 502, origin); }
+    catch { return json({ error: 'Non-JSON from Anthropic', raw: apiRespText.slice(0, 300) }, 502, origin); }
 
     if (!apiResp.ok) {
-      return json({ error: data?.error?.message || 'API error', code: data?.error?.type, status: apiResp.status, full: debug ? data : undefined }, apiResp.status, origin);
+      return json({ error: data?.error?.message || 'API error', code: data?.error?.type, status: apiResp.status }, apiResp.status, origin);
     }
 
     const text = (data.content || [])
@@ -160,10 +168,6 @@ export default {
       .map(b => b.text)
       .join('\n')
       .trim();
-
-    if (!text) {
-      return json({ error: 'Empty response', content_blocks: debug ? data.content : undefined }, 500, origin);
-    }
 
     let result;
     try {
@@ -173,7 +177,8 @@ export default {
       result = { summary: text, products: [] };
     }
 
-    if (!debug) {
+    // Only cache responses that have actual products
+    if (!debug && result.products && result.products.length > 0) {
       try {
         const dc = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
         const ic = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
