@@ -1,12 +1,9 @@
 /**
- * MCP Demo — Shopify Product Search Worker v2
+ * MCP Demo — Shopify Product Search Worker
+ * Simplified — no KV cache/rate limiting to isolate rendering issue
  */
 
-const DAILY_LIMIT    = 500;
-const PER_IP_LIMIT   = 5;
-const CACHE_TTL      = 604800;
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
-const CACHE_VER      = 'v2:'; // prefix bump busts all stale KV entries
 
 const SYSTEM_PROMPT = `You are a Shopify product search tool. When given any product query, you MUST immediately call productsearch_search_products — do not ask clarifying questions, do not respond conversationally. Just search.
 
@@ -36,18 +33,6 @@ Rules:
 - Omit image field if unavailable
 - Never include checkoutUrl
 - If no results: { "summary": "No products found.", "products": [] }`;
-
-function hashQuery(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(31, h) + str.charCodeAt(i) | 0;
-  }
-  return Math.abs(h).toString(36);
-}
-
-function today() {
-  return new Date().toISOString().split('T')[0];
-}
 
 function cors(origin) {
   const allowed = origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN;
@@ -84,37 +69,6 @@ export default {
 
     const query = (body.query || '').trim();
     if (!query) return json({ error: 'Missing query' }, 400, origin);
-
-    const debug     = body.debug === true;
-    const normQuery = query.toLowerCase().replace(/\s+/g, ' ');
-    const cacheKey  = CACHE_VER + hashQuery(normQuery); // v2 prefix busts old entries
-    const dateStr   = today();
-    const ip        = request.headers.get('CF-Connecting-IP') || 'unknown';
-    const dailyKey  = `daily:${dateStr}`;
-    const ipKey     = `ip:${ip}:${dateStr}`;
-
-    if (!debug) {
-      // Check cache
-      let cached = null;
-      try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        // Only serve cache if it has actual products
-        if (parsed.products && parsed.products.length > 0) {
-          return json({ result: parsed, source: 'cache', sponsored: true });
-        }
-      }
-
-      // Rate limits
-      const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
-      if (dailyCount >= DAILY_LIMIT) {
-        return json({ result: null, source: 'quota', sponsored: true, message: `Today's ${DAILY_LIMIT} free demos have been used. Powered by mcpcio.com — check back tomorrow!` });
-      }
-      const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
-      if (ipCount >= PER_IP_LIMIT) {
-        return json({ result: null, source: 'ratelimit', sponsored: true, message: `You've used your ${PER_IP_LIMIT} free demos for today. Powered by mcpcio.com — come back tomorrow!` });
-      }
-    }
 
     if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY not set' }, 500, origin);
     if (!env.MCPCIO_TOKEN)      return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
@@ -177,17 +131,6 @@ export default {
       result = { summary: text, products: [] };
     }
 
-    // Only cache responses that have actual products
-    if (!debug && result.products && result.products.length > 0) {
-      try {
-        const dc = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
-        const ic = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
-        await env.MCP_LIMITS.put(dailyKey, String(dc + 1), { expirationTtl: 86400 });
-        await env.MCP_LIMITS.put(ipKey,    String(ic + 1), { expirationTtl: 86400 });
-        await env.MCP_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: CACHE_TTL });
-      } catch {}
-    }
-
-    return json({ result, source: debug ? 'debug' : 'live', sponsored: true });
+    return json({ result, source: 'live', sponsored: true });
   }
 };
