@@ -1,6 +1,7 @@
 /**
  * MCP Demo — Web Search Worker
- * Calls mcpcio websearch_web_search tool directly — no Claude middleman
+ * Calls websearch_query (text answer) + websearch_video_search in parallel
+ * No Claude middleman — direct MCP tool calls only
  */
 
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
@@ -23,8 +24,8 @@ function json(data, status = 200, origin = ALLOWED_ORIGIN) {
   });
 }
 
-async function callWebSearch(token, query) {
-  return fetch(MCP_URL, {
+async function callTool(token, toolName, args) {
+  const resp = await fetch(MCP_URL, {
     method: 'POST',
     headers: {
       'Content-Type':  'application/json',
@@ -35,12 +36,39 @@ async function callWebSearch(token, query) {
       jsonrpc: '2.0',
       id:      1,
       method:  'tools/call',
-      params: {
-        name:      'websearch_web_search',
-        arguments: { query, num_results: 5 }
-      }
+      params:  { name: toolName, arguments: args }
     })
   });
+  return resp;
+}
+
+async function parseToolResponse(resp) {
+  const text        = await resp.text();
+  const contentType = resp.headers.get('content-type') || '';
+  let mcpData;
+
+  if (contentType.includes('text/event-stream')) {
+    const lines = text.split('\n');
+    let jsonStr = null;
+    for (const line of lines) {
+      if (line.startsWith('data: ')) jsonStr = line.slice(6).trim();
+    }
+    if (!jsonStr) throw new Error('No data in SSE response');
+    mcpData = JSON.parse(jsonStr);
+  } else {
+    mcpData = JSON.parse(text);
+  }
+
+  if (mcpData.error) throw new Error(mcpData.error.message || 'MCP tool error');
+
+  // Extract content block
+  const resultContent = mcpData.result?.content;
+  if (Array.isArray(resultContent)) {
+    for (const block of resultContent) {
+      if (block.type === 'text') return JSON.parse(block.text);
+    }
+  }
+  return mcpData.result || null;
 }
 
 export default {
@@ -64,75 +92,54 @@ export default {
 
     if (!env.MCPCIO_TOKEN) return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
 
-    // Call mcpcio MCP directly
-    let mcpResp, mcpText;
+    // Fire both calls in parallel
+    let textResp, videoResp;
     try {
-      mcpResp = await callWebSearch(env.MCPCIO_TOKEN, query);
-      mcpText = await mcpResp.text();
+      [textResp, videoResp] = await Promise.all([
+        callTool(env.MCPCIO_TOKEN, 'websearch_query',        { query, search_mode: 'text' }),
+        callTool(env.MCPCIO_TOKEN, 'websearch_video_search', { query, limit: 5 })
+      ]);
     } catch (err) {
       return json({ error: 'Search service unavailable. Please try again.', detail: err.message }, 502, origin);
     }
 
-    // Handle SSE response (text/event-stream)
-    let mcpData;
-    const contentType = mcpResp.headers.get('content-type') || '';
-
-    if (contentType.includes('text/event-stream')) {
-      const lines = mcpText.split('\n');
-      let jsonStr = null;
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          jsonStr = line.slice(6).trim();
-        }
-      }
-      if (!jsonStr) {
-        return json({ error: 'No data in SSE response', raw: mcpText.slice(0, 300) }, 502, origin);
-      }
-      try { mcpData = JSON.parse(jsonStr); }
-      catch { return json({ error: 'Could not parse SSE data', raw: jsonStr.slice(0, 300) }, 502, origin); }
-    } else {
-      try { mcpData = JSON.parse(mcpText); }
-      catch { return json({ error: 'Could not parse MCP response', raw: mcpText.slice(0, 300) }, 502, origin); }
-    }
-
-    if (mcpData.error) {
-      return json({ error: mcpData.error.message || 'MCP tool error', code: mcpData.error.code }, 502, origin);
-    }
-
-    // Extract the tool result content
-    let toolResult = null;
+    // Parse text answer (required)
+    let textResult;
     try {
-      const resultContent = mcpData.result?.content;
-      if (Array.isArray(resultContent)) {
-        for (const block of resultContent) {
-          if (block.type === 'text') {
-            toolResult = JSON.parse(block.text);
-            break;
-          }
-        }
-      } else if (mcpData.result) {
-        toolResult = mcpData.result;
-      }
+      textResult = await parseToolResponse(textResp);
     } catch (e) {
-      return json({ error: 'Could not parse search result', detail: e.message, raw: JSON.stringify(mcpData).slice(0, 300) }, 502, origin);
+      return json({ error: 'Could not parse search answer: ' + e.message }, 502, origin);
     }
 
-    if (!toolResult) {
-      return json({ error: 'Empty result from search tool' }, 502, origin);
-    }
-
-    // toolResult shape: { success, data: { answer, sources, cached, model_used, ... } }
-    const data = toolResult.data || toolResult;
+    const data    = textResult?.data || textResult || {};
     const answer  = data.answer  || null;
     const sources = (data.sources || []).map(s => s.display_name || s.collection);
     const cached  = data.cached  || false;
 
-    if (!answer) {
-      return json({ error: 'No answer returned from search' }, 502, origin);
+    if (!answer) return json({ error: 'No answer returned from search' }, 502, origin);
+
+    // Parse video results (optional — don't fail if missing)
+    let videos = [];
+    try {
+      const videoResult = await parseToolResponse(videoResp);
+      const raw = videoResult?.data || videoResult || {};
+      // Shape: { videos: [ { title, channel, thumbnail, url, duration, ... } ] }
+      if (Array.isArray(raw.videos)) {
+        videos = raw.videos.slice(0, 5).map(v => ({
+          title:     v.title     || '',
+          channel:   v.channel   || v.author || '',
+          thumbnail: v.thumbnail || v.thumbnail_url || '',
+          url:       v.url       || v.link || '',
+          duration:  v.duration  || '',
+          mentions:  v.mentions  || null,
+        }));
+      }
+    } catch (_) {
+      // Videos are best-effort — silently skip on error
     }
 
     return json({
-      result: { answer, sources, cached },
+      result: { answer, sources, cached, videos },
       source: 'live'
     });
   }
