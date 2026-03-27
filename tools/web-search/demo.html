@@ -61,8 +61,6 @@
     .mcp-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.2rem .55rem;font-family:"Exo 2",sans-serif}
     .live-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);display:inline-block;margin-right:.4rem;animation:pulse 1.5s ease-in-out infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-    /* Answer body */
     .result-answer{padding:1.25rem 1.25rem .75rem;color:var(--txt);font-size:.92rem;line-height:1.8}
     .result-answer p{margin-bottom:.75rem;color:var(--muted)}
     .result-answer p:last-child{margin-bottom:0}
@@ -72,28 +70,33 @@
     .result-answer h2,.result-answer h3{font-family:"Exo 2",sans-serif;font-weight:700;color:var(--txt);margin:.75rem 0 .35rem}
     .result-answer h2{font-size:1.05rem}
     .result-answer h3{font-size:.95rem;color:var(--cyan)}
-
-    /* Superscript citation */
-    .cite-sup{
-      display:inline-flex;align-items:center;justify-content:center;
-      width:15px;height:15px;font-size:.6rem;font-weight:700;
-      background:rgba(0,212,255,.15);color:var(--cyan);
-      border:1px solid rgba(0,212,255,.3);border-radius:3px;
-      vertical-align:super;line-height:1;cursor:default;
-      font-family:"Exo 2",sans-serif;margin-left:1px;
-    }
-
-    /* Footnotes */
+    .cite-sup{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;font-size:.6rem;font-weight:700;background:rgba(0,212,255,.15);color:var(--cyan);border:1px solid rgba(0,212,255,.3);border-radius:3px;vertical-align:super;line-height:1;cursor:default;font-family:"Exo 2",sans-serif;margin-left:1px}
     .footnotes{padding:.75rem 1.25rem 1rem;border-top:1px solid var(--border);background:rgba(0,0,0,.15)}
     .footnotes-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-family:"Exo 2",sans-serif;margin-bottom:.5rem}
     .footnote-item{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.25rem;font-size:.78rem}
     .footnote-num{min-width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.25);border-radius:3px;font-size:.62rem;font-weight:700;font-family:"Exo 2",sans-serif;flex-shrink:0}
     .footnote-text{color:var(--muted)}
-
     .sources-row{padding:.6rem 1.25rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
     .sources-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-family:"Exo 2",sans-serif;margin-right:.25rem}
     .source-chip{font-size:.72rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif;font-weight:600}
     .cached-note{font-size:.7rem;color:var(--dim);margin-left:auto}
+
+    /* Video section */
+    .video-section{display:none;margin-top:1.25rem}
+    .video-section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:"Exo 2",sans-serif;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+    .video-section-label::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4444;box-shadow:0 0 6px #ff4444}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
+    .video-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-decoration:none;transition:transform .2s,box-shadow .2s;display:block}
+    .video-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,212,255,.1);text-decoration:none}
+    .video-thumb{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg2);overflow:hidden}
+    .video-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .video-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--bg2)}
+    .play-icon{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .video-duration{position:absolute;bottom:.3rem;right:.3rem;background:rgba(0,0,0,.8);color:#fff;font-size:.65rem;padding:.1rem .35rem;border-radius:3px;font-family:"Exo 2",sans-serif;font-weight:600}
+    .video-info{padding:.6rem .75rem .75rem}
+    .video-title{font-size:.78rem;font-weight:600;color:var(--txt);line-height:1.4;margin-bottom:.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .video-channel{font-size:.7rem;color:var(--dim)}
+
     .error-box{display:none;background:rgba(255,80,80,.06);border:1px solid rgba(255,80,80,.2);border-radius:10px;padding:1.25rem;color:#ff8080;font-size:.88rem;margin-bottom:1rem}
     .how-it-works{margin-top:2.5rem}
     .how-toggle{background:none;border:1px solid var(--border);border-radius:8px;padding:.7rem 1.1rem;color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;cursor:pointer;width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s}
@@ -113,7 +116,7 @@
     footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
     footer a:hover{color:var(--cyan)}
     .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.input-row{flex-direction:column}.foot-cols{grid-template-columns:1fr}}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.input-row{flex-direction:column}.foot-cols{grid-template-columns:1fr}.video-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}}
   </style>
 </head>
 <body>
@@ -166,7 +169,7 @@
   <div class="result-box" id="resultBox">
     <div class="result-header">
       <span style="font-size:.8rem;color:var(--muted)"><span class="live-dot"></span>Live result</span>
-      <span class="mcp-badge">MCP Tool: websearch_web_search</span>
+      <span class="mcp-badge">MCP Tools: websearch_query + websearch_video_search</span>
     </div>
     <div class="result-answer" id="resultAnswer"></div>
     <div class="footnotes" id="footnotesBox" style="display:none">
@@ -174,6 +177,11 @@
       <div id="footnotesList"></div>
     </div>
     <div class="sources-row" id="sourcesRow"></div>
+  </div>
+
+  <div class="video-section" id="videoSection">
+    <div class="video-section-label">Related Videos</div>
+    <div class="video-grid" id="videoGrid"></div>
   </div>
 
   <div class="error-box" id="errorBox"></div>
@@ -184,9 +192,8 @@
       <span id="howArrow">&#9662;</span>
     </button>
     <div class="how-body" id="howBody">
-      <p>When you hit Search, this page posts your query to a Cloudflare Worker running at <code>api.mcpdemo.com/proxy/web-search</code>. No API key needed on your end — the Worker handles authentication.</p>
-      <p>The Worker calls <code>websearch_web_search</code> directly on the mcpcio.com MCP server at <code>https://api.mcpcio.com/mcp</code> using the JSON-RPC 2.0 protocol. This is a direct tool call — there is no Claude or LLM in the search itself. The MCP server runs a live web search and returns a synthesized answer with source attribution.</p>
-      <p>The Worker returns clean JSON to this page: the synthesized answer and the sources it came from. Inline citations are extracted from the answer and rendered as numbered footnotes. What you see is what the web actually says right now.</p>
+      <p>When you search, this page posts your query to a Cloudflare Worker at <code>api.mcpdemo.com/proxy/web-search</code>. The Worker makes two parallel MCP tool calls: <code>websearch_query</code> for the synthesized text answer and <code>websearch_video_search</code> for related videos — both direct calls to the mcpcio.com MCP server, no LLM in the loop.</p>
+      <p>Inline citations from the answer (e.g. [Wikipedia]) are extracted and rendered as numbered superscripts with a footnote list below. Video thumbnails link directly to the source. What you see is what the web actually says right now.</p>
     </div>
   </div>
 </div>
@@ -244,6 +251,7 @@
     document.getElementById('sendBtn').disabled = true;
     document.getElementById('thinking').classList.add('active');
     document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('videoSection').style.display = 'none';
     document.getElementById('errorBox').style.display = 'none';
   }
 
@@ -252,28 +260,19 @@
     document.getElementById('thinking').classList.remove('active');
   }
 
-  /**
-   * Parse the answer text into HTML.
-   * - Extracts [Source Name] inline citations, replaces with superscript numbers
-   * - Converts **bold**, * bullet lines, ## headings to HTML
-   * - Returns { html, footnotes[] }
-   */
   function parseAnswer(raw) {
-    // Step 1: collect all unique [Source] references in order of appearance
     var footnotes = [];
     var footMap   = {};
 
     var cleaned = raw.replace(/\[([^\]]+)\]/g, function(match, name) {
-      // Skip if it looks like a markdown link label (unlikely here but safe)
       if (!footMap.hasOwnProperty(name)) {
         footnotes.push(name);
-        footMap[name] = footnotes.length; // 1-indexed
+        footMap[name] = footnotes.length;
       }
       var n = footMap[name];
       return '<sup class="cite-sup" title="' + escapeAttr(name) + '">' + n + '</sup>';
     });
 
-    // Step 2: split into lines and convert markdown constructs
     var lines  = cleaned.split('\n');
     var html   = '';
     var inList = false;
@@ -284,8 +283,6 @@
         if (inList) { html += '</ul>'; inList = false; }
         continue;
       }
-
-      // Headings
       if (line.startsWith('### ')) {
         if (inList) { html += '</ul>'; inList = false; }
         html += '<h3>' + inlineFormat(line.slice(4)) + '</h3>';
@@ -296,25 +293,18 @@
         html += '<h2>' + inlineFormat(line.slice(3)) + '</h2>';
         continue;
       }
-
-      // Bullet points (* or -)
       if (/^[\*\-]\s+/.test(line)) {
         if (!inList) { html += '<ul>'; inList = true; }
         html += '<li>' + inlineFormat(line.replace(/^[\*\-]\s+/, '')) + '</li>';
         continue;
       }
-
-      // Regular paragraph
       if (inList) { html += '</ul>'; inList = false; }
       html += '<p>' + inlineFormat(line) + '</p>';
     }
-
     if (inList) html += '</ul>';
-
     return { html: html, footnotes: footnotes };
   }
 
-  // Convert **bold** inline
   function inlineFormat(text) {
     return text
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -325,37 +315,36 @@
     return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
   function renderResult(data) {
     hideLoading();
 
     var raw     = data.answer  || 'No answer returned.';
     var sources = data.sources || [];
     var cached  = data.cached  || false;
+    var videos  = data.videos  || [];
 
-    // Parse answer into HTML + footnotes
+    // Answer
     var parsed = parseAnswer(raw);
-
-    // Render answer HTML
     document.getElementById('resultAnswer').innerHTML = parsed.html;
 
-    // Render footnotes section
+    // Footnotes
     var footBox  = document.getElementById('footnotesBox');
     var footList = document.getElementById('footnotesList');
     footList.innerHTML = '';
-
     if (parsed.footnotes.length > 0) {
       parsed.footnotes.forEach(function(name, idx) {
         var item = document.createElement('div');
         item.className = 'footnote-item';
-
         var num = document.createElement('span');
         num.className = 'footnote-num';
         num.textContent = idx + 1;
-
         var txt = document.createElement('span');
         txt.className = 'footnote-text';
         txt.textContent = name;
-
         item.appendChild(num);
         item.appendChild(txt);
         footList.appendChild(item);
@@ -365,16 +354,14 @@
       footBox.style.display = 'none';
     }
 
-    // Render data-sources chips row
+    // Data source chips
     var sourcesRow = document.getElementById('sourcesRow');
     sourcesRow.innerHTML = '';
-
     if (sources.length > 0) {
       var label = document.createElement('span');
       label.className = 'sources-label';
       label.textContent = 'Data from:';
       sourcesRow.appendChild(label);
-
       sources.forEach(function(s) {
         var chip = document.createElement('span');
         chip.className = 'source-chip';
@@ -382,7 +369,6 @@
         sourcesRow.appendChild(chip);
       });
     }
-
     if (cached) {
       var note = document.createElement('span');
       note.className = 'cached-note';
@@ -391,6 +377,68 @@
     }
 
     document.getElementById('resultBox').style.display = 'block';
+
+    // Videos
+    var videoSection = document.getElementById('videoSection');
+    var videoGrid    = document.getElementById('videoGrid');
+    videoGrid.innerHTML = '';
+
+    if (videos.length > 0) {
+      videos.forEach(function(v) {
+        var card = document.createElement('a');
+        card.className = 'video-card';
+        card.href   = v.url || '#';
+        card.target = '_blank';
+        card.rel    = 'noopener noreferrer';
+
+        // Thumbnail
+        var thumbDiv = document.createElement('div');
+        thumbDiv.className = 'video-thumb';
+
+        if (v.thumbnail) {
+          var img = document.createElement('img');
+          img.src = v.thumbnail;
+          img.alt = v.title || 'Video thumbnail';
+          img.loading = 'lazy';
+          img.onerror = function() {
+            this.parentNode.innerHTML = '<div class="video-thumb-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>';
+          };
+          thumbDiv.appendChild(img);
+        } else {
+          thumbDiv.innerHTML = '<div class="video-thumb-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>';
+        }
+
+        if (v.duration) {
+          var dur = document.createElement('span');
+          dur.className = 'video-duration';
+          dur.textContent = v.duration;
+          thumbDiv.appendChild(dur);
+        }
+
+        // Info
+        var info = document.createElement('div');
+        info.className = 'video-info';
+
+        var title = document.createElement('div');
+        title.className = 'video-title';
+        title.textContent = v.title || 'Untitled';
+
+        var channel = document.createElement('div');
+        channel.className = 'video-channel';
+        channel.textContent = v.channel || '';
+
+        info.appendChild(title);
+        if (v.channel) info.appendChild(channel);
+
+        card.appendChild(thumbDiv);
+        card.appendChild(info);
+        videoGrid.appendChild(card);
+      });
+
+      videoSection.style.display = 'block';
+    } else {
+      videoSection.style.display = 'none';
+    }
   }
 
   function showError(msg) {
@@ -403,23 +451,18 @@
   async function sendSearch() {
     var query = document.getElementById('queryInput').value.trim();
     if (!query) return;
-
     showLoading();
-
     try {
       var resp = await fetch('https://api.mcpdemo.com/proxy/web-search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: query })
       });
-
       var data = await resp.json();
-
       if (!resp.ok || data.error) {
         showError(data.error || 'Search failed. Please try again.');
         return;
       }
-
       renderResult(data.result);
     } catch (err) {
       showError('Could not reach the search service. Please try again.');
