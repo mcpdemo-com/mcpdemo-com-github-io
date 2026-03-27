@@ -332,6 +332,25 @@ Nav links: `Home→/` `About→/about/` `Contact→/contact/` `Explore Tools→/
 
 ---
 
+## Analytics — Required on EVERY Page
+
+**Every HTML page on mcpdemo.com MUST include the Ahrefs analytics script in the `<head>`.**
+
+Place it immediately after the Google Fonts `<link>` tags and before the `<style>` block:
+
+```html
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
+```
+
+This applies to:
+- Every tool info page (`/tools/[name]/index.html`)
+- Every tool demo page (`/tools/[name]/demo.html`)
+- Every site page (homepage, about, contact, tools directory, 404, all legal pages)
+
+**Do not skip this.** Pages without it will not show up in Ahrefs Web Analytics.
+
+---
+
 ## Common Bugs to Avoid
 
 | Bug | Cause | Fix |
@@ -344,14 +363,15 @@ Nav links: `Home→/` `About→/about/` `Contact→/contact/` `Explore Tools→/
 | Wrong auth | Email instead of API key | Use API key from mcpcio dashboard, not email address |
 | Worker not deploying | Missing wrangler.toml | Always create wrangler.toml in worker folder |
 | SSE parse error | mcpcio returns event-stream | Handle both `application/json` and `text/event-stream` in Worker |
+| Missing analytics | Forgot Ahrefs script | Add `<script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>` in `<head>` |
 
 ---
 
 ## File Checklist for Each New Tool
 
 - [ ] `tools/index.html` — card added to liveGrid, removed from soon chips
-- [ ] `tools/[tool-name]/index.html` — info page with generated content
-- [ ] `tools/[tool-name]/demo.html` — demo page with direct MCP call
+- [ ] `tools/[tool-name]/index.html` — info page with generated content + Ahrefs script
+- [ ] `tools/[tool-name]/demo.html` — demo page with direct MCP call + Ahrefs script
 - [ ] `workers/[tool-name]-proxy/worker.js` — Cloudflare Worker
 - [ ] `workers/[tool-name]-proxy/wrangler.toml` — Wrangler config
 - [ ] Cloudflare — Worker created, secret added, route configured
@@ -362,7 +382,7 @@ Nav links: `Home→/` `About→/about/` `Contact→/contact/` `Explore Tools→/
 ## Connectors Available in This Project
 
 | Connector | Purpose |
-|-----------|---------|
+|-----------|---------| 
 | `mcpcio` | GitHub file management, product search, content creator, web search |
 | `MCPDEMO` | Widget management (PMG platform — separate from mcpcio MCP tools) |
 
