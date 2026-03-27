@@ -31,11 +31,15 @@ There are two tool types. Determine which before building anything:
 |-----------|----------|-------|
 | Static site | GitHub Pages | `mcpdemo-com/mcpdemo-com-github-io` |
 | DNS + CDN | Cloudflare | mcpdemo.com zone |
-| API proxy | Cloudflare Worker | `mcpdemo-shopify-proxy` (one Worker per tool) |
-| Worker deploy | GitHub CI | Auto-deploys on push to `workers/[tool]/` |
-| KV storage | Cloudflare KV | `MCP_CACHE` and `MCP_LIMITS` per Worker |
+| API proxy | Cloudflare Worker | one Worker per tool |
+| Worker deploy | Manual paste | See Step 6 — Git CI does NOT work for subdirectory repos |
+| KV storage | Cloudflare KV | `MCP_CACHE` and `MCP_LIMITS` per Worker (optional) |
 | MCP server | mcpcio.com | `https://api.mcpcio.com/mcp` |
 | MCP auth | Worker secret | `MCPCIO_TOKEN` = API key from mcpcio dashboard |
+
+⚠️ **Important:** Cloudflare's Git CI cannot find subdirectories inside a GitHub Pages repo.
+Always deploy Workers by pasting code directly into the Cloudflare editor — do not rely on the
+Connect to Git / Build pipeline for Workers in this repo.
 
 ---
 
@@ -58,7 +62,12 @@ Always test before building. Use the mcpcio connector in Claude:
 Call [tool_name] with a sample query and see what the raw data looks like
 ```
 
-Note the exact field names — `title`, `price`, `image`, `description`, etc.
+**Capture the exact response shape** — field names vary by tool. For example:
+- `websearch_video_search` returns `{ results: [...] }` not `{ videos: [...] }`
+- Video thumbnails are `thumbnail_url` not `thumbnail`
+- `productsearch_search_products` returns `{ offers: [...] }`
+
+Note the exact field names before writing a single line of Worker code.
 The Cloudflare Worker will format this data directly — **no Claude in the loop**.
 
 ---
@@ -106,8 +115,8 @@ Use mcpcio content creator. Takes ~90 seconds — do not timeout:
 mcpcio:contentcreator_generate_content
   topic: "[Tool Name] MCP integration for [use case]"
   template: "how-to-guide"
-  additional_context: "For mcpdemo.com — educational site showcasing Model Context Protocol (MCP) tools. 
-    Audience: developers and business owners. Plain English, active voice. 
+  additional_context: "For mcpdemo.com — educational site showcasing Model Context Protocol (MCP) tools.
+    Audience: developers and business owners. Plain English, active voice.
     Explain what MCP is, how Claude connects to [tool] through it, real-world use cases.
     Tool is provided by mcpcio.com MCP infrastructure at https://api.mcpcio.com/mcp"
   word_count_min: 1200
@@ -157,14 +166,20 @@ File: `workers/[tool-name]-proxy/worker.js`
 
 **Critical rule: Call the MCP tool directly. No Claude. No LLM interpretation.**
 
-Pattern (use Shopify worker as reference):
+Use the Web Search worker (`workers/web-search-proxy/worker.js`) as the reference —
+it is more complete than the Shopify worker, handling:
+- Parallel tool calls via `Promise.all`
+- Both JSON and SSE response parsing via `parseToolResponse()`
+- Best-effort secondary calls (videos, etc.) that don't fail the primary result
+
+Core pattern:
 
 ```javascript
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
 const MCP_URL        = 'https://api.mcpcio.com/mcp';
 
 async function callTool(token, toolName, args) {
-  const resp = await fetch(MCP_URL, {
+  return fetch(MCP_URL, {
     method: 'POST',
     headers: {
       'Content-Type':  'application/json',
@@ -172,19 +187,41 @@ async function callTool(token, toolName, args) {
       'Accept':        'application/json, text/event-stream',
     },
     body: JSON.stringify({
-      jsonrpc: '2.0',
-      id:      1,
+      jsonrpc: '2.0', id: 1,
       method:  'tools/call',
       params:  { name: toolName, arguments: args }
     })
   });
-  return resp;
+}
+
+async function parseToolResponse(resp) {
+  const text = await resp.text();
+  const contentType = resp.headers.get('content-type') || '';
+  let mcpData;
+
+  if (contentType.includes('text/event-stream')) {
+    const lines = text.split('\n');
+    let jsonStr = null;
+    for (const line of lines) {
+      if (line.startsWith('data: ')) jsonStr = line.slice(6).trim();
+    }
+    if (!jsonStr) throw new Error('No data in SSE response');
+    mcpData = JSON.parse(jsonStr);
+  } else {
+    mcpData = JSON.parse(text);
+  }
+
+  if (mcpData.error) throw new Error(mcpData.error.message || 'MCP tool error');
+
+  const resultContent = mcpData.result?.content;
+  if (Array.isArray(resultContent)) {
+    for (const block of resultContent) {
+      if (block.type === 'text') return JSON.parse(block.text);
+    }
+  }
+  return mcpData.result || null;
 }
 ```
-
-Handle both JSON and SSE (text/event-stream) responses — mcpcio may return either.
-
-Format the raw tool result into clean card data yourself — do not send to Claude.
 
 **Worker secrets needed** (same for every tool):
 - `MCPCIO_TOKEN` — already set on existing Workers, reuse pattern
@@ -201,12 +238,18 @@ compatibility_date = "2024-01-01"
 
 Note: KV bindings optional — only add if caching is needed.
 
-Push both files, then in Cloudflare:
-1. Workers & Pages → Create Worker → "Start with Hello World" → name: `mcpdemo-[tool-name]-proxy`
-2. Settings → Bindings → add `MCPCIO_TOKEN` secret (same value as Shopify worker)
-3. Settings → Build → Connect GitHub → root directory: `workers/[tool-name]-proxy`
-4. DNS → add A record: name=`api`, IPv4=`192.0.2.1`, Proxied ON (if not already exists)
-5. Workers Routes → add route: `api.mcpdemo.com/proxy/[tool-name]*` → worker
+### 6c. Push to GitHub, then deploy manually to Cloudflare
+
+Push both files to GitHub first (for version control), then:
+
+1. Cloudflare → Workers & Pages → Create → "Hello World" (or open existing Worker)
+2. In the online editor: select all, paste the full `worker.js` content, click **Deploy**
+3. Settings → Variables and Secrets → **+** → add `MCPCIO_TOKEN` as a Secret
+4. Workers Routes → Add Route: `api.mcpdemo.com/proxy/[tool-name]*` → select worker
+5. DNS → confirm `api` A record exists: `192.0.2.1`, Proxied ON (only needed once)
+
+⚠️ **Do NOT use Connect to Git for Workers** — Cloudflare Git CI fails to find
+subdirectories inside a GitHub Pages repo. Always paste code manually into the editor.
 
 ---
 
@@ -214,7 +257,13 @@ Push both files, then in Cloudflare:
 
 File: `tools/[tool-name]/demo.html`
 
-Use the Shopify demo page as the template. Key elements:
+Use the **Web Search demo page** as the template — it is more polished than Shopify and includes:
+- Inline footnote citation chips (numbered superscripts + inline source list)
+- Video card grid (if tool returns video results)
+- Correct showLoading/hideLoading pattern
+- No outbound links (everything stays in-app)
+
+Key elements:
 
 **Context bar** (always):
 ```html
@@ -236,11 +285,8 @@ Free demos provided by <a href="https://mcpcio.com">mcpcio.com</a>
 
 **Results area** — DOM-built cards (never use innerHTML with nested quotes)
 
-**"What's happening under the hood?"** collapsible — explain:
-- Cloudflare Worker at api.mcpdemo.com/proxy/[tool-name]
-- Direct call to mcpcio.com MCP server
-- Tool name that gets called
-- No API key needed for visitors
+**No outbound links** — video cards and source chips must be `<div>` not `<a>`.
+Nothing in the demo should navigate the user away from the page.
 
 **JS pattern** — always separate showLoading/hideLoading:
 ```javascript
@@ -256,16 +302,9 @@ function hideLoading() {
   // do NOT touch result elements here
 }
 
-// Each outcome (results/error/quota) manages its own display
-function renderResults(data) {
-  hideLoading();
-  // show results
-}
-
-function showError(msg) {
-  hideLoading();
-  // show error
-}
+// Each outcome manages its own display
+function renderResults(data) { hideLoading(); /* show results */ }
+function showError(msg)       { hideLoading(); /* show error  */ }
 
 async function sendSearch() {
   showLoading();
@@ -284,9 +323,30 @@ async function sendSearch() {
 
 ---
 
-## Step 8 — Update the Info Page Code Example
+## Step 8 — Update Sitemap
 
-The code example on the info page should show the direct MCP call pattern, not the Anthropic API pattern:
+Always update `sitemap.xml` after deploying new pages. Read it fresh first, then add:
+
+```xml
+  <url>
+    <loc>https://mcpdemo.com/tools/[tool-name]/</loc>
+    <lastmod>YYYY-MM-DD</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mcpdemo.com/tools/[tool-name]/demo.html</loc>
+    <lastmod>YYYY-MM-DD</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+```
+
+---
+
+## Step 9 — Update the Info Page Code Example
+
+The code example on the info page should show the direct MCP call pattern:
 
 ```javascript
 // Direct MCP tool call — no LLM middleman
@@ -297,8 +357,7 @@ const resp = await fetch('https://api.mcpcio.com/mcp', {
     'Authorization': 'Bearer YOUR_MCPCIO_API_KEY',
   },
   body: JSON.stringify({
-    jsonrpc: '2.0',
-    id:      1,
+    jsonrpc: '2.0', id: 1,
     method:  'tools/call',
     params: {
       name:      '[tool_name]',
@@ -342,11 +401,6 @@ Place it immediately after the Google Fonts `<link>` tags and before the `<style
 <script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
 ```
 
-This applies to:
-- Every tool info page (`/tools/[name]/index.html`)
-- Every tool demo page (`/tools/[name]/demo.html`)
-- Every site page (homepage, about, contact, tools directory, 404, all legal pages)
-
 **Do not skip this.** Pages without it will not show up in Ahrefs Web Analytics.
 
 ---
@@ -357,13 +411,16 @@ This applies to:
 |-----|-------|-----|
 | Results flash then disappear | `finally` block resets display | Separate showLoading/hideLoading, never touch display in finally |
 | SVG broken in dynamic cards | innerHTML with nested quotes | Always use DOM createElement, never innerHTML for dynamic cards |
-| Nothing displayed, no error | Worker returning empty products | Test tool directly first, check MCP auth token |
+| Nothing displayed, no error | Worker returning empty data | Test tool directly first, check MCP auth token |
+| Video cards not showing | Wrong field name | Use `raw.results` not `raw.videos`; use `thumbnail_url` not `thumbnail` |
+| Worker Git CI fails | Cloudflare can't find subdirectory | Always paste worker code manually into Cloudflare editor — never rely on Git CI |
 | "Overloaded" error | Anthropic 529 | Don't use Anthropic — call MCP tool directly |
 | Tool returns no results | LLM refusing to call tool | Don't use LLM — call MCP tool directly |
 | Wrong auth | Email instead of API key | Use API key from mcpcio dashboard, not email address |
-| Worker not deploying | Missing wrangler.toml | Always create wrangler.toml in worker folder |
+| Worker not deploying | Missing wrangler.toml | Always create wrangler.toml in worker folder (for version control) |
 | SSE parse error | mcpcio returns event-stream | Handle both `application/json` and `text/event-stream` in Worker |
-| Missing analytics | Forgot Ahrefs script | Add `<script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>` in `<head>` |
+| Missing analytics | Forgot Ahrefs script | Add script tag in `<head>` on every page |
+| Links leaving the app | Used `<a>` for result cards | Use `<div>` for all result cards — no outbound links from demo pages |
 
 ---
 
@@ -372,9 +429,12 @@ This applies to:
 - [ ] `tools/index.html` — card added to liveGrid, removed from soon chips
 - [ ] `tools/[tool-name]/index.html` — info page with generated content + Ahrefs script
 - [ ] `tools/[tool-name]/demo.html` — demo page with direct MCP call + Ahrefs script
-- [ ] `workers/[tool-name]-proxy/worker.js` — Cloudflare Worker
+- [ ] `workers/[tool-name]-proxy/worker.js` — Cloudflare Worker (in GitHub for version control)
 - [ ] `workers/[tool-name]-proxy/wrangler.toml` — Wrangler config
-- [ ] Cloudflare — Worker created, secret added, route configured
+- [ ] `sitemap.xml` — both new URLs added with today's date
+- [ ] Cloudflare — Worker code pasted manually into editor and deployed
+- [ ] Cloudflare — `MCPCIO_TOKEN` secret added to Worker
+- [ ] Cloudflare — Route `api.mcpdemo.com/proxy/[tool-name]*` added
 - [ ] Cloudflare — DNS A record for api.mcpdemo.com (only needed once)
 
 ---
@@ -382,7 +442,7 @@ This applies to:
 ## Connectors Available in This Project
 
 | Connector | Purpose |
-|-----------|---------| 
+|-----------|---------|
 | `mcpcio` | GitHub file management, product search, content creator, web search |
 | `MCPDEMO` | Widget management (PMG platform — separate from mcpcio MCP tools) |
 
@@ -393,13 +453,16 @@ This applies to:
 
 ---
 
-## Shopify Demo — Reference Implementation
+## Reference Implementations
 
-The Shopify demo is the canonical reference for everything above.
+| Tool | Best reference for... |
+|------|-----------------------|
+| Shopify | Product card rendering, offers/price parsing |
+| Web Search | Parallel tool calls, SSE+JSON handling, video cards, footnote chips, no-outbound-link pattern |
 
-- Info page: `tools/shopify/index.html`
-- Demo page: `tools/shopify/demo.html`
-- Worker: `workers/shopify-proxy/worker.js`
-- MCP tool called: `productsearch_search_products`
-- Worker route: `api.mcpdemo.com/proxy/shopify*`
-- Worker name: `mcpdemo-shopify-proxy`
+- Web Search info page: `tools/web-search/index.html`
+- Web Search demo page: `tools/web-search/demo.html`
+- Web Search worker: `workers/web-search-proxy/worker.js`
+- MCP tools called: `websearch_query` + `websearch_video_search`
+- Worker route: `api.mcpdemo.com/proxy/web-search*`
+- Worker name: `mcpdemo-web-search-proxy`
