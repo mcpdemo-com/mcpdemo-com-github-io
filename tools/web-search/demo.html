@@ -81,13 +81,12 @@
     .source-chip{font-size:.72rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif;font-weight:600}
     .cached-note{font-size:.7rem;color:var(--dim);margin-left:auto}
 
-    /* Video section */
+    /* Video section — cards are display-only, no links */
     .video-section{display:none;margin-top:1.25rem}
     .video-section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:"Exo 2",sans-serif;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
     .video-section-label::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4444;box-shadow:0 0 6px #ff4444}
     .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
-    .video-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-decoration:none;transition:transform .2s,box-shadow .2s;display:block}
-    .video-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,212,255,.1);text-decoration:none}
+    .video-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:block;cursor:default}
     .video-thumb{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg2);overflow:hidden}
     .video-thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .video-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--bg2)}
@@ -193,7 +192,7 @@
     </button>
     <div class="how-body" id="howBody">
       <p>When you search, this page posts your query to a Cloudflare Worker at <code>api.mcpdemo.com/proxy/web-search</code>. The Worker makes two parallel MCP tool calls: <code>websearch_query</code> for the synthesized text answer and <code>websearch_video_search</code> for related videos — both direct calls to the mcpcio.com MCP server, no LLM in the loop.</p>
-      <p>Inline citations from the answer (e.g. [Wikipedia]) are extracted and rendered as numbered superscripts with a footnote list below. Video thumbnails link directly to the source. What you see is what the web actually says right now.</p>
+      <p>Inline citations from the answer (e.g. [Wikipedia]) are extracted and rendered as numbered superscripts with a footnote list below. Related video thumbnails are shown for reference — all results stay within this page. What you see is what the web actually says right now.</p>
     </div>
   </div>
 </div>
@@ -315,10 +314,6 @@
     return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
-  function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
   function renderResult(data) {
     hideLoading();
 
@@ -378,18 +373,16 @@
 
     document.getElementById('resultBox').style.display = 'block';
 
-    // Videos
+    // Videos — display only, no links
     var videoSection = document.getElementById('videoSection');
     var videoGrid    = document.getElementById('videoGrid');
     videoGrid.innerHTML = '';
 
     if (videos.length > 0) {
       videos.forEach(function(v) {
-        var card = document.createElement('a');
+        // Use div instead of <a> — no navigation out of the app
+        var card = document.createElement('div');
         card.className = 'video-card';
-        card.href   = v.url || '#';
-        card.target = '_blank';
-        card.rel    = 'noopener noreferrer';
 
         // Thumbnail
         var thumbDiv = document.createElement('div');
