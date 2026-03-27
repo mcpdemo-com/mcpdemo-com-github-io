@@ -123,15 +123,14 @@ export default {
     try {
       const videoResult = await parseToolResponse(videoResp);
       const raw = videoResult?.data || videoResult || {};
-      // Shape: { videos: [ { title, channel, thumbnail, url, duration, ... } ] }
-      if (Array.isArray(raw.videos)) {
-        videos = raw.videos.slice(0, 5).map(v => ({
-          title:     v.title     || '',
-          channel:   v.channel   || v.author || '',
-          thumbnail: v.thumbnail || v.thumbnail_url || '',
-          url:       v.url       || v.link || '',
-          duration:  v.duration  || '',
-          mentions:  v.mentions  || null,
+      // actual shape: { results: [ { video_id, title, channel, thumbnail_url, ... } ] }
+      const videoList = raw.results || raw.videos || [];
+      if (Array.isArray(videoList)) {
+        videos = videoList.slice(0, 5).map(v => ({
+          title:     v.title         || '',
+          channel:   v.channel       || v.author || '',
+          thumbnail: v.thumbnail_url || v.thumbnail || '',
+          duration:  v.duration      || '',
         }));
       }
     } catch (_) {
