@@ -18,14 +18,26 @@
 | 1 | Test tool directly, note field names | 5 min |
 | 2 | Generate info page content via mcpcio content creator | 2 min (90s generate) |
 | 3 | Add card to tools/index.html | 5 min |
-| 4 | Build and push info page | 15 min |
+| 4 | Build and push info page (with Ahrefs script) | 15 min |
 | 5 | Write Cloudflare Worker | 15 min |
 | 6 | Push wrangler.toml | 2 min |
 | 7 | Create Worker in Cloudflare, add secret, connect GitHub | 5 min |
 | 8 | Add Worker route in Cloudflare | 2 min |
-| 9 | Build and push demo page | 20 min |
+| 9 | Build and push demo page (with Ahrefs script) | 20 min |
 | 10 | Test live | 5 min |
 | **Total** | | **~76 min** |
+
+---
+
+## ⚠️ Analytics — Required on Every Page
+
+**Every HTML page MUST include this script in `<head>`, after Google Fonts links:**
+
+```html
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
+```
+
+This includes the info page AND the demo page for every tool. Do not skip it.
 
 ---
 
@@ -176,6 +188,18 @@ compatibility_date = "2024-01-01"
 ```
 
 No KV needed unless you add caching later.
+
+---
+
+## Per-Page HTML Checklist
+
+Before pushing any `.html` file, verify it has:
+
+- [ ] Ahrefs script in `<head>`: `<script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>`
+- [ ] Standard nav (Home / About / Contact / Explore Tools button)
+- [ ] Standard footer with legal links + copyright year script
+- [ ] Logo images using `mix-blend-mode: screen`
+- [ ] Brand colors only (no purple, no Tailwind CDN)
 
 ---
 
