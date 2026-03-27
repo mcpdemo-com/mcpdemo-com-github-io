@@ -1,35 +1,10 @@
 /**
  * MCP Demo — Shopify Product Search Worker
+ * Calls mcpcio MCP tool directly — no Claude middleman for search
  */
 
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
-
-const SYSTEM_PROMPT = `You are a Shopify product search tool. When given any product query, you MUST immediately call productsearch_search_products — do not ask clarifying questions, do not respond conversationally. Just search.
-
-After getting results, return ONLY a JSON object — no other text, no markdown, no explanation:
-
-{
-  "summary": "Found X products matching your search",
-  "products": [
-    {
-      "title": "Product Name",
-      "price": "$XX.XX",
-      "rating": "4.4/5 (449 reviews)",
-      "seller": "Seller Name",
-      "description": "One sentence description",
-      "image": "https://cdn.shopify.com/..."
-    }
-  ]
-}
-
-Rules:
-- Always search immediately — never ask for more information
-- Maximum 4 products
-- Price is in cents — divide by 100 and format as $XX.XX
-- Use first media item's url as the image field
-- Omit image field if unavailable
-- NEVER include url, variantUrl, checkoutUrl, or any product links — no links at all
-- If no results: { "summary": "No products found.", "products": [] }`;
+const MCP_URL        = 'https://api.mcpcio.com/mcp';
 
 function cors(origin) {
   const allowed = origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN;
@@ -48,37 +23,72 @@ function json(data, status = 200, origin = ALLOWED_ORIGIN) {
   });
 }
 
-async function callAnthropic(env, query) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+// Call the mcpcio MCP server directly via JSON-RPC
+async function searchProducts(token, query) {
+  const resp = await fetch(MCP_URL, {
     method: 'POST',
     headers: {
-      'Content-Type':      'application/json',
-      'x-api-key':         env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-beta':    'mcp-client-2025-04-04',
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Accept':        'application/json, text/event-stream',
     },
     body: JSON.stringify({
-      model:      'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      system:     SYSTEM_PROMPT,
-      messages:   [{ role: 'user', content: `Search for: ${query}` }],
-      mcp_servers: [{
-        type:                'url',
-        url:                 'https://api.mcpcio.com/mcp',
-        name:                'mcpcio',
-        authorization_token: env.MCPCIO_TOKEN,
-        tool_configuration: {
-          enabled: true,
-          allowed_tools: [
-            'productsearch_search_products',
-            'productsearch_get_product_details',
-            'productsearch_compare_offers'
-          ]
-        }
-      }]
+      jsonrpc: '2.0',
+      id:      1,
+      method:  'tools/call',
+      params: {
+        name:      'productsearch_search_products',
+        arguments: { query, limit: 4 }
+      }
     })
   });
+
   return resp;
+}
+
+// Format raw MCP offers into clean product cards
+function formatProducts(offers, query) {
+  if (!offers || offers.length === 0) {
+    return { summary: 'No products found. Try a more specific search.', products: [] };
+  }
+
+  // Deduplicate by product title — take first variant per unique product
+  const seen = new Set();
+  const products = [];
+
+  for (const offer of offers) {
+    if (products.length >= 4) break;
+    if (seen.has(offer.title)) continue;
+    seen.add(offer.title);
+
+    const variant  = offer.variants?.[0];
+    const price    = variant?.price?.amount
+      ? `$${(variant.price.amount / 100).toFixed(2)}`
+      : offer.priceRange?.min?.amount
+        ? `$${(offer.priceRange.min.amount / 100).toFixed(2)}`
+        : null;
+
+    const rating = offer.rating?.count > 0
+      ? `${offer.rating.rating.toFixed(1)}/5 (${offer.rating.count} reviews)`
+      : null;
+
+    const image  = offer.media?.[0]?.url || variant?.media?.[0]?.url || null;
+    const seller = variant?.shop?.name || null;
+
+    products.push({
+      title:       offer.title,
+      price,
+      rating,
+      seller,
+      description: offer.description?.slice(0, 120) || null,
+      image,
+    });
+  }
+
+  return {
+    summary:  `Found ${products.length} product${products.length !== 1 ? 's' : ''} matching your search`,
+    products,
+  };
 }
 
 export default {
@@ -100,59 +110,66 @@ export default {
     const query = (body.query || '').trim();
     if (!query) return json({ error: 'Missing query' }, 400, origin);
 
-    if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY not set' }, 500, origin);
-    if (!env.MCPCIO_TOKEN)      return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
+    if (!env.MCPCIO_TOKEN) return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
 
-    let apiResp, apiRespText;
-    for (let attempt = 1; attempt <= 2; attempt++) {
-      try {
-        apiResp = await callAnthropic(env, query);
-        apiRespText = await apiResp.text();
-        if (apiResp.status === 529 && attempt < 2) {
-          await new Promise(r => setTimeout(r, 2000));
-          continue;
-        }
-        break;
-      } catch (err) {
-        if (attempt === 2) {
-          return json({ error: 'Search service unavailable. Please try again in a moment.' }, 502, origin);
-        }
-        await new Promise(r => setTimeout(r, 1000));
-      }
-    }
-
-    let data;
-    try { data = JSON.parse(apiRespText); }
-    catch { return json({ error: 'Unexpected response from search service.' }, 502, origin); }
-
-    if (!apiResp.ok) {
-      if (apiResp.status === 529) return json({ error: 'Search service is busy — please try again in a few seconds.' }, 503, origin);
-      if (apiResp.status === 401) return json({ error: 'API authentication error. Please contact support.' }, 401, origin);
-      return json({ error: data?.error?.message || 'Search failed. Please try again.' }, apiResp.status, origin);
-    }
-
-    const text = (data.content || [])
-      .filter(b => b.type === 'text')
-      .map(b => b.text)
-      .join('\n')
-      .trim();
-
-    let result;
+    // Call mcpcio MCP directly
+    let mcpResp, mcpText;
     try {
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      result = jsonMatch ? JSON.parse(jsonMatch[0]) : { summary: text, products: [] };
-    } catch {
-      result = { summary: text, products: [] };
+      mcpResp = await searchProducts(env.MCPCIO_TOKEN, query);
+      mcpText = await mcpResp.text();
+    } catch (err) {
+      return json({ error: 'Search service unavailable. Please try again.', detail: err.message }, 502, origin);
     }
 
-    // Strip any urls that slipped through
-    if (result.products) {
-      result.products = result.products.map(p => {
-        const { url, variantUrl, checkoutUrl, lookupUrl, ...clean } = p;
-        return clean;
-      });
+    // Handle SSE response (text/event-stream)
+    let mcpData;
+    const contentType = mcpResp.headers.get('content-type') || '';
+
+    if (contentType.includes('text/event-stream')) {
+      // Parse SSE — find the data line with the result
+      const lines = mcpText.split('\n');
+      let jsonStr = null;
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          jsonStr = line.slice(6).trim();
+        }
+      }
+      if (!jsonStr) {
+        return json({ error: 'No data in SSE response', raw: mcpText.slice(0, 300) }, 502, origin);
+      }
+      try { mcpData = JSON.parse(jsonStr); }
+      catch { return json({ error: 'Could not parse SSE data', raw: jsonStr.slice(0, 300) }, 502, origin); }
+    } else {
+      try { mcpData = JSON.parse(mcpText); }
+      catch { return json({ error: 'Could not parse MCP response', raw: mcpText.slice(0, 300) }, 502, origin); }
     }
 
+    // Check for JSON-RPC error
+    if (mcpData.error) {
+      return json({ error: mcpData.error.message || 'MCP tool error', code: mcpData.error.code }, 502, origin);
+    }
+
+    // Extract offers from result
+    let offers = [];
+    try {
+      const resultContent = mcpData.result?.content;
+      if (Array.isArray(resultContent)) {
+        // MCP returns content blocks
+        for (const block of resultContent) {
+          if (block.type === 'text') {
+            const parsed = JSON.parse(block.text);
+            offers = parsed.offers || parsed.products || parsed || [];
+            break;
+          }
+        }
+      } else if (mcpData.result?.offers) {
+        offers = mcpData.result.offers;
+      }
+    } catch (e) {
+      return json({ error: 'Could not parse product data', detail: e.message, raw: JSON.stringify(mcpData).slice(0, 300) }, 502, origin);
+    }
+
+    const result = formatProducts(offers, query);
     return json({ result, source: 'live', sponsored: true });
   }
 };
