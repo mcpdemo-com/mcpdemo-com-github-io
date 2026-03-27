@@ -1,6 +1,5 @@
 /**
  * MCP Demo — Shopify Product Search Worker
- * Debug version — returns full error details
  */
 
 const DAILY_LIMIT    = 500;
@@ -8,14 +7,12 @@ const PER_IP_LIMIT   = 5;
 const CACHE_TTL      = 604800;
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
 
-const SYSTEM_PROMPT = `You are a Shopify product search assistant. You have access to live product search tools via MCP that query millions of real Shopify products.
+const SYSTEM_PROMPT = `You are a Shopify product search tool. When given any product query, you MUST immediately call productsearch_search_products — do not ask clarifying questions, do not respond conversationally. Just search.
 
-When a user asks about products:
-1. Call productsearch_search_products with their query and any price/filter they mention
-2. Return results as a JSON object in this exact format — no other text, just the JSON:
+After getting results, return ONLY a JSON object in this exact format — no other text, no markdown, no explanation:
 
 {
-  "summary": "One sentence describing what you found",
+  "summary": "Found X products matching your search",
   "products": [
     {
       "title": "Product Name",
@@ -30,13 +27,14 @@ When a user asks about products:
 }
 
 Rules:
-- Maximum 4 products
-- Price is in cents in the raw data — divide by 100 and format as $XX.XX
-- Use the first variant's variantUrl as the url field
-- Use the first media item's url as the image field
-- If no image available, omit the image field
-- Never include checkoutUrl — product page links only
-- If no results found, return { "summary": "No products found for that search.", "products": [] }`;
+- Always search immediately — never ask for more information
+- Maximum 4 products in results
+- Price is in cents — divide by 100 and format as $XX.XX
+- Use first variant's variantUrl as the url field
+- Use first media item's url as the image field
+- Omit image field if no image available
+- Never include checkoutUrl
+- If no results: { "summary": "No products found.", "products": [] }`;
 
 function hashQuery(str) {
   let h = 0;
@@ -86,44 +84,34 @@ export default {
     const query = (body.query || '').trim();
     if (!query) return json({ error: 'Missing query' }, 400, origin);
 
-    // DEBUG MODE: bypass rate limits and cache for testing
     const debug = body.debug === true;
-
-    const normQuery  = query.toLowerCase().replace(/\s+/g, ' ');
-    const cacheKey   = `cache:${hashQuery(normQuery)}`;
-    const dateStr    = today();
-    const ip         = request.headers.get('CF-Connecting-IP') || 'unknown';
-    const dailyKey   = `daily:${dateStr}`;
-    const ipKey      = `ip:${ip}:${dateStr}`;
+    const normQuery = query.toLowerCase().replace(/\s+/g, ' ');
+    const cacheKey  = `cache:${hashQuery(normQuery)}`;
+    const dateStr   = today();
+    const ip        = request.headers.get('CF-Connecting-IP') || 'unknown';
+    const dailyKey  = `daily:${dateStr}`;
+    const ipKey     = `ip:${ip}:${dateStr}`;
 
     if (!debug) {
       let cached = null;
       try { cached = await env.MCP_CACHE.get(cacheKey); } catch {}
+      if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
 
       const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
       if (dailyCount >= DAILY_LIMIT) {
-        if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
-        return json({ result: null, source: 'quota', sponsored: true, message: `Today's ${DAILY_LIMIT} free demos have been used.` });
+        return json({ result: null, source: 'quota', sponsored: true, message: `Today's ${DAILY_LIMIT} free demos have been used. Powered by mcpcio.com — check back tomorrow!` });
       }
 
       const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
       if (ipCount >= PER_IP_LIMIT) {
-        if (cached) return json({ result: JSON.parse(cached), source: 'cache', sponsored: true });
-        return json({ result: null, source: 'ratelimit', sponsored: true, message: `You've used your ${PER_IP_LIMIT} free demos for today.` });
+        return json({ result: null, source: 'ratelimit', sponsored: true, message: `You've used your ${PER_IP_LIMIT} free demos for today. Powered by mcpcio.com — come back tomorrow!` });
       }
     }
 
-    // Check secrets are available
-    if (!env.ANTHROPIC_API_KEY) {
-      return json({ error: 'ANTHROPIC_API_KEY secret not set', debug: true }, 500, origin);
-    }
-    if (!env.MCPCIO_TOKEN) {
-      return json({ error: 'MCPCIO_TOKEN secret not set', debug: true }, 500, origin);
-    }
+    if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY not set' }, 500, origin);
+    if (!env.MCPCIO_TOKEN) return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
 
-    // Make Anthropic API call
-    let apiResp;
-    let apiRespText;
+    let apiResp, apiRespText;
     try {
       apiResp = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -137,7 +125,7 @@ export default {
           model:      'claude-haiku-4-5-20251001',
           max_tokens: 1024,
           system:     SYSTEM_PROMPT,
-          messages:   [{ role: 'user', content: query }],
+          messages:   [{ role: 'user', content: `Search for: ${query}` }],
           mcp_servers: [{
             type:                'url',
             url:                 'https://api.mcpcio.com/mcp',
@@ -156,19 +144,15 @@ export default {
       });
       apiRespText = await apiResp.text();
     } catch (err) {
-      return json({ error: 'Fetch to Anthropic failed', detail: err.message, debug: true }, 502, origin);
+      return json({ error: 'Fetch to Anthropic failed', detail: err.message }, 502, origin);
     }
 
-    // Parse response
     let data;
-    try {
-      data = JSON.parse(apiRespText);
-    } catch {
-      return json({ error: 'Anthropic returned non-JSON', raw: apiRespText.slice(0, 500), status: apiResp.status, debug: true }, 502, origin);
-    }
+    try { data = JSON.parse(apiRespText); }
+    catch { return json({ error: 'Anthropic returned non-JSON', raw: apiRespText.slice(0, 500), status: apiResp.status }, 502, origin); }
 
     if (!apiResp.ok) {
-      return json({ error: data?.error?.message || 'Anthropic API error', code: data?.error?.type, status: apiResp.status, full: data, debug: true }, apiResp.status, origin);
+      return json({ error: data?.error?.message || 'API error', code: data?.error?.type, status: apiResp.status, full: debug ? data : undefined }, apiResp.status, origin);
     }
 
     const text = (data.content || [])
@@ -178,7 +162,7 @@ export default {
       .trim();
 
     if (!text) {
-      return json({ error: 'Empty response from API', content_blocks: data.content, debug: true }, 500, origin);
+      return json({ error: 'Empty response', content_blocks: debug ? data.content : undefined }, 500, origin);
     }
 
     let result;
@@ -191,10 +175,10 @@ export default {
 
     if (!debug) {
       try {
-        const dailyCount = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
-        const ipCount = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
-        await env.MCP_LIMITS.put(dailyKey, String(dailyCount + 1), { expirationTtl: 86400 });
-        await env.MCP_LIMITS.put(ipKey,    String(ipCount + 1),    { expirationTtl: 86400 });
+        const dc = parseInt(await env.MCP_LIMITS.get(dailyKey).catch(() => '0') || '0');
+        const ic = parseInt(await env.MCP_LIMITS.get(ipKey).catch(() => '0') || '0');
+        await env.MCP_LIMITS.put(dailyKey, String(dc + 1), { expirationTtl: 86400 });
+        await env.MCP_LIMITS.put(ipKey,    String(ic + 1), { expirationTtl: 86400 });
         await env.MCP_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: CACHE_TTL });
       } catch {}
     }
