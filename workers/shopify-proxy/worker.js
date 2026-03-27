@@ -1,6 +1,6 @@
 /**
  * MCP Demo — Shopify Product Search Worker
- * Simplified — no KV cache/rate limiting to isolate rendering issue
+ * With retry on 529 overload and friendly error messages
  */
 
 const ALLOWED_ORIGIN = 'https://mcpdemo.com';
@@ -51,6 +51,42 @@ function json(data, status = 200, origin = ALLOWED_ORIGIN) {
   });
 }
 
+async function callAnthropic(env, query) {
+  const payload = {
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 1024,
+    system:     SYSTEM_PROMPT,
+    messages:   [{ role: 'user', content: `Search for: ${query}` }],
+    mcp_servers: [{
+      type:                'url',
+      url:                 'https://api.mcpcio.com/mcp',
+      name:                'mcpcio',
+      authorization_token: env.MCPCIO_TOKEN,
+      tool_configuration: {
+        enabled: true,
+        allowed_tools: [
+          'productsearch_search_products',
+          'productsearch_get_product_details',
+          'productsearch_compare_offers'
+        ]
+      }
+    }]
+  };
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type':      'application/json',
+      'x-api-key':         env.ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-beta':    'mcp-client-2025-04-04',
+    },
+    body: JSON.stringify(payload)
+  });
+
+  return resp;
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -73,48 +109,39 @@ export default {
     if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY not set' }, 500, origin);
     if (!env.MCPCIO_TOKEN)      return json({ error: 'MCPCIO_TOKEN not set' }, 500, origin);
 
+    // Try up to 2 times — retry once on 529 overload
     let apiResp, apiRespText;
-    try {
-      apiResp = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type':      'application/json',
-          'x-api-key':         env.ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-beta':    'mcp-client-2025-04-04',
-        },
-        body: JSON.stringify({
-          model:      'claude-haiku-4-5-20251001',
-          max_tokens: 1024,
-          system:     SYSTEM_PROMPT,
-          messages:   [{ role: 'user', content: `Search for: ${query}` }],
-          mcp_servers: [{
-            type:                'url',
-            url:                 'https://api.mcpcio.com/mcp',
-            name:                'mcpcio',
-            authorization_token: env.MCPCIO_TOKEN,
-            tool_configuration: {
-              enabled: true,
-              allowed_tools: [
-                'productsearch_search_products',
-                'productsearch_get_product_details',
-                'productsearch_compare_offers'
-              ]
-            }
-          }]
-        })
-      });
-      apiRespText = await apiResp.text();
-    } catch (err) {
-      return json({ error: 'Fetch failed', detail: err.message }, 502, origin);
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        apiResp = await callAnthropic(env, query);
+        apiRespText = await apiResp.text();
+        // Only retry on 529
+        if (apiResp.status === 529 && attempt < 2) {
+          await new Promise(r => setTimeout(r, 2000)); // wait 2s before retry
+          continue;
+        }
+        break;
+      } catch (err) {
+        if (attempt === 2) {
+          return json({ error: 'Search service unavailable. Please try again in a moment.' }, 502, origin);
+        }
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
 
     let data;
     try { data = JSON.parse(apiRespText); }
-    catch { return json({ error: 'Non-JSON from Anthropic', raw: apiRespText.slice(0, 300) }, 502, origin); }
+    catch { return json({ error: 'Unexpected response from search service.' }, 502, origin); }
 
     if (!apiResp.ok) {
-      return json({ error: data?.error?.message || 'API error', code: data?.error?.type, status: apiResp.status }, apiResp.status, origin);
+      // Friendly error messages for common API errors
+      if (apiResp.status === 529) {
+        return json({ error: 'Search service is busy right now — please try again in a few seconds.' }, 503, origin);
+      }
+      if (apiResp.status === 401) {
+        return json({ error: 'API authentication error. Please contact support.' }, 401, origin);
+      }
+      return json({ error: data?.error?.message || 'Search failed. Please try again.' }, apiResp.status, origin);
     }
 
     const text = (data.content || [])
