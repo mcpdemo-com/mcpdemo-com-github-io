@@ -199,12 +199,14 @@
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
 
     try {
-      const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
+      const res = await fetch('https://app.mcpcio.com/api/forms/afucvq2p/submit', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ name, email })
+        body: JSON.stringify({ name, email, subject, message })
       });
       if (res.ok) {
         document.getElementById('contactForm').style.display = 'none';
@@ -213,7 +215,7 @@
     } catch {
       btn.textContent = 'Send message';
       btn.disabled = false;
-      window.open('https://app.mcpcio.com/forms/sqt6qbtd','_blank');
+      window.open('https://app.mcpcio.com/forms/afucvq2p','_blank');
     }
   }
 </script>
