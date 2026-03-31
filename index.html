@@ -449,7 +449,7 @@
     const email = document.getElementById('newsletterEmail').value.trim();
     if (!email) return;
     try {
-      const res = await fetch('https://app.mcpcio.com/api/forms/sqt6qbtd/submit', {
+      const res = await fetch('https://app.mcpcio.com/api/forms/h0o8j951/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -460,7 +460,7 @@
         document.getElementById('newsletterSuccess').style.display = 'block';
       } else { throw new Error(); }
     } catch {
-      window.open('https://app.mcpcio.com/forms/sqt6qbtd', '_blank');
+      window.open('https://app.mcpcio.com/forms/h0o8j951', '_blank');
     }
   }
 </script>
