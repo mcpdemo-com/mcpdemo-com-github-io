@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /404.html
+Disallow: /legal/
 
+# Facebook media crawlers — must be able to fetch video/image files for Reels and OG previews
 User-agent: facebookexternalhit
 Allow: /
 
