@@ -67,7 +67,7 @@ export default {
           'anthropic-beta': 'mcp-client-2025-04-04',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-6',
           max_tokens: 1024,
           system: SYSTEM_PROMPT,
           messages: [{ role: 'user', content: query }],
@@ -85,8 +85,10 @@ export default {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('Anthropic error:', data);
-        return json({ error: 'Upstream API error. Please try again.' }, 502);
+        // Return the actual Anthropic error for easier debugging
+        const errMsg = data?.error?.message || 'Upstream API error. Please try again.';
+        console.error('Anthropic error:', JSON.stringify(data));
+        return json({ error: errMsg }, 502);
       }
 
       // Extract text blocks from response
