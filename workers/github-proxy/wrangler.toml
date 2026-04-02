@@ -1,0 +1,12 @@
+name = "mcpdemo-github-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# GITHUB_TOKEN and ANTHROPIC_API_KEY are set as encrypted secrets
+# in Cloudflare Dashboard → Workers & Pages → mcpdemo-github-proxy
+# → Settings → Variables and Secrets
+
+[[routes]]
+pattern = "api.mcpdemo.com/proxy/github*"
+zone_name = "mcpdemo.com"
