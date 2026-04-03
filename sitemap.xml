@@ -87,4 +87,18 @@
     <priority>0.75</priority>
   </url>
 
+  <!-- Tool: Filesystem MCP -->
+  <url>
+    <loc>https://mcpdemo.com/tools/filesystem/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mcpdemo.com/tools/filesystem/demo.html</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
