@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filesystem MCP Integration with Claude AI — MCP Demo</title>
+  <meta name="description" content="Learn how Claude AI connects to your local filesystem via Model Context Protocol (MCP) — reading files, listing directories, and searching content through natural language." />
+  <link rel="canonical" href="https://mcpdemo.com/tools/filesystem/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/filesystem/" />
+  <meta property="og:title" content="Filesystem MCP Integration with Claude AI" />
+  <meta property="og:description" content="Learn how Claude connects to your local filesystem via MCP — read files, list directories, and search content through natural language commands." />
+  <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:site_name" content="MCP Demo" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
+  <style>
+    :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.7}
+    a{color:var(--cyan);text-decoration:none}
+    a:hover{text-decoration:underline}
+    nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo img{height:32px;mix-blend-mode:screen}
+    .nav-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+    .nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
+    .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
+    .hero{padding:4.5rem 2rem 3rem;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,.09) 0%,transparent 70%)}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--dim);margin-bottom:1.5rem}
+    .breadcrumb a{color:var(--muted);transition:color .2s;text-decoration:none}
+    .breadcrumb a:hover{color:var(--cyan)}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1rem;font-family:"Exo 2",sans-serif}
+    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin-bottom:1rem;color:var(--txt)}
+    .hero-sub{color:var(--muted);font-size:1.05rem;margin-bottom:2rem;max-width:640px}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+    .btn-primary{display:inline-block;padding:.75rem 2rem;background:var(--cyan);color:#080d1a;border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;text-decoration:none;font-size:.95rem}
+    .btn-primary:hover{background:#00eeff;box-shadow:0 0 28px rgba(0,212,255,.45);text-decoration:none}
+    .btn-ghost{display:inline-block;padding:.75rem 2rem;background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;transition:border-color .2s;font-size:.95rem;text-decoration:none}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.5);text-decoration:none}
+    .article-wrap{max-width:820px;margin:0 auto;padding:3rem 2rem 5rem}
+    .article h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--txt);margin:2.5rem 0 1rem;padding-top:.5rem;border-top:1px solid var(--border)}
+    .article h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.1rem;color:var(--cyan);margin:1.75rem 0 .6rem}
+    .article p{color:var(--muted);margin-bottom:1.1rem;font-size:.95rem;line-height:1.75}
+    .article ul,.article ol{color:var(--muted);margin:0 0 1.25rem 1.5rem;font-size:.95rem;line-height:1.8}
+    .article li{margin-bottom:.4rem}
+    .article strong{color:var(--txt);font-weight:600}
+    .article code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;color:var(--cyan);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:4px;padding:.1rem .35rem}
+    .article pre{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;overflow-x:auto;font-size:.82rem;line-height:1.7;margin:1rem 0 1.5rem}
+    .article pre code{background:none;border:none;padding:0;color:var(--txt)}
+    .article table{width:100%;border-collapse:collapse;margin:1.25rem 0 1.75rem;font-size:.88rem}
+    .article table th{background:var(--bg3);color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding:.75rem 1rem;border:1px solid var(--border);text-align:left}
+    .article table td{padding:.7rem 1rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
+    .article table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
+    .takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .cta-box{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:3rem}
+    .cta-box h2{border:none;padding:0;margin:0 0 .75rem}
+    .cta-box p{max-width:500px;margin:0 auto 1.75rem;color:var(--muted)}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
+    .foot-inner{max-width:1100px;margin:0 auto}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
+    .foot-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;text-decoration:none}
+    .foot-logo img{height:26px;mix-blend-mode:screen}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1rem}
+    footer h4{color:var(--cyan);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;font-family:"Exo 2",sans-serif;font-weight:700}
+    footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
+    footer a:hover{color:var(--cyan)}
+    .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.foot-cols{grid-template-columns:1fr}.hero-actions{flex-direction:column}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="/tools/">Tools</a>
+      <span>›</span>
+      <span>Filesystem</span>
+    </div>
+    <div class="sec-label">System / Files · MCP Tool</div>
+    <h1>Filesystem MCP — Let Claude Read and Navigate Your Local Files</h1>
+    <p class="hero-sub">Navigate and manage local files through AI commands. The Filesystem MCP server gives Claude direct, sandboxed access to directories you choose — read files, list folders, and search content through natural language.</p>
+    <div class="hero-actions">
+      <a href="/tools/filesystem/demo.html" class="btn-primary">Try the Live Demo →</a>
+      <a href="#how-it-works" class="btn-ghost">How it works</a>
+    </div>
+  </div>
+</div>
+
+<div class="article-wrap">
+  <div class="article">
+
+    <h2>Key Takeaways</h2>
+    <ul class="takeaways">
+      <li>Model Context Protocol (MCP) lets Claude connect directly to your local filesystem through a sandboxed server — it can only access directories you explicitly permit.</li>
+      <li>The official Filesystem MCP server is an open-source reference implementation by the MCP team, installable in minutes via <code>npx</code> or Docker.</li>
+      <li>Claude can read files, list directory contents, search for files by name or content, move files, and create directories — all from a single conversation.</li>
+      <li>Security is enforced at the server level: Claude physically cannot access files outside your allowlisted paths, regardless of what you ask it to do.</li>
+      <li>No API key, no cloud service, no database — the entire integration runs locally on your machine.</li>
+    </ul>
+
+    <h2 id="how-it-works">What the Filesystem MCP Server Actually Is</h2>
+    <p>Model Context Protocol (MCP) is an open standard that defines how AI models like Claude connect to external tools and data sources. The Filesystem MCP server is the official reference implementation for giving Claude read and write access to local files — maintained by the same team that built MCP.</p>
+    <p>Before MCP, connecting Claude to your file system meant copy-pasting content into the chat, using custom scripts, or granting an AI service broad cloud access. The Filesystem MCP server changes that: it runs entirely on your machine, exposes a defined set of file tools to Claude, and refuses any request that touches paths outside the directories you configured at startup.</p>
+    <p>Think of it as a controlled tunnel. You specify which folders Claude is allowed to enter. Everything inside those folders becomes navigable through conversation. Everything outside stays completely off-limits.</p>
+
+    <h3>Why This Matters for Developers</h3>
+    <p>Developers spend a surprising amount of time hunting for files — grepping through directories, reading config files, checking what changed, understanding a codebase they didn't write. The Filesystem MCP server turns those tasks into conversations. Ask Claude to find all files modified in the last 24 hours, summarize a log file, or list all JSON configs in a project directory — and it does, using live data, not guesses.</p>
+
+    <h2>How the Filesystem MCP Connection Works</h2>
+    <p>The Filesystem MCP server runs locally using Node.js. When you start it, you pass the directories you want Claude to access as command-line arguments. Claude communicates with the server over the MCP protocol, calls specific tools like <code>read_file</code> or <code>list_directory</code>, and the server translates those calls into real filesystem operations.</p>
+    <p>Here's the complete flow: you ask Claude "what's in the config folder?" Claude identifies this as a directory listing request, calls the <code>list_directory</code> tool on your MCP server, and the server returns the actual contents of that path. Claude presents the result in natural language. No browser upload, no file transfer, no copying — the data stays on your machine throughout.</p>
+
+    <h3>Step 1 — Install the Server</h3>
+    <p>The fastest path is <code>npx</code> — no global install required. Run this to start the server and grant Claude access to a specific directory:</p>
+    <pre><code>npx -y @modelcontextprotocol/server-filesystem /path/to/your/project</code></pre>
+    <p>You can specify multiple directories by listing them as additional arguments. Add <code>,ro</code> after a path to make it read-only. Docker is also supported if you prefer an isolated environment.</p>
+
+    <h3>Step 2 — Connect Claude to the Server</h3>
+    <p>Pass the server URL in your Anthropic API call using the <code>mcp_servers</code> parameter. Claude automatically discovers the available tools and uses them during the conversation:</p>
+    <pre><code>const response = await fetch("https://api.anthropic.com/v1/messages", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": YOUR_ANTHROPIC_API_KEY,
+    "anthropic-version": "2023-06-01",
+    "anthropic-beta": "mcp-client-2025-04-04"
+  },
+  body: JSON.stringify({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 1024,
+    messages: [{ role: "user", content: "List the files in /project/src" }],
+    mcp_servers: [{
+      type: "url",
+      url: "http://localhost:3000",
+      name: "filesystem"
+    }]
+  })
+});</code></pre>
+
+    <h3>Step 3 — What Tools Claude Can Call</h3>
+    <p>A standard Filesystem MCP server exposes these tools. Claude chooses the right one based on what you ask:</p>
+    <table>
+      <tr><th>Tool</th><th>What It Does</th><th>Example Prompt</th></tr>
+      <tr><td><code>read_file</code></td><td>Returns the full text content of a file</td><td>"Read the contents of package.json"</td></tr>
+      <tr><td><code>list_directory</code></td><td>Lists all files and folders at a given path</td><td>"What's in the /src directory?"</td></tr>
+      <tr><td><code>search_files</code></td><td>Finds files matching a name pattern recursively</td><td>"Find all .env files in the project"</td></tr>
+      <tr><td><code>get_file_info</code></td><td>Returns metadata: size, modified date, permissions</td><td>"When was README.md last modified?"</td></tr>
+      <tr><td><code>create_directory</code></td><td>Creates a new directory at the specified path</td><td>"Create a /logs folder under /project"</td></tr>
+      <tr><td><code>move_file</code></td><td>Moves or renames a file to a new location</td><td>"Move old-config.json to /archive"</td></tr>
+      <tr><td><code>write_file</code></td><td>Creates or overwrites a file with given content</td><td>"Write this JSON to config/settings.json"</td></tr>
+    </table>
+
+    <h2>Real-World Use Cases</h2>
+
+    <h3>Codebase Onboarding and Exploration</h3>
+    <p>Joining a new project means navigating an unfamiliar directory tree, reading config files, and understanding how things connect. With Claude connected via the Filesystem MCP server, a developer can ask "give me an overview of this project structure" and get a clear, plain-language summary based on the actual files — not documentation that might be out of date.</p>
+    <p>Claude can read multiple files in sequence, cross-reference imports, and explain what it finds. What used to take an afternoon of exploration can happen in minutes.</p>
+
+    <h3>Log Analysis and Debugging</h3>
+    <p>Log files grow large fast. Finding the relevant error in 50,000 lines is tedious when done manually. With the Filesystem MCP server, Claude can read a log file directly and answer specific questions: "find all ERROR entries from the last hour" or "show me the stack trace around the first 500 exception." Claude processes the content and returns exactly what you need.</p>
+
+    <h3>Configuration Audits</h3>
+    <p>Teams running multiple environments — dev, staging, production — accumulate configuration files that drift apart over time. Claude connected to a filesystem can compare configs side-by-side: "which keys are in production.json but missing from staging.json?" That's a task that usually requires a developer writing a diff script. Via MCP, it's a single question.</p>
+
+    <h3>Automated File Organization</h3>
+    <p>Repetitive file management tasks — renaming files by convention, organizing downloads into folders, moving processed files to an archive directory — are exactly the kind of work that benefits from natural language commands. Claude can execute a multi-step organization plan across a directory in one conversation, with each action visible and reversible.</p>
+
+    <h2>Filesystem MCP vs. Traditional File Access</h2>
+    <table>
+      <tr><th>Method</th><th>Setup</th><th>Live Data</th><th>Security Controls</th><th>Natural Language</th></tr>
+      <tr><td>Filesystem MCP + Claude</td><td>~5 minutes</td><td>Yes</td><td>Allowlisted directories</td><td>Yes</td></tr>
+      <tr><td>Zapier / Make File triggers</td><td>1–2 hours</td><td>Trigger-based</td><td>Cloud-stored tokens</td><td>No</td></tr>
+      <tr><td>Custom script (bash/Python)</td><td>Hours to days</td><td>Yes</td><td>Depends on implementation</td><td>No</td></tr>
+      <tr><td>Manual copy-paste to AI chat</td><td>None</td><td>No (snapshot only)</td><td>Data sent to cloud</td><td>Yes</td></tr>
+    </table>
+
+    <h2>Security and Permissions</h2>
+    <p>The Filesystem MCP server enforces access controls at startup. You pass the allowed directories as arguments when starting the server — Claude can only read or write within those exact paths. If you ask Claude to access a file outside those directories, the server rejects the request outright. No credentials to manage, no permissions system to configure separately.</p>
+    <p>For extra protection, you can mount individual directories as read-only. The server also runs locally — your file contents are never transmitted to Anthropic or any third-party service. Claude sees what the MCP server returns; nothing else.</p>
+
+    <div class="cta-box">
+      <div class="sec-label">Live Demo</div>
+      <h2>See it in action</h2>
+      <p>Try a simulated Filesystem MCP session — Claude navigates a sample project directory and answers real questions about file contents.</p>
+      <a href="/tools/filesystem/demo.html" class="btn-primary">Open the Live Demo →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-cols">
+      <div>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4>Legal</h4>
+          <a href="/legal/privacy-policy.html">Privacy Policy</a>
+          <a href="/legal/terms-of-service.html">Terms of Service</a>
+          <a href="/legal/cookie-policy.html">Cookie Policy</a>
+          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/tools/">Tools Directory</a>
+        </div>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">For legal notices, privacy requests, or general inquiries.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
+      <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
