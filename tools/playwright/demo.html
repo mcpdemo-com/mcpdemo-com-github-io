@@ -166,7 +166,8 @@
   <details>
     <summary>What's happening under the hood?</summary>
     <div class="details-body">
-      <p>This demo calls the <strong style="color:var(--txt)">Anthropic Messages API</strong> directly with a system prompt that instructs Claude to respond as if it has live Playwright MCP access. Claude describes the exact tool calls it would make — <code>browser_navigate</code>, <code>browser_snapshot</code>, <code>browser_click</code> — and what the accessibility tree would return.</p>
+      <p>When you run a task, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds the Anthropic API key securely — it's never sent to your browser.</p>
+      <p>The Worker calls the <strong style="color:var(--txt)">Anthropic Messages API</strong> with a system prompt that instructs Claude to respond as if it has live Playwright MCP access. Claude describes the exact tool calls it would make — <code>browser_navigate</code>, <code>browser_snapshot</code>, <code>browser_click</code> — and what the accessibility tree would return.</p>
       <p>A live Playwright MCP setup runs <code>@playwright/mcp@latest</code> locally via <code>npx</code> and connects to Claude Desktop, VS Code, Cursor, or Windsurf. The browser launches on your machine, reads real pages, and Claude interacts with actual elements by reference ID. <a href="/tools/playwright/">Read the full setup guide →</a></p>
     </div>
   </details>
@@ -274,34 +275,18 @@
     if (!query) return;
     showLoading();
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('https://api.mcpdemo.com/proxy/playwright', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1000,
-          system: `You are Claude connected to a Playwright MCP server (@playwright/mcp by Microsoft). You have live browser control through Model Context Protocol (MCP).
-
-When the user describes a browser task, respond as if you are actively executing it. Walk through the MCP tool calls step by step:
-1. State which tool you are calling (e.g. browser_navigate, browser_snapshot, browser_click, browser_type)
-2. Describe what the accessibility tree snapshot returns — list real-looking elements with ref IDs (e.g. [ref=e5], [ref=e12])
-3. Show any follow-up tool calls needed
-4. Summarize what you found or accomplished
-
-Be specific and realistic. Use numbered steps. Keep responses concise and practical.
-Never use markdown tables or raw [text](url) style links. Use numbered lists and plain text only.
-Always clarify that this is a demonstration of what Playwright MCP would do with real browser access.`,
-          messages: [{ role: 'user', content: query }]
-        })
+        body: JSON.stringify({ query })
       });
       const data = await res.json();
       if (!res.ok) {
-        showError('API error — please try again.');
+        showError(data.error || 'API error — please try again.');
         return;
       }
-      const text = data.content && data.content[0] && data.content[0].text;
-      if (!text) { showError('No response received. Please try again.'); return; }
-      showResult(text);
+      if (!data.text) { showError('No response received. Please try again.'); return; }
+      showResult(data.text);
     } catch (err) {
       showError('Connection failed. Please check your network and try again.');
     }
