@@ -175,7 +175,7 @@
   <details>
     <summary>What's happening under the hood?</summary>
     <div class="details-body">
-      <p>When you ask a question, the demo calls the <strong style="color:var(--txt)">Anthropic Messages API</strong> directly. Claude is given a system prompt that instructs it to simulate being connected to a sandboxed demo project directory via Model Context Protocol (MCP).</p>
+      <p>When you ask a question, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds the Anthropic API key securely — it's never sent to your browser.</p>
       <p>In a real Filesystem MCP setup, Claude calls tools like <code>list_directory</code>, <code>read_file</code>, and <code>search_files</code> against your actual local filesystem. This demo shows what those interactions look like — the responses are realistic simulations based on a fictional but plausible project structure.</p>
       <p>No files are transferred, no local access is required for this demo. Want to connect Claude to your real filesystem? <a href="/tools/filesystem/">Read the setup guide →</a></p>
     </div>
@@ -288,59 +288,18 @@
     if (!query) return;
     showLoading();
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('https://api.mcpdemo.com/proxy/filesystem', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1000,
-          system: `You are Claude connected to a local filesystem via Model Context Protocol (MCP). You have READ-ONLY access to a sandboxed demo project at /demo-project. Never create, modify, or delete anything — only read, list, and search.
-
-The /demo-project directory contains a realistic Node.js web application with this structure:
-/demo-project/
-  README.md
-  package.json
-  .env.example
-  src/
-    index.js
-    app.js
-    routes/
-      api.js
-      auth.js
-    models/
-      user.js
-      post.js
-    config/
-      database.js
-      redis.js
-  tests/
-    api.test.js
-    auth.test.js
-  logs/
-    app.log
-    error.log
-  public/
-    index.html
-    styles.css
-
-When asked to list files, describe the contents clearly using numbered lists.
-When asked to read a file, provide realistic but fictional file content appropriate for that file type.
-When asked to search, describe what you find using numbered results.
-Always mention which MCP tool you used: list_directory, read_file, search_files, or get_file_info.
-Be specific and concise. Keep responses under 350 words.
-Never use markdown tables. Never use raw markdown links. Use numbered lists and plain paragraphs only.`,
-          messages: [{ role: 'user', content: query }]
-        })
+        body: JSON.stringify({ query })
       });
       const data = await res.json();
       if (!res.ok) {
-        showError(data.error?.message || 'Request failed. Please try again.');
+        showError(data.error || 'Request failed. Please try again.');
         return;
       }
-      const text = (data.content || [])
-        .filter(b => b.type === 'text').map(b => b.text).join('\n').trim()
-        || 'No response received.';
-      showResult(text);
+      if (!data.text) { showError('No response received. Please try again.'); return; }
+      showResult(data.text);
     } catch (err) {
       showError('Connection failed. Please check your network and try again.');
     }
