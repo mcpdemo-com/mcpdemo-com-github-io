@@ -6,8 +6,18 @@
   <title>Web Search Demo — MCP Demo</title>
   <meta name="description" content="Live web search powered by Model Context Protocol. Ask anything — Claude fetches real results from the web right now." />
   <link rel="canonical" href="https://mcpdemo.com/tools/web-search/demo.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/web-search/demo.html" />
   <meta property="og:title" content="Web Search MCP Live Demo — MCP Demo" />
+  <meta property="og:description" content="Live web search powered by Model Context Protocol. Ask anything — Claude fetches real results from the web right now." />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:site_name" content="MCP Demo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Web Search MCP Live Demo — MCP Demo" />
+  <meta name="twitter:description" content="Live web search powered by Model Context Protocol. Ask anything — Claude fetches real results from the web right now." />
+  <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,20 +81,15 @@
     .result-answer h2{font-size:1.05rem}
     .result-answer h3{font-size:.95rem;color:var(--cyan)}
     .cite-sup{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;font-size:.6rem;font-weight:700;background:rgba(0,212,255,.15);color:var(--cyan);border:1px solid rgba(0,212,255,.3);border-radius:3px;vertical-align:super;line-height:1;cursor:default;font-family:"Exo 2",sans-serif;margin-left:1px}
-
-    /* Footnotes — horizontal inline chips */
     .footnotes{padding:.6rem 1.25rem .75rem;border-top:1px solid var(--border);background:rgba(0,0,0,.12)}
     .footnotes-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-family:"Exo 2",sans-serif;margin-bottom:.4rem}
     .footnotes-chips{display:flex;flex-wrap:wrap;gap:.35rem}
     .footnote-chip{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--muted);background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:20px;padding:.2rem .55rem .2rem .35rem;white-space:nowrap}
     .footnote-chip-num{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;background:rgba(0,212,255,.18);color:var(--cyan);border-radius:3px;font-size:.6rem;font-weight:700;font-family:"Exo 2",sans-serif;flex-shrink:0;padding:0 .2rem}
-
     .sources-row{padding:.5rem 1.25rem .6rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
     .sources-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-family:"Exo 2",sans-serif;margin-right:.2rem}
     .source-chip{font-size:.72rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif;font-weight:600}
     .cached-note{font-size:.7rem;color:var(--dim);margin-left:auto}
-
-    /* Video section — display only, no links */
     .video-section{display:none;margin-top:1.25rem}
     .video-section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:"Exo 2",sans-serif;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
     .video-section-label::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4444;box-shadow:0 0 6px #ff4444}
@@ -98,7 +103,6 @@
     .video-info{padding:.6rem .75rem .75rem}
     .video-title{font-size:.78rem;font-weight:600;color:var(--txt);line-height:1.4;margin-bottom:.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .video-channel{font-size:.7rem;color:var(--dim)}
-
     .error-box{display:none;background:rgba(255,80,80,.06);border:1px solid rgba(255,80,80,.2);border-radius:10px;padding:1.25rem;color:#ff8080;font-size:.88rem;margin-bottom:1rem}
     .how-it-works{margin-top:2.5rem}
     .how-toggle{background:none;border:1px solid var(--border);border-radius:8px;padding:.7rem 1.1rem;color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;cursor:pointer;width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s}
@@ -325,11 +329,9 @@
     var cached  = data.cached  || false;
     var videos  = data.videos  || [];
 
-    // Answer
     var parsed = parseAnswer(raw);
     document.getElementById('resultAnswer').innerHTML = parsed.html;
 
-    // Footnotes — inline chips
     var footBox  = document.getElementById('footnotesBox');
     var footList = document.getElementById('footnotesList');
     footList.innerHTML = '';
@@ -338,13 +340,10 @@
       parsed.footnotes.forEach(function(name, idx) {
         var chip = document.createElement('span');
         chip.className = 'footnote-chip';
-
         var num = document.createElement('span');
         num.className = 'footnote-chip-num';
         num.textContent = idx + 1;
-
         var txt = document.createTextNode(name);
-
         chip.appendChild(num);
         chip.appendChild(txt);
         footList.appendChild(chip);
@@ -354,7 +353,6 @@
       footBox.style.display = 'none';
     }
 
-    // Data source chips
     var sourcesRow = document.getElementById('sourcesRow');
     sourcesRow.innerHTML = '';
     if (sources.length > 0) {
@@ -378,7 +376,6 @@
 
     document.getElementById('resultBox').style.display = 'block';
 
-    // Videos — display only, no links
     var videoSection = document.getElementById('videoSection');
     var videoGrid    = document.getElementById('videoGrid');
     videoGrid.innerHTML = '';
@@ -387,10 +384,8 @@
       videos.forEach(function(v) {
         var card = document.createElement('div');
         card.className = 'video-card';
-
         var thumbDiv = document.createElement('div');
         thumbDiv.className = 'video-thumb';
-
         if (v.thumbnail) {
           var img = document.createElement('img');
           img.src     = v.thumbnail;
@@ -403,35 +398,28 @@
         } else {
           thumbDiv.innerHTML = '<div class="video-thumb-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>';
         }
-
         if (v.duration) {
           var dur = document.createElement('span');
           dur.className   = 'video-duration';
           dur.textContent = v.duration;
           thumbDiv.appendChild(dur);
         }
-
         var info = document.createElement('div');
         info.className = 'video-info';
-
         var title = document.createElement('div');
         title.className   = 'video-title';
         title.textContent = v.title || 'Untitled';
-
         info.appendChild(title);
-
         if (v.channel) {
           var channel = document.createElement('div');
           channel.className   = 'video-channel';
           channel.textContent = v.channel;
           info.appendChild(channel);
         }
-
         card.appendChild(thumbDiv);
         card.appendChild(info);
         videoGrid.appendChild(card);
       });
-
       videoSection.style.display = 'block';
     } else {
       videoSection.style.display = 'none';
