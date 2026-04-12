@@ -4,14 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shopify MCP Integration with Claude AI — MCP Demo</title>
-  <meta name="description" content="Your store has thousands of products. Your customers have questions. Learn how Shopify MCP integration with Claude AI bridges that gap with live product search, inventory checks, and real-time pricing." />
+  <meta name="description" content="Learn how Claude connects to Shopify via Model Context Protocol (MCP) for live product search, inventory checks, and real-time pricing — all through natural language." />
   <link rel="canonical" href="https://mcpdemo.com/tools/shopify/" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://mcpdemo.com/tools/shopify/" />
   <meta property="og:title" content="Shopify MCP Integration with Claude AI for Product Search" />
   <meta property="og:description" content="Learn how Claude connects to Shopify via Model Context Protocol (MCP) to search products, compare prices, and retrieve checkout links in real time." />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
   <meta property="og:site_name" content="MCP Demo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shopify MCP Integration with Claude AI for Product Search" />
+  <meta name="twitter:description" content="Learn how Claude connects to Shopify via MCP to search products, compare prices, and retrieve checkout links in real time." />
+  <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,7 +51,6 @@
     .btn-primary:hover{background:#00eeff;box-shadow:0 0 28px rgba(0,212,255,.45);text-decoration:none}
     .btn-ghost{display:inline-block;padding:.75rem 2rem;background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;transition:border-color .2s;font-size:.95rem;text-decoration:none}
     .btn-ghost:hover{border-color:rgba(255,255,255,.5);text-decoration:none}
-    /* Article content */
     .article-wrap{max-width:820px;margin:0 auto;padding:3rem 2rem 5rem}
     .article h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--txt);margin:2.5rem 0 1rem;padding-top:.5rem;border-top:1px solid var(--border)}
     .article h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.1rem;color:var(--cyan);margin:1.75rem 0 .6rem}
@@ -61,13 +66,10 @@
     .article table th{background:var(--bg3);color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding:.75rem 1rem;border:1px solid var(--border);text-align:left}
     .article table td{padding:.7rem 1rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
     .article table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
-    /* Key takeaways box */
     .article h2:first-of-type + ul,.takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
-    /* CTA box at bottom */
     .cta-box{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:3rem}
     .cta-box h2{border:none;padding:0;margin:0 0 .75rem}
     .cta-box p{max-width:500px;margin:0 auto 1.75rem;color:var(--muted)}
-    /* Footer */
     footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
     .foot-inner{max-width:1100px;margin:0 auto}
     .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
@@ -197,7 +199,6 @@
     <table>
       <tr><th>Integration Method</th><th>Setup Time</th><th>Real-Time Data</th><th>Maintenance</th><th>Cost</th></tr>
       <tr><td>Shopify MCP + Claude</td><td>1–3 hours</td><td>Yes</td><td>Low</td><td>Low (open source server)</td></tr>
-      <tr><td>Zapier / Make Middleware</td><td>2–4 hours</td><td>Delayed (trigger-based)</td><td>Medium</td><td>$20–$100+/month</td></tr>
       <tr><td>Custom API Integration</td><td>1–4 weeks</td><td>Yes</td><td>High</td><td>Developer time + hosting</td></tr>
       <tr><td>Manual Copy-Paste / Export</td><td>Minutes per session</td><td>No (snapshot only)</td><td>Constant</td><td>Staff time</td></tr>
     </table>
