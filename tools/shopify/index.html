@@ -22,6 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
   <style>
     :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -67,6 +68,11 @@
     .article table td{padding:.7rem 1rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
     .article table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
     .article h2:first-of-type + ul,.takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .video-section{margin:3rem 0;padding-top:.5rem;border-top:1px solid var(--border)}
+    .video-section h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--txt);margin:0 0 .5rem;border:none;padding:0}
+    .video-section p{color:var(--muted);font-size:.95rem;margin-bottom:1.25rem}
+    .video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--bg2)}
+    .video-wrap video{display:block;width:100%;height:auto}
     .cta-box{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:3rem}
     .cta-box h2{border:none;padding:0;margin:0 0 .75rem}
     .cta-box p{max-width:500px;margin:0 auto 1.75rem;color:var(--muted)}
@@ -206,6 +212,18 @@
     <h2>Security and Permissions</h2>
     <p>MCP connections to Shopify are only as permissive as the API scopes you grant your custom app. If you create a Shopify app with only <code>read_products</code> scope, Claude physically can't modify, delete, or create products — the API token doesn't have that permission. That's a meaningful safety boundary.</p>
     <p>Your Shopify Admin API token stays in your local MCP server configuration — it doesn't get sent to Anthropic or stored in Claude's memory. The MCP server runs on your machine (or your own hosted infrastructure), and Claude communicates with it locally. Your product data never leaves your control.</p>
+
+    <div class="video-section">
+      <div class="sec-label">Explainer Video</div>
+      <h2>How Shopify MCP Works — 80-Second Overview</h2>
+      <p>A quick walkthrough of the Shopify MCP integration: what it is, what Claude can do with your store data, how to set it up, and who benefits most.</p>
+      <div class="video-wrap">
+        <video controls preload="none" poster="/images/shopify-explainer-thumb.jpg">
+          <source src="https://mcpdemo.com/images/shopify-explainer.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
 
     <div class="cta-box">
       <div class="sec-label">Live Demo</div>
