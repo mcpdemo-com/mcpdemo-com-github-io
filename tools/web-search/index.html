@@ -51,6 +51,11 @@
     .btn-primary:hover{background:#00eeff;box-shadow:0 0 28px rgba(0,212,255,.45);text-decoration:none}
     .btn-ghost{display:inline-block;padding:.8rem 2rem;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;text-decoration:none;transition:all .2s}
     .btn-ghost:hover{border-color:#fff;text-decoration:none}
+    .video-band{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem}
+    .video-band-inner{max-width:820px;margin:0 auto}
+    .video-band-inner p{color:var(--muted);font-size:.88rem;margin-top:.6rem}
+    .video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#000;margin-top:1rem}
+    .video-wrap video{display:block;width:100%;height:auto}
     .section{padding:4rem 2rem}
     .section.alt{background:var(--bg2)}
     .inner{max-width:900px;margin:0 auto}
@@ -116,6 +121,19 @@
   <div class="hero-ctas">
     <a href="demo.html" class="btn-primary">Try the Live Demo</a>
     <a href="#how-it-works" class="btn-ghost">How It Works</a>
+  </div>
+</div>
+
+<div class="video-band">
+  <div class="video-band-inner">
+    <div class="sec-label">Explainer Video</div>
+    <div class="video-wrap">
+      <video controls preload="none" poster="https://mcpdemo.com/images/web-search-explainer-thumb.jpg">
+        <source src="https://mcpdemo.com/images/web-search-explainer.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p>A 97-second overview of the Web Search MCP integration — why training data alone isn't enough, how live search works through MCP, and who benefits most.</p>
   </div>
 </div>
 
