@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 
   <!-- Core Pages -->
   <url>
@@ -7,6 +8,12 @@
     <lastmod>2026-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/homepage-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>MCP Demo — Model Context Protocol Tools with Claude AI</video:title>
+      <video:description>An overview of mcpdemo.com — what Model Context Protocol is, how Claude connects to real tools and data, and what you can explore on the site.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/homepage-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
 
   <url>
@@ -37,6 +44,12 @@
     <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/web-search-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>Web Search MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the Web Search MCP integration — what it is, what Claude can do with real-time search, how to set it up, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/web-search-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://mcpdemo.com/tools/web-search/demo.html</loc>
@@ -51,6 +64,12 @@
     <lastmod>2026-03-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/shopify-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>Shopify MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the Shopify MCP integration — what it is, what Claude can do with your store data, how to set it up, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/shopify-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://mcpdemo.com/tools/shopify/demo.html</loc>
@@ -65,6 +84,12 @@
     <lastmod>2026-04-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/github-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>GitHub MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the GitHub MCP integration — what it is, what Claude can do with your repos, how authentication works, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/github-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://mcpdemo.com/tools/github/demo.html</loc>
