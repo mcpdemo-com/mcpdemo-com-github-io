@@ -1,0 +1,12 @@
+name = "mcpdemo-supabase-proxy"
+main = "worker.js"
+compatibility_date = "2025-04-01"
+
+[[routes]]
+pattern = "api.mcpdemo.com/proxy/supabase*"
+zone_id = "214bb66c6ec4f28e2ef4304953c2f777"
+
+# Secrets (set via Cloudflare:execute or dashboard — DO NOT commit values):
+#   ANTHROPIC_API_KEY
+#   SUPABASE_PAT
+#   SUPABASE_PROJECT_REF
