@@ -55,19 +55,25 @@
     .section-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
     .section-head h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.1rem;color:var(--txt)}
     .live-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.25);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif}
+    .info-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(74,158,255,.12);color:var(--blue);border:1px solid rgba(74,158,255,.25);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif}
     .coming-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.2);border-radius:4px;padding:.15rem .5rem;font-family:"Exo 2",sans-serif}
     .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
     .tool-card{background:var(--bg3);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:12px;padding:1.6rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .2s,box-shadow .2s;text-decoration:none;color:inherit}
     .tool-card:hover{transform:translateY(-4px);box-shadow:0 8px 36px rgba(0,212,255,.1);text-decoration:none}
+    .tool-card.info-card{border-top-color:var(--blue)}
+    .tool-card.info-card:hover{box-shadow:0 8px 36px rgba(74,158,255,.1)}
     .tool-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
     .tool-icon{width:44px;height:44px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .info-card .tool-icon{background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.15)}
     .tool-card h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.05rem;color:var(--cyan);margin-bottom:.2rem}
+    .info-card h3{color:var(--blue)}
     .tool-card .category{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-family:"Exo 2",sans-serif;font-weight:600}
     .tool-card p{color:var(--muted);font-size:.88rem;line-height:1.6;flex:1}
     .tool-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.25rem}
     .tool-tags{display:flex;gap:.4rem;flex-wrap:wrap}
     .tag{font-size:.7rem;background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.15);border-radius:4px;padding:.1rem .45rem;font-family:"Exo 2",sans-serif;font-weight:600}
     .card-cta{font-size:.8rem;font-weight:700;color:var(--cyan);font-family:"Exo 2",sans-serif;white-space:nowrap}
+    .info-card .card-cta{color:var(--blue)}
     .soon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-top:.5rem}
     .soon-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted)}
     .soon-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0}
@@ -234,13 +240,45 @@
 
   <hr class="divider" />
 
+  <!-- INFO-ONLY TOOLS -->
+  <div class="section-head">
+    <h2>Info-Only Pages</h2>
+    <span class="info-badge">OAuth-Only MCPs</span>
+  </div>
+  <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.5rem;max-width:720px">Some MCPs require per-user OAuth authentication and can't be demoed on a shared public page. These pages explain the tool, show you what it does, and point you to the two-minute setup for connecting it to your own AI client.</p>
+
+  <div class="tool-grid" id="infoGrid">
+
+    <a class="tool-card info-card" href="/tools/notion/" data-name="notion productivity workspace docs databases knowledge oauth" data-cat="productivity">
+      <div class="tool-card-head">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#4a9eff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h12l4 4v12a0 0 0 01 0 0H4a0 0 0 01 0 0z"/><path d="M4 8h16M9 4v16"/>
+          </svg>
+        </div>
+        <span class="info-badge">Info</span>
+      </div>
+      <div>
+        <div class="category">Productivity</div>
+        <h3>Notion MCP</h3>
+      </div>
+      <p>Query and update your Notion workspace with AI. Claude searches pages, fetches content, and updates databases through Notion's officially hosted MCP server — connects via OAuth from your own client.</p>
+      <div class="tool-card-foot">
+        <div class="tool-tags"><span class="tag">Search</span><span class="tag">Fetch</span><span class="tag">OAuth</span></div>
+        <span class="card-cta">Explore &#8594;</span>
+      </div>
+    </a>
+
+  </div>
+
+  <hr class="divider" />
+
   <!-- COMING SOON -->
   <div class="section-head">
     <h2>Coming Soon</h2>
     <span class="coming-badge">In Development</span>
   </div>
   <div class="soon-grid" id="soonGrid">
-    <div class="soon-chip" data-name="notion productivity docs data knowledge"><span class="soon-dot"></span>Notion</div>
     <div class="soon-chip" data-name="supabase postgres database data developer"><span class="soon-dot"></span>Supabase</div>
     <div class="soon-chip" data-name="slack communication messaging teams"><span class="soon-dot"></span>Slack</div>
     <div class="soon-chip" data-name="salesforce crm data communication"><span class="soon-dot"></span>Salesforce</div>
@@ -305,17 +343,18 @@
   function filterTools() {
     const q = document.getElementById('toolSearch').value.toLowerCase();
     const liveCards = document.querySelectorAll('#liveGrid .tool-card');
+    const infoCards = document.querySelectorAll('#infoGrid .tool-card');
     const soonChips = document.querySelectorAll('#soonGrid .soon-chip');
-    let liveVisible = 0;
+    let visibleCount = 0;
 
-    liveCards.forEach(card => {
+    [...liveCards, ...infoCards].forEach(card => {
       const name = card.dataset.name || '';
       const cat = card.dataset.cat || '';
       const matchesSearch = !q || name.includes(q);
       const matchesCat = activeFilter === 'all' || cat === activeFilter;
       const show = matchesSearch && matchesCat;
       card.style.display = show ? '' : 'none';
-      if (show) liveVisible++;
+      if (show) visibleCount++;
     });
 
     soonChips.forEach(chip => {
@@ -324,7 +363,7 @@
       chip.style.display = matchesSearch ? '' : 'none';
     });
 
-    document.getElementById('noResults').style.display = liveVisible === 0 && q ? 'block' : 'none';
+    document.getElementById('noResults').style.display = visibleCount === 0 && q ? 'block' : 'none';
   }
 
   function clearSearch() {
