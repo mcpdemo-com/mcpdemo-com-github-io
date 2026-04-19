@@ -4,19 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Slack MCP Integration with Claude AI — MCP Demo</title>
-  <meta name="description" content="How Claude connects to Slack via Model Context Protocol (MCP) to search channels, read threads, and send messages through natural language." />
+  <meta name="description" content="Learn how Claude connects to Slack via Model Context Protocol (MCP) to search messages, post updates, manage channels, and pull workspace context through natural language." />
   <link rel="canonical" href="https://mcpdemo.com/tools/slack/" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://mcpdemo.com/tools/slack/" />
   <meta property="og:title" content="Slack MCP Integration with Claude AI" />
-  <meta property="og:description" content="How Claude connects to Slack via MCP to search channels, read threads, and send messages through conversation." />
+  <meta property="og:description" content="How Claude connects to Slack via MCP to search workspace history, post messages, and pull conversation context." />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
   <meta property="og:image:width" content="1400" />
   <meta property="og:image:height" content="420" />
   <meta property="og:site_name" content="MCP Demo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Slack MCP Integration with Claude AI" />
-  <meta name="twitter:description" content="How Claude connects to Slack via MCP to search channels, read threads, and send messages through conversation." />
+  <meta name="twitter:description" content="How Claude connects to Slack via MCP to search workspace history, post messages, and pull conversation context." />
   <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -67,7 +67,7 @@
     .article table th{background:var(--bg3);color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding:.75rem 1rem;border:1px solid var(--border);text-align:left}
     .article table td{padding:.7rem 1rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
     .article table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
-    .article h2:first-of-type + ul,.takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
     .cta-box{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:3rem}
     .cta-box h2{border:none;padding:0;margin:0 0 .75rem}
     .cta-box p{max-width:500px;margin:0 auto 1.75rem;color:var(--muted)}
@@ -108,8 +108,8 @@
       <span>Slack MCP</span>
     </div>
     <div class="sec-label">Communication · MCP Tool</div>
-    <h1>Slack MCP Integration with Claude AI for Workspace Messaging and Search</h1>
-    <p class="hero-sub">Search channels, read threads, and post updates with AI. Claude queries your Slack workspace, retrieves conversations, and sends messages through a single conversation — using Slack's officially hosted MCP server.</p>
+    <h1>Slack MCP Integration with Claude AI for Workspace Search and Messaging</h1>
+    <p class="hero-sub">Search Slack history, post messages, and pull conversation context into your AI workflow. Claude connects to Slack through the officially hosted MCP server &mdash; one OAuth flow, then every Slack tool is available in the chat.</p>
     <div class="hero-actions">
       <a href="#how-it-works" class="btn-primary">How it works</a>
       <a href="/tools/slack/demo.html" class="btn-ghost">About this demo</a>
@@ -119,95 +119,12 @@
 
 <div class="article-wrap">
   <div class="article">
-
-    <h2>Key Takeaways</h2>
-    <ul>
-      <li>Model Context Protocol (MCP) is an open standard that lets Claude AI connect directly to Slack, reading messages and posting updates without manual copy-paste.</li>
-      <li>Slack ships an officially hosted MCP server reached over Streamable HTTP — no self-hosting required. It exposes tools for searching messages, users, and channels, plus reading and sending messages, drafting messages, and managing canvases.</li>
-      <li>Connection uses OAuth 2.0: each user authorizes their own workspace once through Claude Desktop, Cursor, ChatGPT, or any MCP-compatible client. The AI then acts with that user's exact Slack permissions.</li>
-      <li>Knowledge workers benefit most from natural-language queries like <em>"find every mention of the Q2 pricing discussion"</em> or <em>"post a summary of today's incident thread to #leadership"</em> — without leaving their chat.</li>
-      <li>Slack MCP enforces the same rate limits as the Web API on a per-tool basis. Workspace admins approve which Marketplace apps are allowed to connect, and audit logs capture every MCP action.</li>
-    </ul>
-
-    <h2 id="how-it-works">What Slack MCP Actually Is (Plain English Version)</h2>
-    <p>Slack MCP is Slack's officially hosted Model Context Protocol (MCP) server. It gives AI assistants like Claude a standard way to read and write data in your Slack workspace — messages, threads, channels, users, canvases — without anyone writing a custom integration. You connect once via OAuth, and from then on Claude can search conversations, fetch context, and post messages in Slack as if you were doing it yourself.</p>
-    <p>Before MCP existed, connecting an AI model to Slack meant building your own Slack app: provisioning bot and user scopes, writing wrappers around the Web API, handling event subscriptions, and maintaining all of that when Slack shipped new endpoints. The Slack MCP server removes that effort. Slack operates the server, and any approved MCP client can connect to it.</p>
-    <p>Slack designed their MCP server specifically for AI agents. Tool descriptions are written for agentic reasoning, not deterministic backend jobs. Search results embed enough context for the model to follow threads and reason about who said what. The effect is that Claude can work with real Slack content efficiently, even across large multi-channel workspaces.</p>
-
-    <h3>Why Claude Specifically?</h3>
-    <p>Claude is Anthropic's AI assistant, and it's a primary client built to work natively with MCP. Claude Desktop treats Slack MCP as a first-class connector — you add it through Settings, complete OAuth, and it just works. Claude can chain multiple Slack tool calls in one conversation: searching for a thread, fetching its full history, drafting a reply, and posting it back to Slack, without losing context between steps.</p>
-
-    <h2>How the Slack MCP Connection Works</h2>
-    <p>The Slack MCP integration works over a remote streamable-HTTP transport using JSON-RPC 2.0. Your MCP client — Claude Desktop, Cursor, ChatGPT, or any other compatible tool — connects to the Slack-hosted MCP endpoint, completes a browser-based OAuth flow, and stores the resulting access token. From then on, the client uses that token to call tools on Slack's MCP server, which executes the action against the Slack Web API and returns results formatted for AI consumption.</p>
-    <p>Here's the flow in plain terms: you ask Claude <em>"summarize yesterday's discussion in #incident-2024 and draft a postmortem outline."</em> Claude calls the search tool to find the thread, calls the conversations tool to fetch its messages, and drafts an outline you can review before anything gets posted. Each tool call respects your Slack permissions — Claude can only see channels you're a member of and can only post where you have permission to post.</p>
-    <p>Slack restricts MCP access to apps published in the Slack Marketplace or internal apps within an Enterprise org. Unlisted apps are prohibited from using MCP at this time. That gating is deliberate: it gives workspace admins a clear approval surface for which AI tools can touch company data.</p>
-
-    <h3>What Claude Can Actually Do With Your Slack Workspace</h3>
-    <p>Slack MCP exposes tools across four capability areas: search, conversations, users, and canvases. The most important ones for typical workflows:</p>
-    <table>
-      <tr><th>Tool Area</th><th>What It Does</th><th>Example Claude Prompt</th></tr>
-      <tr><td><strong>Search</strong></td><td>Find messages, files, users, and channels across the workspace with filters for date, author, channel, and content type</td><td>"Find every message about the Q2 pricing update in the last two weeks"</td></tr>
-      <tr><td><strong>Conversations</strong></td><td>Retrieve channel or thread history, including threaded replies and attachments, so Claude can reason over complete context</td><td>"Pull the full thread from this morning's incident in #platform-oncall"</td></tr>
-      <tr><td><strong>Send Messages</strong></td><td>Post new messages to channels, threads, or direct messages — with optional draft-and-preview before anything goes live</td><td>"Draft a status update for #leadership about the shipping delay"</td></tr>
-      <tr><td><strong>Users</strong></td><td>Look up users by name, email, or ID; retrieve profile information and current status</td><td>"Who on the design team is out this week?"</td></tr>
-      <tr><td><strong>Channels</strong></td><td>List and filter public and private channels by name or description; retrieve channel metadata</td><td>"Find all channels related to customer onboarding"</td></tr>
-      <tr><td><strong>Canvases</strong></td><td>Create and update Slack canvases — the long-form document format that lives alongside channels</td><td>"Create a canvas in #engineering-hiring summarizing this week's interview feedback"</td></tr>
-    </table>
-
-    <h2>Setting Up Slack MCP</h2>
-    <p>Connecting Slack MCP to Claude takes about two minutes for most users. You don't write any code, you don't run a server, and you don't handle an API key yourself. The setup happens entirely through your MCP client's connector settings and Slack's OAuth flow. The only gating factor is whether your workspace admin has approved the specific AI client you're using.</p>
-
-    <h3>Step 1 — Add the Slack Connector in Your Client</h3>
-    <p>In Claude Desktop, go to <strong>Settings → Connectors</strong> and add the Slack connector from the Marketplace-approved list. In Cursor, edit your <code>~/.cursor/mcp.json</code> and add a remote MCP server entry pointing at Slack's published MCP URL. Any MCP-compatible client follows the same pattern.</p>
-
-    <h3>Step 2 — Complete the OAuth Flow</h3>
-    <p>The first time you use a Slack tool, your client opens a browser window asking you to choose a workspace and authorize access. Slack shows you which scopes the AI tool is requesting and which channels the connection can see. You approve, Slack stores the resulting access token against your user, and the client is ready to make tool calls.</p>
-
-    <h3>Step 3 — Review Your Permissions</h3>
-    <p>Slack's permission model is explicit: the MCP connection acts with your exact user permissions. If you're a member of a private channel, the AI can see it. If you're not, it can't. Enterprise Grid admins can further restrict which AI clients are approved for MCP access at the org level and can audit every MCP tool call in the standard audit log stream.</p>
-
-    <h3>Step 4 — Start Asking Claude About Your Slack Content</h3>
-    <p>Start with simple queries — <em>"what did my team discuss in #standup this week"</em> or <em>"find the latest decision on the auth rewrite."</em> If those return real results, the connection is working. Move to composite workflows next: <em>"summarize yesterday's incident thread and draft a follow-up email to the exec team."</em></p>
-
-    <h2>Real-World Use Cases</h2>
-
-    <h3>Cross-Channel Search Without Tab-Switching</h3>
-    <p>Teams lose minutes every day trying to find that one message someone posted weeks ago. With Slack MCP connected, Claude handles the search: <em>"find the thread where Maya explained the new deployment process"</em> returns the thread in seconds, with a summary Claude can elaborate on. No switching to the Slack desktop app, no manual keyword searching, no guessing which channel it landed in.</p>
-
-    <h3>Incident Summaries and Postmortems</h3>
-    <p>When an incident runs long, the responders are too busy to write a clean summary in real time. After the fact, an on-call lead can ask Claude to <em>"pull the full incident thread from #incident-platform-2024-04-18 and draft a customer-facing status update plus an internal postmortem outline."</em> Claude reads the thread, identifies the timeline, and produces both artifacts in one prompt — leaving the humans to edit rather than transcribe.</p>
-
-    <h3>Daily Handoffs for Distributed Teams</h3>
-    <p>Teams working across time zones need clean handoffs at the end of each shift. With Slack MCP, a team lead can ask Claude to <em>"read the last 12 hours of activity in #eng-on-call and draft a handoff note with open items, current owners, and anything blocked."</em> Claude generates the note; the lead reviews it and posts it to the channel before logging off.</p>
-
-    <h3>Onboarding Q&amp;A From Real Conversations</h3>
-    <p>New hires have questions that are often already answered somewhere in Slack history. With an AI-accessible workspace, a new engineer can ask Claude <em>"how does this team handle staging deploys?"</em> and Claude can search the engineering channels, find prior discussions, and synthesize a grounded answer — including links back to the original threads so the answer is auditable.</p>
-
-    <h2>Slack MCP vs. Traditional Slack Integrations</h2>
-    <table>
-      <tr><th>Integration Method</th><th>Setup Time</th><th>Real-Time Data</th><th>Maintenance</th><th>Headless Use</th></tr>
-      <tr><td>Slack MCP (hosted)</td><td>2 minutes (OAuth)</td><td>Yes</td><td>None (Slack runs the server)</td><td>Requires human OAuth</td></tr>
-      <tr><td>Custom Slack app + Web API</td><td>Hours to days</td><td>Yes</td><td>Ongoing (scopes, tokens, API changes)</td><td>Yes (bot token)</td></tr>
-      <tr><td>Zapier or Make workflows</td><td>Per-workflow setup</td><td>Trigger-based</td><td>Per-workflow upkeep</td><td>Yes (credentials stored per run)</td></tr>
-      <tr><td>Manual copy-paste</td><td>Per session</td><td>Snapshot only</td><td>Constant</td><td>N/A</td></tr>
-    </table>
-
-    <h2>Security and Permissions</h2>
-    <p>Slack MCP uses OAuth 2.0 with confidential-client support — your workspace credentials never reach the MCP client directly. When you authorize a connection, Slack issues an access token scoped to your user and the specific scopes the approved Marketplace app declared. Every tool call executes with your exact Slack permissions; Claude can't read channels you haven't joined and can't post where you don't have permission to post.</p>
-    <p>Workspace admins have additional controls. Only apps published in the Slack Marketplace or internal apps within an Enterprise org are permitted to use MCP. Admins can approve or reject specific AI clients, and every MCP action shows up in the workspace audit log attributed to the authorizing user — so existing governance and compliance workflows keep working.</p>
-
-    <div class="notice">
-      <strong>Why this tool has no live demo on mcpdemo.com</strong>
-      Slack MCP requires per-workspace OAuth and is gated to approved Marketplace apps — there's no shared public endpoint we could call anonymously. A public demo would have to either expose one real Slack workspace to every visitor or silently simulate responses while claiming to be live. Both would be dishonest. <a href="/tools/slack/demo.html">See our full explanation →</a>
-    </div>
-
-    <div class="cta-box">
-      <div class="sec-label">Try it yourself</div>
-      <h2>Connect Slack MCP to Claude in two minutes</h2>
-      <p>The fastest way to see Slack MCP in action is to connect it to your own workspace using Claude Desktop or any MCP-compatible client. Here is Slack's official guide.</p>
-      <a href="https://docs.slack.dev/ai/slack-mcp-server/" class="btn-primary" target="_blank" rel="noopener">How to connect Slack to Claude →</a>
-    </div>
-
+    <!-- SECTION:takeaways -->
+    <!-- SECTION:what-it-is -->
+    <!-- SECTION:tools-summary -->
+    <!-- SECTION:tools-detail -->
+    <!-- SECTION:setup -->
+    <!-- SECTION:conclusion -->
   </div>
 </div>
 
