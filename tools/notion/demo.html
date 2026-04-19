@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notion MCP — About This Demo | MCP Demo</title>
+  <meta name="description" content="Why there's no live Notion MCP demo on mcpdemo.com — and the two-minute path to connecting Notion to Claude yourself." />
+  <link rel="canonical" href="https://mcpdemo.com/tools/notion/demo.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/notion/demo.html" />
+  <meta property="og:title" content="Notion MCP — About This Demo | MCP Demo" />
+  <meta property="og:description" content="Why there's no live Notion MCP demo on mcpdemo.com — and the two-minute path to connecting Notion to Claude yourself." />
+  <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:site_name" content="MCP Demo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Notion MCP — About This Demo | MCP Demo" />
+  <meta name="twitter:description" content="Why there's no live Notion MCP demo on mcpdemo.com — and the two-minute path to connecting Notion to Claude yourself." />
+  <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
+  <style>
+    :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+    a{color:var(--cyan);text-decoration:none}
+    nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo img{height:32px;mix-blend-mode:screen}
+    .nav-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+    .nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
+    .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
+    .context-bar{background:rgba(74,158,255,.06);border-bottom:1px solid rgba(74,158,255,.15);padding:.6rem 2rem;text-align:center;font-size:.8rem;color:var(--blue);font-family:"Exo 2",sans-serif;font-weight:600;letter-spacing:.04em}
+    .context-bar span{color:var(--muted);font-weight:400;font-family:"IBM Plex Sans",sans-serif}
+    main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:2rem 2rem 4rem}
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--dim);margin-bottom:1.5rem}
+    .breadcrumb a{color:var(--muted);transition:color .2s}
+    .breadcrumb a:hover{color:var(--cyan)}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;font-family:"Exo 2",sans-serif}
+    .sec-label-info{color:var(--blue);background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.25)}
+    .page-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.4rem}
+    .page-head h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.2rem)}
+    .page-sub{color:var(--muted);font-size:.95rem;margin-bottom:1.5rem;max-width:640px}
+    .sponsored-bar{display:flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:8px;padding:.5rem 1rem;margin-bottom:1.5rem;font-size:.78rem;color:var(--muted)}
+    .sponsored-bar a{color:var(--blue);font-size:.78rem;font-weight:600}
+    .disclaimer-panel{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:12px;padding:2rem;margin:1rem 0 1.5rem}
+    .disclaimer-panel h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.4rem;margin:.75rem 0 1rem;color:var(--txt);line-height:1.25}
+    .disclaimer-panel p{color:var(--muted);line-height:1.75;margin-bottom:1rem;font-size:.95rem}
+    .disclaimer-panel p strong{color:var(--txt);font-weight:600}
+    .disclaimer-panel code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;color:var(--cyan);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:4px;padding:.1rem .35rem}
+    .disclaimer-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin:1.75rem 0 .25rem}
+    .btn-primary{display:inline-block;padding:.75rem 1.6rem;background:var(--cyan);color:#080d1a;border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;text-decoration:none;font-size:.92rem}
+    .btn-primary:hover{background:#00eeff;box-shadow:0 0 24px rgba(0,212,255,.4);text-decoration:none}
+    .btn-ghost{display:inline-block;padding:.75rem 1.6rem;background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;transition:border-color .2s;font-size:.92rem;text-decoration:none}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.5);text-decoration:none}
+    .setup-steps{background:#080d1a;border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.75rem;margin-top:1.5rem}
+    .setup-steps strong{color:var(--cyan);display:block;margin-bottom:.85rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;font-family:"Exo 2",sans-serif;font-weight:700}
+    .setup-steps ol{color:var(--muted);margin-left:1.4rem;font-size:.9rem;line-height:1.85}
+    .setup-steps li{margin-bottom:.35rem}
+    .setup-steps li strong{display:inline;color:var(--txt);font-size:inherit;text-transform:none;letter-spacing:normal;font-family:"IBM Plex Sans",sans-serif;font-weight:600;margin:0}
+    .setup-steps code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;color:var(--cyan);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:4px;padding:.1rem .35rem}
+    .compare{margin-top:2rem;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.75rem}
+    .compare h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1rem;color:var(--cyan);margin-bottom:.75rem}
+    .compare p{color:var(--muted);font-size:.9rem;line-height:1.7}
+    .compare p:not(:last-child){margin-bottom:.75rem}
+    details{margin-top:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
+    summary:hover{color:var(--cyan)}
+    summary::after{content:"›";font-size:1.2rem;transition:transform .2s}
+    details[open] summary::after{transform:rotate(90deg)}
+    details[open] summary{color:var(--cyan)}
+    .details-body{padding:1.25rem;border-top:1px solid var(--border);background:var(--bg2);font-size:.88rem;color:#b0bec8;line-height:1.75}
+    .details-body p{margin-bottom:.65rem}
+    .details-body p:last-child{margin:0}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
+    .foot-inner{max-width:1100px;margin:0 auto}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
+    .foot-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;text-decoration:none}
+    .foot-logo img{height:26px;mix-blend-mode:screen}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1rem}
+    footer h4{color:var(--cyan);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;font-family:"Exo 2",sans-serif;font-weight:700}
+    footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
+    footer a:hover{color:var(--cyan)}
+    .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.foot-cols{grid-template-columns:1fr}.disclaimer-actions{flex-direction:column}.disclaimer-actions a{text-align:center}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
+    </div>
+  </div>
+</nav>
+
+<div class="context-bar">
+  Notion MCP · <span>Connects via OAuth from your own MCP client · Powered by mcpcio.com</span>
+</div>
+
+<main>
+  <div class="breadcrumb">
+    <a href="/tools/">Tools</a>
+    <span>›</span>
+    <a href="/tools/notion/">Notion MCP</a>
+    <span>›</span>
+    <span>About This Demo</span>
+  </div>
+
+  <div class="page-head">
+    <h1>About This Demo</h1>
+    <span class="sec-label sec-label-info">Info Only</span>
+  </div>
+  <p class="page-sub">Notion MCP uses per-user OAuth authentication. That's the right design for a productivity tool — and it's why this page can't show you a live demo the way our Shopify or GitHub pages do.</p>
+
+  <div class="sponsored-bar">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    Free demos provided by <a href="https://mcpcio.com" target="_blank" rel="noopener">mcpcio.com</a> &nbsp;·&nbsp; Privacy-first · No tracking · No sign-up required
+  </div>
+
+  <div class="disclaimer-panel">
+    <div class="sec-label sec-label-info">Why No Live Demo</div>
+    <h2>Notion MCP requires per-user authentication, not a shared API key</h2>
+    <p>Notion's hosted MCP server at <code>https://mcp.notion.com/mcp</code> uses OAuth 2.0 — each user completes a browser-based authorization flow with their own workspace, and the resulting access token is tied to that specific user. <strong>Per <a href="https://developers.notion.com/guides/mcp/get-started-with-mcp" target="_blank" rel="noopener">Notion's own documentation</a>, the hosted MCP "does not support bearer token authentication"</strong> — there's no way for a shared server like ours to authenticate on behalf of anonymous visitors.</p>
+    <p>This is the right design for a productivity tool. Every person using Notion MCP should act against <strong>their</strong> workspace with <strong>their</strong> permissions. A shared public demo would have to either expose one real workspace to every visitor on the internet, or silently simulate responses while claiming to be live. Neither is a demo worth shipping from a site about being honest about MCP.</p>
+    <p>We'll build a live demo here the moment Notion adds a headless authentication path. Until then, the fastest way to see Notion MCP in action is to connect it to your own workspace — which takes about two minutes.</p>
+
+    <div class="disclaimer-actions">
+      <a href="https://developers.notion.com/docs/mcp" class="btn-primary" target="_blank" rel="noopener">How to connect Notion to Claude →</a>
+      <a href="/tools/notion/" class="btn-ghost">Read the full integration guide</a>
+    </div>
+
+    <div class="setup-steps">
+      <strong>Try it yourself in about 2 minutes</strong>
+      <ol>
+        <li>Open <strong>Claude Desktop</strong> → Settings → Connectors → Add Custom Connector</li>
+        <li>Paste the server URL: <code>https://mcp.notion.com/mcp</code></li>
+        <li>Complete the OAuth flow in your browser — choose which pages the connection can see</li>
+        <li>Ask Claude: <em>"what are my current projects in Notion?"</em></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="compare">
+    <h3>Not a Claude user? Notion MCP works with any MCP-compatible client.</h3>
+    <p><strong>Cursor</strong> — Add <code>"notion": {"url": "https://mcp.notion.com/mcp"}</code> to your <code>~/.cursor/mcp.json</code> and complete OAuth when you first call a Notion tool.</p>
+    <p><strong>ChatGPT Pro</strong> — Notion is listed as a built-in connector. Settings → Connected Apps → Notion.</p>
+    <p><strong>Other MCP clients</strong> — Any client that supports remote MCP servers with OAuth can connect. See Notion's <a href="https://developers.notion.com/guides/mcp/get-started-with-mcp" target="_blank" rel="noopener">client integration guide</a>.</p>
+  </div>
+
+  <details>
+    <summary>Could you use a stored OAuth token on the server instead?</summary>
+    <div class="details-body">
+      <p>Technically, yes — an operator could complete OAuth once with a personal account, store the resulting token as a server secret, and proxy every visitor's request through that single token. We considered it.</p>
+      <p>We decided against it for three reasons: (1) every demo visitor would then be reading and potentially writing against <strong>one real person's workspace</strong>, (2) Notion's own security guidance treats shared-token patterns as unintended use, and (3) the site's thesis is showing MCPs the way real clients use them — and real clients don't share one OAuth token across thousands of users. An honest "no live demo" is better than a live demo that misrepresents how the tool actually works.</p>
+      <p>If Notion ships bearer-token support for the hosted MCP in the future, we'll replace this page with a real live demo immediately.</p>
+    </div>
+  </details>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-cols">
+      <div>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4>Legal</h4>
+          <a href="/legal/privacy-policy.html">Privacy Policy</a>
+          <a href="/legal/terms-of-service.html">Terms of Service</a>
+          <a href="/legal/cookie-policy.html">Cookie Policy</a>
+          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/tools/">Tools Directory</a>
+        </div>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">For legal notices, privacy requests, or general inquiries.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
+      <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
