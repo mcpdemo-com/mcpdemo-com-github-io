@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Postgres Query Demo — MCP Demo</title>
+  <meta name="description" content="Live demo: Query a real Supabase Postgres database with plain English via Model Context Protocol (MCP). No account needed — powered by mcpcio.com." />
+  <link rel="canonical" href="https://mcpdemo.com/tools/supabase/demo.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/supabase/demo.html" />
+  <meta property="og:title" content="Supabase Live Demo — MCP Demo" />
+  <meta property="og:description" content="Live demo: Query a real Supabase Postgres database in plain English via Model Context Protocol. No account needed." />
+  <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:site_name" content="MCP Demo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Supabase Live Demo — MCP Demo" />
+  <meta name="twitter:description" content="Live demo: Query a real Supabase Postgres database in plain English via MCP. No account needed." />
+  <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
+  <style>
+    :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+    a{color:var(--cyan);text-decoration:none}
+    nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo img{height:32px;mix-blend-mode:screen}
+    .nav-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+    .nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
+    .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
+    .context-bar{background:rgba(0,212,255,.06);border-bottom:1px solid rgba(0,212,255,.15);padding:.6rem 2rem;text-align:center;font-size:.8rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:600;letter-spacing:.04em}
+    .context-bar span{color:var(--muted);font-weight:400;font-family:"IBM Plex Sans",sans-serif}
+    main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:2rem 2rem 4rem}
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--dim);margin-bottom:1.5rem}
+    .breadcrumb a{color:var(--muted);transition:color .2s}
+    .breadcrumb a:hover{color:var(--cyan)}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;font-family:"Exo 2",sans-serif}
+    .page-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.4rem}
+    .page-head h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.2rem)}
+    .page-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+    .sponsored-bar{display:flex;align-items:center;justify-content:center;gap:.5rem;background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:8px;padding:.5rem 1rem;margin-bottom:1.5rem;font-size:.78rem;color:var(--muted)}
+    .schema-note{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:.85rem 1.1rem;margin-bottom:1.5rem;font-size:.85rem;color:var(--muted);line-height:1.65}
+    .schema-note strong{color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:.25rem}
+    .schema-note code{color:var(--txt);font-family:"IBM Plex Mono","Courier New",monospace;font-size:.8rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:3px;padding:.05rem .3rem;margin:0 .15rem}
+    .prompts-label{font-size:.75rem;color:var(--muted);margin-bottom:.55rem;font-family:"Exo 2",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .prompts{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    .prompt-chip{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:.38rem .95rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:"IBM Plex Sans",sans-serif}
+    .prompt-chip:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06)}
+    .input-row{display:flex;gap:.75rem;margin-bottom:1.5rem}
+    #userInput{flex:1;background:#0d1528!important;color:#e8edf5!important;border:1px solid var(--border);border-radius:10px;padding:.8rem 1.1rem;font-family:"IBM Plex Sans",sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
+    #userInput:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0d1528 inset!important;-webkit-text-fill-color:#e8edf5!important}
+    #userInput:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+    #userInput::placeholder{color:var(--dim)}
+    #sendBtn{padding:.8rem 1.75rem;background:var(--cyan);color:#080d1a;border:none;border-radius:10px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;white-space:nowrap;font-size:.95rem}
+    #sendBtn:hover{background:#00eeff;box-shadow:0 0 20px rgba(0,212,255,.4)}
+    #sendBtn:disabled{opacity:.5;cursor:not-allowed}
+    .response-area{min-height:180px;margin-bottom:1.5rem}
+    .placeholder{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:3rem;text-align:center;color:var(--dim)}
+    .placeholder svg{display:block;margin:0 auto 1rem;opacity:.3}
+    .placeholder p{font-size:.9rem}
+    .thinking{display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center}
+    .thinking.active{display:block}
+    .dots{display:inline-flex;gap:.4rem;margin-bottom:.75rem}
+    .dots span{display:inline-block;width:8px;height:8px;background:var(--cyan);border-radius:50%;animation:dot-pulse 1.4s ease-in-out infinite}
+    .dots span:nth-child(2){animation-delay:.2s}
+    .dots span:nth-child(3){animation-delay:.4s}
+    @keyframes dot-pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+    .thinking p{color:var(--muted);font-size:.95rem}
+    .error-msg{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:1rem 1.25rem;color:#ff6b6b;font-size:.9rem;display:none}
+    .result-box{display:none;background:var(--bg3);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:12px;padding:1.5rem}
+    .mcp-badge{display:inline-flex;align-items:center;gap:.35rem;color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem}
+    .result-text{color:var(--muted);font-size:.92rem;line-height:1.8}
+    .result-text p{margin-bottom:.75rem}
+    .result-text ol{margin:.4rem 0 .8rem 1.5rem}
+    .result-text li{margin-bottom:.65rem}
+    .result-text strong{color:var(--txt);font-weight:600}
+    .result-text table{width:100%;border-collapse:collapse;margin:.75rem 0 1rem;font-size:.85rem;overflow-x:auto;display:block}
+    .result-text table thead{background:var(--bg2)}
+    .result-text table th{color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding:.6rem .8rem;border:1px solid var(--border);text-align:left;white-space:nowrap}
+    .result-text table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--txt);vertical-align:top;white-space:nowrap}
+    .result-text table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
+    .result-text code{color:var(--cyan);font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.12);border-radius:3px;padding:.1rem .3rem}
+    details{margin-top:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    summary{padding:1rem 1.25rem;cursor:pointer;font-family:"Exo 2",sans-serif;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
+    summary:hover{color:var(--cyan)}
+    summary::after{content:"›";font-size:1.2rem;transition:transform .2s}
+    details[open] summary::after{transform:rotate(90deg)}
+    details[open] summary{color:var(--cyan)}
+    .details-body{padding:1.25rem;border-top:1px solid var(--border);background:var(--bg2);font-size:.88rem;color:#b0bec8;line-height:1.75}
+    .details-body p{margin-bottom:.65rem}
+    .details-body p:last-child{margin:0}
+    .details-body code{color:var(--cyan);font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.12);border-radius:3px;padding:.1rem .3rem}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
+    .foot-inner{max-width:1100px;margin:0 auto}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
+    .foot-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;text-decoration:none}
+    .foot-logo img{height:26px;mix-blend-mode:screen}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1rem}
+    footer h4{color:var(--cyan);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;font-family:"Exo 2",sans-serif;font-weight:700}
+    footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
+    footer a:hover{color:var(--cyan)}
+    .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.input-row{flex-direction:column}.foot-cols{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
+    </div>
+  </div>
+</nav>
+
+<div class="context-bar">
+  Connected to <strong>Supabase</strong> via MCP &nbsp;·&nbsp; <span>Live Postgres · Read-only · Powered by mcpcio.com</span>
+</div>
+
+<main>
+  <div class="breadcrumb">
+    <a href="/tools/">Tools</a>
+    <span>›</span>
+    <a href="/tools/supabase/">Supabase</a>
+    <span>›</span>
+    <span>Live Demo</span>
+  </div>
+
+  <div class="page-head">
+    <h1>Supabase Postgres Query</h1>
+    <span class="sec-label">Live Demo</span>
+  </div>
+  <p class="page-sub">Query a real Postgres database in plain English via MCP. Every query runs against a live Supabase project in strict read-only mode.</p>
+
+  <div class="sponsored-bar">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    Free demos provided by mcpcio.com &nbsp;·&nbsp; Privacy-first · No tracking · No sign-up required
+  </div>
+
+  <div class="schema-note">
+    <strong>Sample Dataset — Bookstore</strong>
+    You're querying a public demo schema with five tables: <code>authors</code>, <code>categories</code>, <code>books</code>, <code>customers</code>, and <code>orders</code>. All data is fictional — 30 authors, 80 books, 150 customers, and 2,000 orders. Ask Claude anything about this data.
+  </div>
+
+  <div class="prompts-label">Try a starter prompt</div>
+  <div class="prompts">
+    <button class="prompt-chip" onclick="usePrompt(this)">List all tables in the demo schema</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Top 5 books by stock in the demo schema</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">How many orders by country in the demo schema</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Which author has the most titles in demo.books</button>
+  </div>
+
+  <div class="input-row">
+    <input type="text" id="userInput" placeholder="Ask a question about the demo schema…" onkeydown="if(event.key==='Enter')sendQuery()" />
+    <button id="sendBtn" onclick="sendQuery()">Query →</button>
+  </div>
+
+  <div class="response-area">
+    <div class="placeholder" id="placeholder">
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#00d4ff" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/></svg>
+      <p>Results will appear here.<br>Enter a question above to get started.</p>
+    </div>
+    <div class="thinking" id="thinking">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <p>Querying Postgres via MCP…</p>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="result-box" id="resultBox">
+      <span class="mcp-badge">
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        MCP · Supabase
+      </span>
+      <div class="result-text" id="resultText"></div>
+    </div>
+  </div>
+
+  <details>
+    <summary>What's happening under the hood?</summary>
+    <div class="details-body">
+      <p>When you submit a query, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com</code>. The Worker holds a Supabase Personal Access Token securely — it's never sent to your browser.</p>
+      <p>The Worker forwards your question to Claude via the Anthropic Messages API, with Supabase's hosted MCP server at <code>mcp.supabase.com/mcp</code> wired in as an MCP tool. The URL is scoped with <code>project_ref</code> and <code>read_only=true</code>, and only the <code>database</code> feature group is exposed — so Claude can call <code>list_tables</code> and <code>execute_sql</code> on one specific demo project, and nothing else.</p>
+      <p>Results come back as structured data. Claude explains them in plain English and the page renders any tabular output. Responses stay on this page — no links out, no outbound navigation.</p>
+    </div>
+  </details>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-cols">
+      <div>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4>Legal</h4>
+          <a href="/legal/privacy-policy.html">Privacy Policy</a>
+          <a href="/legal/terms-of-service.html">Terms of Service</a>
+          <a href="/legal/cookie-policy.html">Cookie Policy</a>
+          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/tools/">Tools Directory</a>
+        </div>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">For legal notices, privacy requests, or general inquiries.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
+      <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function usePrompt(btn) {
+    document.getElementById('userInput').value = btn.textContent;
+    document.getElementById('userInput').focus();
+  }
+
+  function showLoading() {
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('thinking').classList.add('active');
+    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('resultBox').style.display = 'none';
+  }
+
+  function hideLoading() {
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('thinking').classList.remove('active');
+  }
+
+  function showError(msg) {
+    hideLoading();
+    document.getElementById('placeholder').style.display = 'none';
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  // Escape HTML to prevent any injection from Postgres data
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // Strip ALL URLs — keep demo users on mcpdemo.com
+  // Removes http/https links, bare domains, and markdown link syntax
+  function stripUrls(text) {
+    if (!text) return '';
+    return text
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')                   // [label](url) -> label
+      .replace(/https?:\/\/[^\s<>"'`]+/gi, '')                    // http(s)://...
+      .replace(/\b[a-z0-9-]+\.(com|org|io|dev|net|co|app)\b/gi, '') // bare domains
+      .replace(/\s+/g, ' ').trim();
+  }
+
+  // Simple markdown-ish renderer with HTML table support
+  // Deliberately does NOT linkify URLs — stripped upstream
+  function renderText(raw) {
+    const cleaned = stripUrls(raw);
+    const lines = cleaned.split('\n');
+    let html = '';
+    let inList = false;
+    let inTable = false;
+    let tableBuf = [];
+
+    function flushTable() {
+      if (tableBuf.length < 2) {
+        // not a real table — render as plain lines
+        tableBuf.forEach(ln => {
+          html += '<p>' + inline(ln) + '</p>';
+        });
+        tableBuf = [];
+        inTable = false;
+        return;
+      }
+      // first line is header, skip separator line (if present)
+      const headerCells = tableBuf[0].split('|').map(c => c.trim()).filter(Boolean);
+      let dataStart = 1;
+      if (tableBuf[1] && /^[\s|:-]+$/.test(tableBuf[1])) dataStart = 2;
+      html += '<table><thead><tr>';
+      headerCells.forEach(h => { html += '<th>' + esc(h) + '</th>'; });
+      html += '</tr></thead><tbody>'
+      for (let i = dataStart; i < tableBuf.length; i++) {
+        const cells = tableBuf[i].split('|').map(c => c.trim()).filter((_, idx, arr) => {
+          // drop leading/trailing empty from | at ends
+          return !(idx === 0 && arr[0] === '') && !(idx === arr.length - 1 && arr[arr.length - 1] === '');
+        });
+        html += '<tr>';
+        cells.forEach(c => { html += '<td>' + esc(c) + '</td>'; });
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      tableBuf = [];
+      inTable = false;
+    }
+
+    function inline(s) {
+      return esc(s)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+    }
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        if (inList) { html += '</ol>'; inList = false; }
+        inTable = true;
+        tableBuf.push(trimmed.replace(/^\||\|$/g, ''));
+        continue;
+      } else if (inTable) {
+        flushTable();
+      }
+      if (!trimmed) {
+        if (inList) { html += '</ol>'; inList = false; }
+        continue;
+      }
+      const listMatch = trimmed.match(/^(\d+)\.\s+(.+)/);
+      if (listMatch) {
+        if (!inList) { html += '<ol>'; inList = true; }
+        html += '<li>' + inline(listMatch[2]) + '</li>';
+      } else {
+        if (inList) { html += '</ol>'; inList = false; }
+        html += '<p>' + inline(trimmed) + '</p>';
+      }
+    }
+    if (inTable) flushTable();
+    if (inList) html += '</ol>';
+    return html || '<p>No response received.</p>';
+  }
+
+  function showResult(text) {
+    hideLoading();
+    document.getElementById('resultText').innerHTML = renderText(text);
+    document.getElementById('resultBox').style.display = 'block';
+  }
+
+  async function sendQuery() {
+    const query = document.getElementById('userInput').value.trim();
+    if (!query) return;
+
+    showLoading();
+
+    try {
+      const res = await fetch('https://api.mcpdemo.com/proxy/supabase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(data.error || 'Request failed. Please try again.');
+        return;
+      }
+
+      showResult(data.result || 'No response received.');
+
+    } catch (err) {
+      showError('Connection failed. Please check your network and try again.');
+    }
+  }
+</script>
+</body>
+</html>
