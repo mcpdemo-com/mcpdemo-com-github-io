@@ -132,6 +132,12 @@
     <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/notion-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>Notion MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the Notion MCP integration — what it is, what Claude can do with your workspace, how to set it up, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/notion-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://mcpdemo.com/tools/notion/demo.html</loc>
