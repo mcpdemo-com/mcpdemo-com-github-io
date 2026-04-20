@@ -166,6 +166,12 @@
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/slack-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>Slack MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the Slack MCP integration — what it is, what Claude can do with your workspace, how to set it up, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/slack-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
   <url>
     <loc>https://mcpdemo.com/tools/slack/demo.html</loc>
