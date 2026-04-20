@@ -4,25 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Slack MCP Live Demo — MCP Demo</title>
-  <meta name="description" content="Live demo: Ask Claude questions about a Slack workspace via Model Context Protocol (MCP). Search channels and read message history in real time." />
+  <meta name="description" content="Live demo: Ask questions about a Slack workspace via Model Context Protocol (MCP). Search channels and read message history in real time." />
   <link rel="canonical" href="https://mcpdemo.com/tools/slack/demo.html" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mcpdemo.com/tools/slack/demo.html" />
   <meta property="og:title" content="Slack MCP Live Demo — MCP Demo" />
-  <meta property="og:description" content="Live demo: Ask Claude questions about a Slack workspace via Model Context Protocol (MCP). Real channel data, no account needed." />
+  <meta property="og:description" content="Live demo: Ask questions about a Slack workspace via Model Context Protocol (MCP). Real channel data, no account needed." />
   <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
   <meta property="og:image:width" content="1400" />
   <meta property="og:image:height" content="420" />
   <meta property="og:site_name" content="MCP Demo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Slack MCP Live Demo — MCP Demo" />
-  <meta name="twitter:description" content="Live demo: Ask Claude questions about a Slack workspace via MCP. Real channel data, no account needed." />
+  <meta name="twitter:description" content="Live demo: Ask questions about a Slack workspace via MCP. Real channel data, no account needed." />
   <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
   <style>
     :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -106,7 +106,7 @@
 
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" style="mix-blend-mode:screen" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/about/">About</a>
@@ -117,7 +117,7 @@
 </nav>
 
 <div class="context-bar">
-  Connected to <strong>Slack</strong> via MCP &nbsp;·&nbsp; <span>Real channel data · Live message history �� Mcpdemo workspace</span>
+  Connected to <strong>Slack</strong> via MCP &nbsp;·&nbsp; <span>Real channel data · Live message history · Mcpdemo workspace</span>
 </div>
 
 <main>
@@ -133,7 +133,7 @@
     <h1>Slack Workspace Explorer</h1>
     <span class="sec-label">Live Demo</span>
   </div>
-  <p class="page-sub">Ask Claude questions about a real Slack workspace via MCP — list channels, read recent messages, surface conversations.</p>
+  <p class="page-sub">Ask questions about a real Slack workspace via MCP — list channels, read recent messages, surface conversations.</p>
 
   <div class="sponsored-bar">
     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -142,25 +142,25 @@
 
   <div class="prompts-label">Try a starter prompt</div>
   <div class="prompts">
-    <button class="prompt-chip" onclick="usePrompt(this)">List all channels in this workspace</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">What channels are in this workspace?</button>
     <button class="prompt-chip" onclick="usePrompt(this)">Show recent messages in #general</button>
-    <button class="prompt-chip" onclick="usePrompt(this)">What's the most active channel?</button>
-    <button class="prompt-chip" onclick="usePrompt(this)">Summarize the latest activity</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">Summarize activity in the most active channel</button>
+    <button class="prompt-chip" onclick="usePrompt(this)">What was discussed recently?</button>
   </div>
 
   <div class="input-row">
     <input type="text" id="userInput" placeholder="Ask about channels, messages, or workspace activity…" onkeydown="if(event.key==='Enter')sendQuery()" />
-    <button id="sendBtn" onclick="sendQuery()">Ask Claude →</button>
+    <button id="sendBtn" onclick="sendQuery()">Ask via MCP ↗</button>
   </div>
 
   <div class="response-area">
     <div class="placeholder" id="placeholder">
       <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#00d4ff" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      <p>Claude's response will appear here.<br>Ask anything about the Slack workspace above.</p>
+      <p>Your response will appear here.<br>Ask anything about the Slack workspace above.</p>
     </div>
     <div class="thinking" id="thinking">
       <div class="dots"><span></span><span></span><span></span></div>
-      <p>Claude is querying Slack via MCP…</p>
+      <p>Querying Slack via MCP…</p>
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="result-box" id="resultBox">
@@ -177,9 +177,9 @@
   <details>
     <summary>What's happening under the hood?</summary>
     <div class="details-body">
-      <p>When you ask a question, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com/proxy/slack</code>. The Worker holds the Slack bot token as a Worker Secret — it never reaches your browser.</p>
-      <p>The Worker uses the <strong style="color:var(--txt)">Anthropic Messages API</strong> with a system prompt that describes the available Slack tools. Claude then calls the Slack Web API directly (<code>conversations.list</code>, <code>conversations.history</code>) using the same read-only operations the Slack MCP server exposes — real data from a real workspace.</p>
-      <p>The demo is scoped to public channels only and uses a read-only bot token. No messages can be posted or modified. Want the full technical walkthrough? <a href="/tools/slack/">Read the info page →</a></p>
+      <p>When you submit a question, the demo calls a <strong style="color:var(--txt)">Cloudflare Worker</strong> at <code>api.mcpdemo.com/proxy/slack</code>. The Worker holds the Slack bot token as a Worker Secret — it never reaches your browser.</p>
+      <p>The Worker calls the Slack Web API directly (<code>conversations.list</code>, <code>conversations.history</code>) using the same read-only operations the Slack MCP server exposes — real data from a real workspace — then returns a structured response to the demo.</p>
+      <p>The demo is scoped to public channels only. No messages can be posted or modified. Want the full technical walkthrough? <a href="/tools/slack/">Read the info page ↗</a></p>
     </div>
   </details>
 </main>
@@ -188,9 +188,9 @@
   <div class="foot-inner">
     <div class="foot-cols">
       <div>
-        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" style="mix-blend-mode:screen" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
         <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
-        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo · Wyoming, USA</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
         <div>
