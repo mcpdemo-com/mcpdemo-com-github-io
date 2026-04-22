@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9+8emHsZ/uAGZescpbe7Tg" async></script>
   <style>
     :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -181,7 +181,7 @@
       <tr><td>Content recommendations</td><td>Specific next-post suggestions grounded in your actual data</td><td>"Based on this week's DMs and post performance, what should I post next?"</td></tr>
       <tr><td>Client reports</td><td>Formatted 30-day summaries with executive summary, metrics table, and action items</td><td>"Generate a client report for the last 30 days"</td></tr>
       <tr><td>Bot improvement analysis</td><td>Patterns in unanswered messages, fallback triggers, welcome flow gaps</td><td>"Where is our Messenger bot breaking down?"</td></tr>
-      <tr><td>Audience behavior breakdown</td><td>How users are entering conversations, which icebreakers are used, engagement health</td><td>"How is our audience interacting with the Page this month?"</td></tr>
+      <tr><td>Audience behavior</td><td>How users are entering conversations, which icebreakers are used, engagement health</td><td>"How is our audience interacting with the Page this month?"</td></tr>
     </table>
 
     <h2 id="setup">Setting Up Facebook MCP</h2>
@@ -194,7 +194,7 @@
     <p>PayMeGPT provides an MCP server endpoint once your Page is connected. Add this to your MCP-compatible client — Claude Desktop, Cursor, or any other tool that supports MCP connections. In Claude Desktop, this is done through <strong>Settings → Connectors</strong>. PayMeGPT's dashboard provides the server URL and any required credentials.</p>
 
     <h3>Step 3 — Enable Confidentiality Mode (Optional)</h3>
-    <p>If you're working with client data, PayMeGPT includes a confidentiality mode that prevents sensitive details — business names, account identifiers, personal information — from appearing in Claude's visible output. The analysis still runs against real data; only the display layer is filtered. This is useful when recording demos or sharing screenshots with clients or stakeholders.</p>
+    <p>If you're working with client data, PayMeGPT includes a confidentiality mode that prevents sensitive details — business names, account identifiers, personal information — from appearing in Claude's visible output. The analysis still runs against real data; only the display layer is filtered. Useful when recording demos or sharing screenshots with stakeholders.</p>
 
     <h3>Step 4 — Start Asking Claude About Your Page</h3>
     <p>Start with a simple query like "what's the engagement on my most recent post" to confirm the connection is working. Once Claude returns real metrics, move to multi-step requests: pull message insights, then ask for a content recommendation based on the results, then generate a report — all in a single conversation thread.</p>
@@ -210,14 +210,14 @@
     <h3>Business Owners Running Their Own Pages</h3>
     <p>Small business owners who manage their own Facebook presence but don't have time for deep analytics get an accessible entry point. Instead of learning Meta Business Suite's reporting interface, they can ask plain questions and get plain answers. "What are people asking about most this week?" is a question any business owner can act on immediately.</p>
 
-    <h3>Chatbot and Messenger Bot Builders</h3>
+    <h3>Messenger Bot Builders</h3>
     <p>Teams running Messenger automation can use the MCP connection to identify where their bot is breaking down — which message types are going unanswered, where users drop off, and which icebreakers are actually being used. That feedback loop makes bot iteration faster and more data-driven than guessing from aggregate stats alone.</p>
 
     <h2>Facebook MCP vs. Doing It Manually</h2>
     <table>
       <tr><th>Task</th><th>Manual Approach</th><th>With Facebook MCP + Claude</th></tr>
       <tr><td>Top DM questions (7 days)</td><td>Read message threads, categorize manually — 30–60 min</td><td>Single prompt, results in seconds</td></tr>
-      <tr><td>Post engagement breakdown</td><td>Open Meta Business Suite, navigate to Insights, export — 10–15 min</td><td>Ask Claude, get metrics and analysis in one response</td></tr>
+      <tr><td>Post engagement breakdown</td><td>Open Meta Business Suite, navigate Insights, export — 10–15 min</td><td>Ask Claude, get metrics and analysis in one response</td></tr>
       <tr><td>Content recommendation</td><td>Interpret data yourself, cross-reference with general knowledge</td><td>Claude cross-references your data and produces a specific recommendation</td></tr>
       <tr><td>Monthly client report</td><td>Pull from multiple sources, format a document, write narrative — 1–2 hrs per client</td><td>Single prompt generates full report, push to Google Drive</td></tr>
       <tr><td>Bot improvement analysis</td><td>Manual review of conversation logs</td><td>Claude identifies patterns and surfaces specific gaps</td></tr>
