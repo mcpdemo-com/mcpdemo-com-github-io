@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook MCP Integration with Claude AI — MCP Demo</title>
+  <meta name="description" content="Learn how Claude connects to Facebook Pages via Model Context Protocol (MCP) to pull insights, analyze post engagement, and generate client-ready reports through natural language." />
+  <link rel="canonical" href="https://mcpdemo.com/tools/facebook-mcp/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://mcpdemo.com/tools/facebook-mcp/" />
+  <meta property="og:title" content="Facebook MCP Integration with Claude AI" />
+  <meta property="og:description" content="How Claude connects to Facebook Pages via MCP to pull page insights, analyze post engagement, and generate client-ready reports through conversation." />
+  <meta property="og:image" content="https://mcpdemo.com/logo-wide.png" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:site_name" content="MCP Demo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Facebook MCP Integration with Claude AI" />
+  <meta name="twitter:description" content="How Claude connects to Facebook Pages via MCP to pull page insights, analyze post engagement, and generate client reports through conversation." />
+  <meta name="twitter:image" content="https://mcpdemo.com/logo-wide.png" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script defer src="https://analytics.ahrefs.com/analytics.js" data-key="K5s/4i6AOwuln4PJrDGxiw"></script>
+  <style>
+    :root{--bg:#080d1a;--bg2:#0d1528;--bg3:#111c35;--cyan:#00d4ff;--blue:#4a9eff;--border:#1a2a40;--txt:#e8edf5;--muted:#8899aa;--dim:#556070}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--txt);font-family:"IBM Plex Sans",sans-serif;line-height:1.7}
+    a{color:var(--cyan);text-decoration:none}
+    a:hover{text-decoration:underline}
+    nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;padding:0 2rem;background:rgba(8,13,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo img{height:32px;mix-blend-mode:screen}
+    .nav-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1.15rem}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+    .nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--cyan)}
+    .btn-nav{padding:.45rem 1.2rem;border:1px solid var(--cyan);border-radius:6px;color:var(--cyan)!important;background:transparent;transition:background .2s,color .2s}
+    .btn-nav:hover{background:var(--cyan)!important;color:var(--bg)!important;text-decoration:none}
+    .hero{padding:4.5rem 2rem 3rem;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,255,.09) 0%,transparent 70%)}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--dim);margin-bottom:1.5rem}
+    .breadcrumb a{color:var(--muted);transition:color .2s;text-decoration:none}
+    .breadcrumb a:hover{color:var(--cyan)}
+    .sec-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:.22rem .65rem;margin-bottom:1rem;font-family:"Exo 2",sans-serif}
+    .hero h1{font-family:"Exo 2",sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin-bottom:1rem;color:var(--txt)}
+    .hero-sub{color:var(--muted);font-size:1.05rem;margin-bottom:2rem;max-width:640px}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+    .btn-primary{display:inline-block;padding:.75rem 2rem;background:var(--cyan);color:#080d1a;border:none;border-radius:8px;font-weight:700;font-family:"IBM Plex Sans",sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;text-decoration:none;font-size:.95rem}
+    .btn-primary:hover{background:#00eeff;box-shadow:0 0 28px rgba(0,212,255,.45);text-decoration:none}
+    .btn-ghost{display:inline-block;padding:.75rem 2rem;background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;transition:border-color .2s;font-size:.95rem;text-decoration:none}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.5);text-decoration:none}
+    .video-band{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem}
+    .video-band-inner{max-width:820px;margin:0 auto}
+    .video-band-inner p{color:var(--muted);font-size:.88rem;margin-top:.6rem}
+    .video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#000;margin-top:1rem}
+    .video-wrap video{display:block;width:100%;height:auto}
+    .article-wrap{max-width:820px;margin:0 auto;padding:3rem 2rem 5rem}
+    .article h2{font-family:"Exo 2",sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--txt);margin:2.5rem 0 1rem;padding-top:.5rem;border-top:1px solid var(--border)}
+    .article h3{font-family:"Exo 2",sans-serif;font-weight:700;font-size:1.1rem;color:var(--cyan);margin:1.75rem 0 .6rem}
+    .article p{color:var(--muted);margin-bottom:1.1rem;font-size:.95rem;line-height:1.75}
+    .article ul,.article ol{color:var(--muted);margin:0 0 1.25rem 1.5rem;font-size:.95rem;line-height:1.8}
+    .article li{margin-bottom:.4rem}
+    .article strong{color:var(--txt);font-weight:600}
+    .article em{color:var(--txt)}
+    .article code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:.82rem;color:var(--cyan);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:4px;padding:.1rem .35rem}
+    .article table{width:100%;border-collapse:collapse;margin:1.25rem 0 1.75rem;font-size:.88rem}
+    .article table th{background:var(--bg3);color:var(--cyan);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding:.75rem 1rem;border:1px solid var(--border);text-align:left}
+    .article table td{padding:.7rem 1rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
+    .article table tr:nth-child(even) td{background:rgba(13,21,40,.5)}
+    .takeaways{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-left:3px solid var(--cyan);border-radius:8px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .cta-box{background:var(--bg3);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:3rem}
+    .cta-box h2{border:none;padding:0;margin:0 0 .75rem}
+    .cta-box p{max-width:500px;margin:0 auto 1.75rem;color:var(--muted)}
+    .notice{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-left:3px solid var(--blue);border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0;font-size:.9rem;color:var(--muted)}
+    .notice strong{color:var(--blue);font-family:"Exo 2",sans-serif;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:.35rem}
+    .source-credit{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin:2rem 0;display:flex;align-items:flex-start;gap:.9rem;font-size:.88rem}
+    .source-credit svg{flex-shrink:0;margin-top:.15rem}
+    .source-credit p{margin:0;color:var(--muted)}
+    .source-credit a{color:var(--cyan)}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
+    .foot-inner{max-width:1100px;margin:0 auto}
+    .foot-cols{display:grid;grid-template-columns:1.2fr 1.6fr 1.2fr;gap:2rem;margin-bottom:2rem}
+    .foot-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;text-decoration:none}
+    .foot-logo img{height:26px;mix-blend-mode:screen}
+    .foot-logo span{font-family:"Exo 2",sans-serif;font-weight:800;font-size:1rem}
+    footer h4{color:var(--cyan);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;font-family:"Exo 2",sans-serif;font-weight:700}
+    footer a{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.4rem;text-decoration:none}
+    footer a:hover{color:var(--cyan)}
+    .foot-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media(max-width:700px){.nav-links a:not(.btn-nav){display:none}.foot-cols{grid-template-columns:1fr}.hero-actions{flex-direction:column}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="/tools/" class="btn-nav">Explore Tools</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="/tools/">Tools</a>
+      <span>›</span>
+      <span>Facebook MCP</span>
+    </div>
+    <div class="sec-label">Social Media · MCP Tool</div>
+    <h1>Facebook MCP Integration with Claude AI for Page Analytics</h1>
+    <p class="hero-sub">Connect Claude to your Facebook Pages via Model Context Protocol (MCP) and pull real insights — top DM questions, post engagement breakdowns, and client-ready reports — through a single conversation.</p>
+    <div class="hero-actions">
+      <a href="#how-it-works" class="btn-primary">How it works</a>
+      <a href="https://paymegpt.com" class="btn-ghost" target="_blank" rel="noopener">Connect via PayMeGPT →</a>
+    </div>
+  </div>
+</div>
+
+<div class="video-band">
+  <div class="video-band-inner">
+    <div class="sec-label">Explainer Video</div>
+    <div class="video-wrap">
+      <video controls preload="none" poster="https://mcpdemo.com/images/facebook-mcp-explainer-thumb.jpg">
+        <source src="https://mcpdemo.com/images/facebook-mcp-explainer.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p>A 90-second overview of the Facebook MCP integration — what it is, what Claude can do with your Page data, how to connect it, and who benefits most.</p>
+  </div>
+</div>
+
+<div class="article-wrap">
+  <div class="article">
+
+    <h2>Key Takeaways</h2>
+    <ul class="takeaways">
+      <li>Model Context Protocol (MCP) gives Claude direct, real-time access to your Facebook Page data — messages, post analytics, audience behavior — without logging into Meta Business Suite or exporting spreadsheets.</li>
+      <li>A live demonstration showed Claude pulling the top five most-asked DM questions from the past seven days, a full post engagement snapshot, and a formatted client report — in under 90 seconds combined.</li>
+      <li>Claude's analysis is grounded in your specific page data, not general marketing knowledge. Every recommendation it produces reflects what your actual audience is asking and engaging with.</li>
+      <li>The MCP server is hosted by PayMeGPT and connects to your Facebook Page through their platform. No custom code, no API credentials to manage yourself.</li>
+      <li>Marketing agencies benefit most — the workflow cuts per-client reporting time from one to two hours down to minutes, and produces output ready to send directly to clients or push to Google Drive.</li>
+    </ul>
+
+    <h2 id="how-it-works">What Facebook MCP Actually Is (Plain English Version)</h2>
+    <p>Facebook MCP is a Model Context Protocol (MCP) server that gives Claude AI a direct connection to your Facebook Page. Instead of logging into Meta Business Suite, navigating dashboards, and manually exporting data, you ask Claude what you want to know — and it retrieves the live information and analyzes it in one step.</p>
+    <p>The MCP server is provided by <a href="https://paymegpt.com" target="_blank" rel="noopener">PayMeGPT</a>, a platform built for connecting AI assistants to social accounts and business tools. You connect your Facebook Page through PayMeGPT's interface, which handles the authentication with Facebook on your behalf. From that point, Claude has access to your Page's messaging data, post performance, and audience insights — and can act on all of it through conversation.</p>
+    <p>Before MCP, getting this kind of analysis meant either doing it manually, hiring someone to compile reports, or setting up custom API integrations that required ongoing maintenance. Facebook MCP collapses all of that into a single connection. Claude doesn't just fetch raw numbers — it reads the data, identifies patterns, and produces actionable recommendations tuned to your Page's specific audience behavior.</p>
+
+    <h3>Why Claude Specifically?</h3>
+    <p>Claude is Anthropic's AI assistant and one of the primary models built to work natively with MCP. It can chain multiple tool calls in a single conversation — pulling message data, then post performance data, then synthesizing both into a structured report — without losing context between steps. The result is analysis that connects patterns across your Page rather than surfacing isolated metrics.</p>
+
+    <h2>Three Live Workflows — What This Looks Like in Practice</h2>
+    <p>The following workflows are drawn from a live demonstration using a real client's Facebook Page, with confidentiality mode enabled. The platform used was PayMeGPT connected to Claude via MCP.</p>
+
+    <h3>Workflow 1 — Top DM Questions from the Last 7 Days</h3>
+    <p>Claude was asked to pull the last seven days of message insights, identify the top five most-asked questions, and produce a specific recommendation for each. For a fishing gear client, the dominant question category was location inquiries — particularly from customers in the western region. Claude's recommendation: add a "Find a Store" icebreaker button that instantly shows all branches with Google Map links, cutting back-and-forth in half.</p>
+    <p>A second major category was product availability questions. Claude recommended building a tappable product catalog flow — fishing gear, marine, fuel, accessories — so customers get instant answers without waiting for an agent. A third pattern: a large share of users were clicking "Get Started" and then stopping because the welcome message gave them no clear direction. The fix was straightforward — add three to four icebreakers to the welcome flow so users have a clear path from the first message.</p>
+    <p>This kind of analysis would normally require a team member to manually read through recent message threads and categorize them. With MCP, it runs in seconds and produces output ready to act on.</p>
+
+    <h3>Workflow 2 — Post Engagement Breakdown and Content Recommendation</h3>
+    <p>Claude pulled the most recent post's performance data — 1,207 reactions, 20 comments, 26 shares, video reel format — and identified that the share-to-comment ratio indicated strong audience resonance with the content. It noted that video was the highest-performing format and cross-referenced that with the top DM question (location inquiries) to produce one specific recommendation: a short-form reel touring the western branch location, with on-screen text tagging products available at each stop.</p>
+    <p>The recommendation wasn't generic social media advice. It was grounded in two data sources simultaneously — what the audience was asking in DMs and what format was actually pulling engagement in the feed. That cross-data synthesis is what separates MCP-powered analysis from a standard analytics dashboard. Claude isn't guessing at what might work; it's reading your specific numbers and connecting them.</p>
+
+    <h3>Workflow 3 — Client-Ready Performance Report</h3>
+    <p>Claude generated a structured 30-day performance report on demand: executive summary, headline metric table, top two performing posts with context, audience behavior breakdown, a "what's working" section, and five recommendations for the next 30 days — formatted under the agency's branding and reporting period. The report was then pushed directly to Google Drive in one click.</p>
+    <p>For agencies managing multiple clients, this is the workflow with the most immediate impact. A report that previously took one to two hours per client — pulling data, formatting it, writing recommendations — is reduced to a single prompt and a review pass. The output is professional, specific, and ready to send.</p>
+
+    <h2>What Claude Can Do with a Facebook Page via MCP</h2>
+    <table>
+      <tr><th>Capability</th><th>What Claude Retrieves</th><th>Example Prompt</th></tr>
+      <tr><td>Message insights</td><td>Top questions, common themes, volume by category from recent DMs</td><td>"What are the most asked questions in the last 7 days?"</td></tr>
+      <tr><td>Post analytics</td><td>Reactions, comments, shares, reach, format breakdown for recent posts</td><td>"Show me the engagement on my last three posts"</td></tr>
+      <tr><td>Content recommendations</td><td>Specific next-post suggestions grounded in your actual data</td><td>"Based on this week's DMs and post performance, what should I post next?"</td></tr>
+      <tr><td>Client reports</td><td>Formatted 30-day summaries with executive summary, metrics table, and action items</td><td>"Generate a client report for the last 30 days"</td></tr>
+      <tr><td>Bot improvement analysis</td><td>Patterns in unanswered messages, fallback triggers, welcome flow gaps</td><td>"Where is our Messenger bot breaking down?"</td></tr>
+      <tr><td>Audience behavior breakdown</td><td>How users are entering conversations, which icebreakers are used, engagement health</td><td>"How is our audience interacting with the Page this month?"</td></tr>
+    </table>
+
+    <h2 id="setup">Setting Up Facebook MCP</h2>
+    <p>The Facebook MCP connection is managed through PayMeGPT. No code required, no Facebook developer account needed, and no API token management. The entire setup happens inside PayMeGPT's interface.</p>
+
+    <h3>Step 1 — Connect Your Facebook Page in PayMeGPT</h3>
+    <p>Sign in to <a href="https://paymegpt.com" target="_blank" rel="noopener">PayMeGPT</a> and connect your Facebook account. PayMeGPT handles the OAuth authorization with Facebook, keeping your credentials within their platform. You select which Pages Claude should have access to during this step.</p>
+
+    <h3>Step 2 — Add the MCP Server to Your Claude Client</h3>
+    <p>PayMeGPT provides an MCP server endpoint once your Page is connected. Add this to your MCP-compatible client — Claude Desktop, Cursor, or any other tool that supports MCP connections. In Claude Desktop, this is done through <strong>Settings → Connectors</strong>. PayMeGPT's dashboard provides the server URL and any required credentials.</p>
+
+    <h3>Step 3 — Enable Confidentiality Mode (Optional)</h3>
+    <p>If you're working with client data, PayMeGPT includes a confidentiality mode that prevents sensitive details — business names, account identifiers, personal information — from appearing in Claude's visible output. The analysis still runs against real data; only the display layer is filtered. This is useful when recording demos or sharing screenshots with clients or stakeholders.</p>
+
+    <h3>Step 4 — Start Asking Claude About Your Page</h3>
+    <p>Start with a simple query like "what's the engagement on my most recent post" to confirm the connection is working. Once Claude returns real metrics, move to multi-step requests: pull message insights, then ask for a content recommendation based on the results, then generate a report — all in a single conversation thread.</p>
+
+    <h2>Who Benefits Most</h2>
+
+    <h3>Social Media Agencies</h3>
+    <p>Agencies managing multiple client Pages get the most immediate time savings. Monthly reporting — which typically requires manual data pulls, document formatting, and written analysis — becomes a single Claude conversation per client. The output is structured, brandable, and ready to send without a heavy revision pass. Agencies can realistically cut per-client reporting time by 80% or more.</p>
+
+    <h3>In-House Social Media Managers</h3>
+    <p>For managers running a single brand's Page, the value is depth rather than volume. Claude can cross-reference what the audience is asking in DMs with what's performing in the feed — a connection that's easy to miss when reviewing each data source separately. Better content decisions come from connecting those dots, and MCP makes that trivial.</p>
+
+    <h3>Business Owners Running Their Own Pages</h3>
+    <p>Small business owners who manage their own Facebook presence but don't have time for deep analytics get an accessible entry point. Instead of learning Meta Business Suite's reporting interface, they can ask plain questions and get plain answers. "What are people asking about most this week?" is a question any business owner can act on immediately.</p>
+
+    <h3>Chatbot and Messenger Bot Builders</h3>
+    <p>Teams running Messenger automation can use the MCP connection to identify where their bot is breaking down — which message types are going unanswered, where users drop off, and which icebreakers are actually being used. That feedback loop makes bot iteration faster and more data-driven than guessing from aggregate stats alone.</p>
+
+    <h2>Facebook MCP vs. Doing It Manually</h2>
+    <table>
+      <tr><th>Task</th><th>Manual Approach</th><th>With Facebook MCP + Claude</th></tr>
+      <tr><td>Top DM questions (7 days)</td><td>Read message threads, categorize manually — 30–60 min</td><td>Single prompt, results in seconds</td></tr>
+      <tr><td>Post engagement breakdown</td><td>Open Meta Business Suite, navigate to Insights, export — 10–15 min</td><td>Ask Claude, get metrics and analysis in one response</td></tr>
+      <tr><td>Content recommendation</td><td>Interpret data yourself, cross-reference with general knowledge</td><td>Claude cross-references your data and produces a specific recommendation</td></tr>
+      <tr><td>Monthly client report</td><td>Pull from multiple sources, format a document, write narrative — 1–2 hrs per client</td><td>Single prompt generates full report, push to Google Drive</td></tr>
+      <tr><td>Bot improvement analysis</td><td>Manual review of conversation logs</td><td>Claude identifies patterns and surfaces specific gaps</td></tr>
+    </table>
+
+    <div class="notice">
+      <strong>Why this tool has no live demo on mcpdemo.com</strong>
+      Facebook MCP requires connecting a real Facebook Page with active data. A shared public demo would either expose a real person's Page to every visitor, or simulate responses — which would be dishonest. The right way to experience this integration is to connect your own Page through PayMeGPT and run it against your actual data.
+    </div>
+
+    <div class="source-credit">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--blue)" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p><strong style="color:var(--txt)">Source:</strong> The workflows on this page are drawn from a live demonstration by the <a href="https://youtube.com/watch?v=v9kl370jkWY" target="_blank" rel="noopener">PAYMEGPT YouTube channel</a>, showing Claude connected to a real client's Facebook Page via MCP. Data shown was from an active fishing gear retailer Page with confidentiality mode enabled.</p>
+    </div>
+
+    <div class="cta-box">
+      <div class="sec-label">Try it yourself</div>
+      <h2>Connect your Facebook Page to Claude via MCP</h2>
+      <p>The fastest way to see this in action is to connect your own Page through PayMeGPT. Setup takes a few minutes and no code is required.</p>
+      <a href="https://paymegpt.com" class="btn-primary" target="_blank" rel="noopener">Get started at PayMeGPT →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-cols">
+      <div>
+        <a class="foot-logo" href="/"><img src="/logo.png" alt="MCP Demo" /><span><span style="color:#fff">MCP</span><span style="color:#00d4ff">Demo</span></span></a>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.4rem">Model Context Protocol</p>
+        <p style="color:var(--dim);font-size:.78rem">&copy; <span id="yr"></span> Effinsoftware.com, INC.<br>d/b/a MCP Demo &middot; Wyoming, USA</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4>Legal</h4>
+          <a href="/legal/privacy-policy.html">Privacy Policy</a>
+          <a href="/legal/terms-of-service.html">Terms of Service</a>
+          <a href="/legal/cookie-policy.html">Cookie Policy</a>
+          <a href="/legal/affiliate-disclosure.html">Affiliate Disclosure</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/tools/">Tools Directory</a>
+        </div>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="mailto:robert@mcpdemo.com" style="color:var(--cyan)">robert@mcpdemo.com</a>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">For legal notices, privacy requests, or general inquiries.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.75rem">2232 Dell Range Blvd<br>Suite 245-3069<br>Cheyenne, WY 82009</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span style="color:var(--cyan);font-size:.85rem;font-weight:600">mcpdemo.com</span>
+      <span style="color:var(--dim);font-size:.76rem;max-width:540px">MCP Demo is operated by Effinsoftware.com, INC., a Wyoming corporation. Not affiliated with Anthropic, Google, or any third-party service demonstrated on this site.</span>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
