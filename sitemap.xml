@@ -33,7 +33,7 @@
   <!-- Tools Directory -->
   <url>
     <loc>https://mcpdemo.com/tools/</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -178,6 +178,20 @@
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+  </url>
+
+  <!-- Tool: Facebook MCP (Type C — Info Only) -->
+  <url>
+    <loc>https://mcpdemo.com/tools/facebook-mcp/</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <video:video>
+      <video:thumbnail_loc>https://mcpdemo.com/images/facebook-mcp-explainer-thumb.jpg</video:thumbnail_loc>
+      <video:title>Facebook MCP Integration with Claude AI — Explainer</video:title>
+      <video:description>An overview of the Facebook MCP integration — what it is, what Claude can do with your Facebook Page data, how to set it up via PayMeGPT, and who benefits most.</video:description>
+      <video:content_loc>https://mcpdemo.com/images/facebook-mcp-explainer.mp4</video:content_loc>
+    </video:video>
   </url>
 
 </urlset>
